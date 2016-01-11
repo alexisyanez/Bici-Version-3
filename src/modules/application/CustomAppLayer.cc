@@ -80,7 +80,8 @@ void CustomAppLayer::initialize(int stage)
     mean_vel_obj = par("mean_vel_obj");
     
     // Error en la posición debido al GPS    
-    position_error= par("position_error")
+    position_error_a= par("position_error_a") // Parametro a de la distribucion weibull
+    position_error_b= par("position_error_b") // Parametro b de la distribucion weibull
     
     length_vehicle_front = par("lenghtVehicle");
     desiredSpacing = par("spacing");
@@ -514,8 +515,10 @@ double CustomAppLayer::getModuleXPosition()
     double posx = 0;
     c = MobilityAccess().get(findHost())->getCurrentPosition();
     posx = c.x;
-    double r = (rand() % 2) * 2 - 1
-    posx = posx + r*position_error
+    
+    double r = (rand() % 2) * 2 - 1;
+    posx = posx + r * weibull(position_error_a,position_error_b); // aplicando una distribucion weibull que caracteriza el error en GPS
+    
     return posx;
 }
 
@@ -528,6 +531,11 @@ double CustomAppLayer::getModuleYPosition()
     double posy = 0;
     c = MobilityAccess().get(findHost())->getCurrentPosition();
     posy = c.y;
+    
+    double r = (rand() % 2) * 2 - 1;
+    posy = posy + r * weibull(position_error_a,position_error_b); // aplicando una distribucion weibull que caracteriza el error en GPS
+    
+    
     return posy;
 }
 
