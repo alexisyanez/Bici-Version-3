@@ -43,7 +43,8 @@ simple CustomAppLayer like IBaseApplLayer
     	double mean_vel_obj = default(0); 
     	
     	//GPS Measure error
-		double position_error = default(0);
+    	double position_error_a = default(0);
+    	double position_error_b = default(0);
     	
     	//Values for spacing error
     	double spacing;
