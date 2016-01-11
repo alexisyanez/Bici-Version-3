@@ -116,7 +116,8 @@ class MIXIM_API CustomAppLayer : public MyTestAppLayer
         double mean_vel_obj;
         
         //GPS Measure error
-        double position_error;
+        double position_error_a;
+        duuble position_error_b;
 
         //Values for calculating Spacing Error
         double length_vehicle_front;
