@@ -23,6 +23,7 @@ NodeInfo::NodeInfo()
     speed = 0;
     xposition = 0;
     yposition = 0;
+    xpositionGPSerror = 0;
     packageID = 0;
     acceleration = 0;
     leaderAcceleration = 0;
@@ -53,6 +54,11 @@ double NodeInfo::getXPosition()
 double NodeInfo::getYPosition()
 {
     return yposition;
+}
+
+double NodeInfo::getXPositionGPSerror()
+{
+    return xpositionGPSerror;
 }
 
 double NodeInfo::getAcceleration()
@@ -93,6 +99,11 @@ void NodeInfo::setXPosition(double xP)
 void NodeInfo::setYPosition(double yP)
 {
     yposition = yP;
+}
+
+void NodeInfo::setXPositionGPSerror(double xPe)
+{
+    xpositionGPSerror = xPe;
 }
 
 void NodeInfo::setPackageID(int pI)

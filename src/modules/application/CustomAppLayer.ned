@@ -37,14 +37,16 @@ simple CustomAppLayer like IBaseApplLayer
     	//Alpha values of CACC with lag
     	double alphaLag;
     	
+    	
     	//Human error in velocity response
     	double mean_error = default(0);
     	double std_error = default(0);
     	double mean_vel_obj = default(0); 
-    	
-    	//GPS Measure error
-    	double position_error_a = default(0);
-    	double position_error_b = default(0);
+        
+        //GPS Measure error
+        bool GPS_error;
+        double position_error_a = default(0);
+        double position_error_b = default(0);
     	
     	//Values for spacing error
     	double spacing;

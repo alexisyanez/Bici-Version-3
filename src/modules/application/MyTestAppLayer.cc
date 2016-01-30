@@ -155,7 +155,7 @@ void MyTestAppLayer::sendReply(CustomApplPkt *msg)
 /**
  * Permite enviar un paquete que contiene la informaciÃ³n de un nodo al resto de nodos
  */
-void MyTestAppLayer::sendNodeInfo(int id, double xpos, double ypos, double speed, double acceleration, int destAddress,
+void MyTestAppLayer::sendNodeInfo(int id, double xpos, double ypos, double xposGPS, double speed, double acceleration, int destAddress,
         double leaderAcceleration, double leaderSpeed, bool beaconingEnabled)
 {
     CustomApplPkt *pkt = new CustomApplPkt("Node Info", POSITION_MESSAGE);
@@ -168,11 +168,12 @@ void MyTestAppLayer::sendNodeInfo(int id, double xpos, double ypos, double speed
     pkt->setId(id);
     pkt->setXposition(xpos);
     pkt->setYposition(ypos);
+    pkt->setXposition(xposGPS);
     pkt->setSpeed(speed);
     pkt->setAcceleration(acceleration);
     pkt->setBeaconingEnabled(beaconingEnabled);
 
-    //Agregar datos del l’der
+    //Agregar datos del lï¿½der
     if (beaconingEnabled)
     {
         pkt->setLeaderAcceleration(leaderAcceleration);

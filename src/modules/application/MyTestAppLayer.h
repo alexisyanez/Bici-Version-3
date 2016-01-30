@@ -73,7 +73,7 @@ class MIXIM_API MyTestAppLayer : public BaseApplLayer
         void sendReply(CustomApplPkt *msg);
 
         /** @brief Permite enviar la información del nodo al resto de nodos */
-        void sendNodeInfo(int id, double xpos, double ypos, double speed, double acceleration, int destAdress,
+        void sendNodeInfo(int id, double xpos, double ypos,double xposGPS, double speed, double acceleration, int destAdress,
                 double leaderAcceleration, double leaderSpeed, bool beaconingEnabled);
 };
 

@@ -33,6 +33,7 @@ void CustomAppLayer::initialize(int stage)
     //Registrar señales
     receivedSignal = registerSignal("received");
     positionXSignal = registerSignal("xposition");
+    positionXGPSErrorSignal = registerSignal("xpositionGPSerror");
     positionYSignal = registerSignal("yposition");
     velNodeSignal = registerSignal("vel");
     sentSignal = registerSignal("sent");
@@ -73,16 +74,17 @@ void CustomAppLayer::initialize(int stage)
     alpha4 = par("alpha4");
     alpha5 = par("alpha5");
     alphaLag = par("alphaLag");
-    
+
     // Error humano asociado a la velocidad
     mean_error = par("mean_error");
     std_error = par("std_error");
     mean_vel_obj = par("mean_vel_obj");
-    
-    // Error en la posición debido al GPS    
-    position_error_a= par("position_error_a") // Parametro a de la distribucion weibull
-    position_error_b= par("position_error_b") // Parametro b de la distribucion weibull
-    
+
+    // Error en la posición debido al GPS
+    GPSErrorEnabled = par("GPS_error");
+    position_error_a = par("position_error_a"); // Corresponde al Parametro Sigma de la distribución de raylegh (setear en 5)
+    position_error_b = par("position_error_b"); // Corresponde a que tan desviados estan los datos (setear en 1.5)
+
     length_vehicle_front = par("lenghtVehicle");
     desiredSpacing = par("spacing");
     beaconInterval = par("beaconInterval");
@@ -124,6 +126,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                 //Obtener datos del nodo para añadir al paquete
                 double xposition = getModuleXPosition();
                 double yposition = getModuleYPosition();
+                double xpositionGPSerror = getModuleXPositionGPSError();
                 double speed = getModuleSpeed();
                 double acceleration = getModuleAcceleration();
 
@@ -145,7 +148,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                         llegada = true;
                     }
                     //Enviar paquete con la posicion y velocidad al resto de nodos
-                    sendNodeInfo(packageID, xposition, yposition, speed, acceleration, LAddress::L3BROADCAST,
+                    sendNodeInfo(packageID, xposition, yposition, xpositionGPSerror, speed, acceleration, LAddress::L3BROADCAST,
                             localLeaderAcceleration, localLeaderSpeed, beaconingEnabled);
 
                 }
@@ -153,7 +156,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                 {
 
                     //Enviar paquete con la posicion y velocidad al resto de nodos
-                    sendNodeInfo(packageID, xposition, yposition, speed, acceleration, LAddress::L3BROADCAST,
+                    sendNodeInfo(packageID, xposition, yposition, xpositionGPSerror, speed, acceleration, LAddress::L3BROADCAST,
                             localLeaderAcceleration, localLeaderSpeed, beaconingEnabled);
 
                 }
@@ -169,6 +172,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                 //Se emiten dos senales con la posicion x e y del nodo al enviar un paquete
                 emit(positionXSignal, xposition);
                 emit(positionYSignal, yposition);
+				emit(positionXGPSErrorSignal, xpositionGPSerror);
 
                 //Volver a iniciar el timer para enviar el siguiente paquete
                 positionTimer = new cMessage("position-timer", POSITION_TIMER);
@@ -185,6 +189,8 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                 //Lista sin duplicados
                 std::vector<NodeInfo*> noDuplicateInfo;
                 double distanceBetweenActualAndFront;
+                double distanceBetweenActualAndFrontGPS;
+
 
                 //Se agrega la informacion a la lista sin duplicados
                 for (int i = 0; i < int(nodeInfoVector.size()); i++)
@@ -207,7 +213,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                         }
                     }
 
-                    //Si nunca se encontrio un paquete de la misma fuente se agrega a la lista
+                    //Si nunca se encontro un paquete de la misma fuente se agrega a la lista
                     if (existeInfo == false)
                     {
                         noDuplicateInfo.push_back(nodeInfo);
@@ -222,10 +228,11 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
 
                 //Obtener la posicion del nodo actual
                 double posx = getModuleXPosition();
+                double posxGPS = getModuleXPositionGPSError();
 
                 //Calcular distancias desde los nodos hacia el actual para determinar el mas cercano
-                NodeInfo* nearestNode = NULL;
-                NodeInfo* leaderNode = NULL;
+                NodeInfo*nearestNode = NULL;
+                NodeInfo*leaderNode = NULL;
 
                 EV << "Node[" << myApplAddr() << "]: Running Platoon Update" << endl;
 
@@ -263,7 +270,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                             //int addr_node_nearest = nearestNode->getSrcAddress();
                             double posx_node_nearest = nearestNode->getXPosition();
                             //double speed_node_nearest = nearestNode->getSpeed();
-                            double distanceToActual_nearest = getDistanceBetweenNodes2(posx, posx_node_nearest);
+                            double distanceToActual_nearest = getDistanceBetweenNodes2(posx, posx_node_nearest); // Se asume que el grupo mantiene un orden fijado con anetrioridad por lo que no se aplica el erro del GPS para detectar el nodo de enfrete
 
                             //Se cambia el nodo mas cercano si la distancia es menor a la del mas cercano actual
                             if (distanceToActual > 0 && distanceToActual < distanceToActual_nearest)
@@ -277,6 +284,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                     double rel_speed_front;
 
                     double spacing_error;
+                    double spacing_error_GPS;
                     double nodeFrontAcceleration;
 
                     if (nearestNode != NULL)
@@ -288,6 +296,10 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                         distanceBetweenActualAndFront = getDistanceBetweenNodes2(posx, nearestNode->getXPosition());
                         spacing_error = -distanceBetweenActualAndFront + length_vehicle_front + desiredSpacing;
 
+						//Obtener spacing error con GPS
+                        distanceBetweenActualAndFrontGPS = getDistanceBetweenNodes2(posxGPS, nearestNode->getXPositionGPSerror());
+                        spacing_error_GPS = -distanceBetweenActualAndFrontGPS + length_vehicle_front + desiredSpacing;
+
                         nodeFrontAcceleration = nearestNode->getAcceleration();
 
                     }
@@ -295,6 +307,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                     {
                         rel_speed_front = 0;
                         spacing_error = 0;
+                        spacing_error_GPS = 0;
                         nodeFrontAcceleration = 0;
                     }
 
@@ -341,12 +354,24 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
 
                     // Enviar valores de la velocidad
                     emit(velNodeSignal,getModuleSpeed());
+                    double A_des;
 
-                     //d. Calcular A_des (Acceleration desired)
-                    double A_des = alpha1 * nodeFrontAcceleration + alpha2 * leaderAcceleration
-                            - alpha3 * rel_speed_front - alpha4 * (getModuleSpeed() - leaderSpeed)
-                            - alpha5 * spacing_error;
+					if (GPSErrorEnabled == true) // se activa solo si el usurio quiere incluir el error del GPS
+					{
+						 //d. Calcular A_des (Acceleration desired)
+						A_des = alpha1 * nodeFrontAcceleration + alpha2 * leaderAcceleration
+								- alpha3 * rel_speed_front - alpha4 * (getModuleSpeed() - leaderSpeed)
+								- alpha5 * spacing_error_GPS;
+					}
+					else
+					{
+						A_des = alpha1 * nodeFrontAcceleration + alpha2 * leaderAcceleration
+								- alpha3 * rel_speed_front - alpha4 * (getModuleSpeed() - leaderSpeed)
+								- alpha5 * spacing_error;
+					}
+
                     emit(accelerationPlatoonSignal, A_des);
+
 
                     // Calcular el error en base a una normal con parámetros de resultados en simulación
                     double vel_error = normal(mean_error,std_error);
@@ -366,7 +391,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
 
                     EV << "Node[" << myApplAddr() << "]: New desired acceleration: " << getModuleAcceleration() << endl;
 
-                    emit(distanceToFwdSignal, spacing_error);
+                    emit(distanceToFwdSignal, spacing_error); // Spacing Real
                     emit(accelerationPlatoonSignal, A_des_lag);
 
                 }
@@ -423,10 +448,13 @@ void CustomAppLayer::handleLowerMsg(cMessage* msg)
         //Se emiten las señales correspondientes a las posiciones del nodo al llegar un paquete
         emit(positionXSignal, getModuleXPosition());
         emit(positionYSignal, getModuleYPosition());
+        emit(positionXGPSErrorSignal, getModuleXPositionGPSError());
+
 
         //Obtener información del paquete para reenviar al resto de nodos
         double xposition = m->getXposition();
         double yposition = m->getYposition();
+        double xpositionGPSerror = m->getXpositionGPS();
         double speed = m->getSpeed();
         double acceleration = m->getAcceleration();
 
@@ -438,6 +466,7 @@ void CustomAppLayer::handleLowerMsg(cMessage* msg)
         nodeInfo->setSrcAddress(m->getSrcAddr());
         nodeInfo->setXPosition(xposition);
         nodeInfo->setYPosition(yposition);
+        nodeInfo->setXPositionGPSerror(xpositionGPSerror);
         nodeInfo->setSpeed(speed);
         nodeInfo->setAcceleration(acceleration);
         nodeInfo->setLeaderAcceleration(m->getLeaderAcceleration());
@@ -515,12 +544,25 @@ double CustomAppLayer::getModuleXPosition()
     double posx = 0;
     c = MobilityAccess().get(findHost())->getCurrentPosition();
     posx = c.x;
-    
-    double r = (rand() % 2) * 2 - 1;
-    posx = posx + r * weibull(position_error_a,position_error_b); // aplicando una distribucion weibull que caracteriza el error en GPS
-    
     return posx;
 }
+
+/*
+ * Obtener la posición x del módulo incluido el error del gps
+ */
+double CustomAppLayer::getModuleXPositionGPSError()
+{
+    Coord c;
+    double posxGPS = 0;
+    c = MobilityAccess().get(findHost())->getCurrentPosition();
+    posxGPS = c.x;
+    double r = (rand() % 2) * 2 - 1;
+    double u = uniform(0,1);
+    double position_error = position_error_a * sqrt(-position_error_b * log(u)); /* generating Rayleigh-distributed variates */
+    posxGPS = posxGPS + r*position_error;
+    return posxGPS;
+}
+
 
 /*
  * Obtener la posición y del módulo
@@ -531,11 +573,6 @@ double CustomAppLayer::getModuleYPosition()
     double posy = 0;
     c = MobilityAccess().get(findHost())->getCurrentPosition();
     posy = c.y;
-    
-    double r = (rand() % 2) * 2 - 1;
-    posy = posy + r * weibull(position_error_a,position_error_b); // aplicando una distribucion weibull que caracteriza el error en GPS
-    
-    
     return posy;
 }
 

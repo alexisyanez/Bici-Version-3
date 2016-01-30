@@ -27,6 +27,7 @@
  *     LAddress::L3Type srcAddr  = LAddress::L3BROADCAST; 
  *     double 									xposition; 
  *     double 									yposition; 
+ *     double 									xpositionGPS; 
  *     double										speed; 
  *     int											   id; 
  *     double 								 acceleration; 
@@ -43,6 +44,7 @@ class CustomApplPkt : public ::cPacket
     LAddress::L3Type srcAddr_var;
     double xposition_var;
     double yposition_var;
+    double xpositionGPS_var;
     double speed_var;
     int id_var;
     double acceleration_var;
@@ -77,6 +79,8 @@ class CustomApplPkt : public ::cPacket
     virtual void setXposition(double xposition);
     virtual double getYposition() const;
     virtual void setYposition(double yposition);
+    virtual double getXpositionGPS() const;
+    virtual void setXpositionGPS(double xpositionGPS);
     virtual double getSpeed() const;
     virtual void setSpeed(double speed);
     virtual int getId() const;

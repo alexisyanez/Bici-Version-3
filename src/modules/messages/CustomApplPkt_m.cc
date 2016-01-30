@@ -40,6 +40,7 @@ CustomApplPkt::CustomApplPkt(const char *name, int kind) : ::cPacket(name,kind)
     this->srcAddr_var = LAddress::L3BROADCAST;
     this->xposition_var = 0;
     this->yposition_var = 0;
+    this->xpositionGPS_var = 0;
     this->speed_var = 0;
     this->id_var = 0;
     this->acceleration_var = 0;
@@ -71,6 +72,7 @@ void CustomApplPkt::copy(const CustomApplPkt& other)
     this->srcAddr_var = other.srcAddr_var;
     this->xposition_var = other.xposition_var;
     this->yposition_var = other.yposition_var;
+    this->xpositionGPS_var = other.xpositionGPS_var;
     this->speed_var = other.speed_var;
     this->id_var = other.id_var;
     this->acceleration_var = other.acceleration_var;
@@ -86,6 +88,7 @@ void CustomApplPkt::parsimPack(cCommBuffer *b)
     doPacking(b,this->srcAddr_var);
     doPacking(b,this->xposition_var);
     doPacking(b,this->yposition_var);
+    doPacking(b,this->xpositionGPS_var);
     doPacking(b,this->speed_var);
     doPacking(b,this->id_var);
     doPacking(b,this->acceleration_var);
@@ -101,6 +104,7 @@ void CustomApplPkt::parsimUnpack(cCommBuffer *b)
     doUnpacking(b,this->srcAddr_var);
     doUnpacking(b,this->xposition_var);
     doUnpacking(b,this->yposition_var);
+    doUnpacking(b,this->xpositionGPS_var);
     doUnpacking(b,this->speed_var);
     doUnpacking(b,this->id_var);
     doUnpacking(b,this->acceleration_var);
@@ -147,6 +151,16 @@ double CustomApplPkt::getYposition() const
 void CustomApplPkt::setYposition(double yposition)
 {
     this->yposition_var = yposition;
+}
+
+double CustomApplPkt::getXpositionGPS() const
+{
+    return xpositionGPS_var;
+}
+
+void CustomApplPkt::setXpositionGPS(double xpositionGPS)
+{
+    this->xpositionGPS_var = xpositionGPS;
 }
 
 double CustomApplPkt::getSpeed() const
@@ -256,7 +270,7 @@ const char *CustomApplPktDescriptor::getProperty(const char *propertyname) const
 int CustomApplPktDescriptor::getFieldCount(void *object) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
-    return basedesc ? 10+basedesc->getFieldCount(object) : 10;
+    return basedesc ? 11+basedesc->getFieldCount(object) : 11;
 }
 
 unsigned int CustomApplPktDescriptor::getFieldTypeFlags(void *object, int field) const
@@ -278,8 +292,9 @@ unsigned int CustomApplPktDescriptor::getFieldTypeFlags(void *object, int field)
         FD_ISEDITABLE,
         FD_ISEDITABLE,
         FD_ISEDITABLE,
+        FD_ISEDITABLE,
     };
-    return (field>=0 && field<10) ? fieldTypeFlags[field] : 0;
+    return (field>=0 && field<11) ? fieldTypeFlags[field] : 0;
 }
 
 const char *CustomApplPktDescriptor::getFieldName(void *object, int field) const
@@ -295,6 +310,7 @@ const char *CustomApplPktDescriptor::getFieldName(void *object, int field) const
         "srcAddr",
         "xposition",
         "yposition",
+        "xpositionGPS",
         "speed",
         "id",
         "acceleration",
@@ -302,7 +318,7 @@ const char *CustomApplPktDescriptor::getFieldName(void *object, int field) const
         "leaderSpeed",
         "beaconingEnabled",
     };
-    return (field>=0 && field<10) ? fieldNames[field] : NULL;
+    return (field>=0 && field<11) ? fieldNames[field] : NULL;
 }
 
 int CustomApplPktDescriptor::findField(void *object, const char *fieldName) const
@@ -313,12 +329,13 @@ int CustomApplPktDescriptor::findField(void *object, const char *fieldName) cons
     if (fieldName[0]=='s' && strcmp(fieldName, "srcAddr")==0) return base+1;
     if (fieldName[0]=='x' && strcmp(fieldName, "xposition")==0) return base+2;
     if (fieldName[0]=='y' && strcmp(fieldName, "yposition")==0) return base+3;
-    if (fieldName[0]=='s' && strcmp(fieldName, "speed")==0) return base+4;
-    if (fieldName[0]=='i' && strcmp(fieldName, "id")==0) return base+5;
-    if (fieldName[0]=='a' && strcmp(fieldName, "acceleration")==0) return base+6;
-    if (fieldName[0]=='l' && strcmp(fieldName, "leaderAcceleration")==0) return base+7;
-    if (fieldName[0]=='l' && strcmp(fieldName, "leaderSpeed")==0) return base+8;
-    if (fieldName[0]=='b' && strcmp(fieldName, "beaconingEnabled")==0) return base+9;
+    if (fieldName[0]=='x' && strcmp(fieldName, "xpositionGPS")==0) return base+4;
+    if (fieldName[0]=='s' && strcmp(fieldName, "speed")==0) return base+5;
+    if (fieldName[0]=='i' && strcmp(fieldName, "id")==0) return base+6;
+    if (fieldName[0]=='a' && strcmp(fieldName, "acceleration")==0) return base+7;
+    if (fieldName[0]=='l' && strcmp(fieldName, "leaderAcceleration")==0) return base+8;
+    if (fieldName[0]=='l' && strcmp(fieldName, "leaderSpeed")==0) return base+9;
+    if (fieldName[0]=='b' && strcmp(fieldName, "beaconingEnabled")==0) return base+10;
     return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
@@ -336,13 +353,14 @@ const char *CustomApplPktDescriptor::getFieldTypeString(void *object, int field)
         "double",
         "double",
         "double",
+        "double",
         "int",
         "double",
         "double",
         "double",
         "bool",
     };
-    return (field>=0 && field<10) ? fieldTypeStrings[field] : NULL;
+    return (field>=0 && field<11) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *CustomApplPktDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -386,12 +404,13 @@ std::string CustomApplPktDescriptor::getFieldAsString(void *object, int field, i
         case 1: {std::stringstream out; out << pp->getSrcAddr(); return out.str();}
         case 2: return double2string(pp->getXposition());
         case 3: return double2string(pp->getYposition());
-        case 4: return double2string(pp->getSpeed());
-        case 5: return long2string(pp->getId());
-        case 6: return double2string(pp->getAcceleration());
-        case 7: return double2string(pp->getLeaderAcceleration());
-        case 8: return double2string(pp->getLeaderSpeed());
-        case 9: return bool2string(pp->getBeaconingEnabled());
+        case 4: return double2string(pp->getXpositionGPS());
+        case 5: return double2string(pp->getSpeed());
+        case 6: return long2string(pp->getId());
+        case 7: return double2string(pp->getAcceleration());
+        case 8: return double2string(pp->getLeaderAcceleration());
+        case 9: return double2string(pp->getLeaderSpeed());
+        case 10: return bool2string(pp->getBeaconingEnabled());
         default: return "";
     }
 }
@@ -408,12 +427,13 @@ bool CustomApplPktDescriptor::setFieldAsString(void *object, int field, int i, c
     switch (field) {
         case 2: pp->setXposition(string2double(value)); return true;
         case 3: pp->setYposition(string2double(value)); return true;
-        case 4: pp->setSpeed(string2double(value)); return true;
-        case 5: pp->setId(string2long(value)); return true;
-        case 6: pp->setAcceleration(string2double(value)); return true;
-        case 7: pp->setLeaderAcceleration(string2double(value)); return true;
-        case 8: pp->setLeaderSpeed(string2double(value)); return true;
-        case 9: pp->setBeaconingEnabled(string2bool(value)); return true;
+        case 4: pp->setXpositionGPS(string2double(value)); return true;
+        case 5: pp->setSpeed(string2double(value)); return true;
+        case 6: pp->setId(string2long(value)); return true;
+        case 7: pp->setAcceleration(string2double(value)); return true;
+        case 8: pp->setLeaderAcceleration(string2double(value)); return true;
+        case 9: pp->setLeaderSpeed(string2double(value)); return true;
+        case 10: pp->setBeaconingEnabled(string2bool(value)); return true;
         default: return false;
     }
 }
@@ -437,8 +457,9 @@ const char *CustomApplPktDescriptor::getFieldStructName(void *object, int field)
         NULL,
         NULL,
         NULL,
+        NULL,
     };
-    return (field>=0 && field<10) ? fieldStructNames[field] : NULL;
+    return (field>=0 && field<11) ? fieldStructNames[field] : NULL;
 }
 
 void *CustomApplPktDescriptor::getFieldStructPointer(void *object, int field, int i) const

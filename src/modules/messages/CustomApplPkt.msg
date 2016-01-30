@@ -29,10 +29,11 @@ packet CustomApplPkt {
     LAddress::L3Type srcAddr  = LAddress::L3BROADCAST; // Direcci贸n de la fuente
     double 									xposition; // Posici贸n x del m贸dulo
     double 									yposition; // Posici贸n y del m贸dulo
+    double 							     xpositionGPS; // Posici贸n x del m贸dulo con error de GPS
     double										speed; // Velocidad del m贸dulo
     int											   id; // ID consecutivo del paquete
     double 								 acceleration; // Aceleraci贸n del m贸dulo
-    double						   leaderAcceleration; //Aceleraci梟 del l抎er
-    double 								  leaderSpeed; //Velocidad del l抎er
-    bool 							 beaconingEnabled; //Habilitaci梟 del beaconing --> true - habilitado; false - deshabilitado
+    double						   leaderAcceleration; //Aceleraci锟絥 del l锟絛er
+    double 								  leaderSpeed; //Velocidad del l锟絛er
+    bool 							 beaconingEnabled; //Habilitaci锟絥 del beaconing --> true - habilitado; false - deshabilitado
 }

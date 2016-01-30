@@ -26,6 +26,7 @@ private:
     int packageID;
     double xposition;
     double yposition;
+    double xpositionGPSerror;
     double speed;
     double acceleration;
     double leaderAcceleration;
@@ -38,6 +39,7 @@ public:
     void setPackageID(int pI);
     void setXPosition(double xP);
     void setYPosition(double yP);
+    void setXPositionGPSerror(double xPe);
     void setSpeed(double s);
     void setAcceleration(double a);
     void setLeaderAcceleration(double a);
@@ -46,6 +48,7 @@ public:
     int getPackageID();
     double getXPosition();
     double getYPosition();
+    double getXPositionGPSerror();
     double getSpeed();
     double getAcceleration();
     double getLeaderAcceleration();

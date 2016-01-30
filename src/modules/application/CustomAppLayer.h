@@ -76,6 +76,9 @@ class MIXIM_API CustomAppLayer : public MyTestAppLayer
         //Señal para emitir la posición x del módulo cuando se recibe un paquete
         simsignal_t positionXSignal;
 
+        //Señal para emitir la posición con error GPS x del módulo cuando se recibe un paquete
+        simsignal_t positionXGPSErrorSignal;
+
         //Señal para emitir la velocidad del nodo
         simsignal_t velNodeSignal;
 
@@ -109,15 +112,16 @@ class MIXIM_API CustomAppLayer : public MyTestAppLayer
 
         //Alpha values of CACC with lag
         double alphaLag;
-        
+
         //Human error in velocity response
         double mean_error;
         double std_error;
         double mean_vel_obj;
-        
+
         //GPS Measure error
+        bool GPSErrorEnabled;
         double position_error_a;
-        duuble position_error_b;
+		double position_error_b;
 
         //Values for calculating Spacing Error
         double length_vehicle_front;
@@ -155,6 +159,9 @@ class MIXIM_API CustomAppLayer : public MyTestAppLayer
 
         /** @brief Permite obtener la posición y del módulo */
         virtual double getModuleYPosition();
+
+        /** @brief Permite obtener la posición x del módulo */
+        virtual double getModuleXPositionGPSError();
 
         /** @brief Permite obtener la velocidad del módulo */
         virtual double getModuleSpeed();
