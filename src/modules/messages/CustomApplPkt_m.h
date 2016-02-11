@@ -27,7 +27,7 @@
  *     LAddress::L3Type srcAddr  = LAddress::L3BROADCAST; 
  *     double 									xposition; 
  *     double 									yposition; 
- *     double 									xpositionGPS; 
+ *     double 							     xpositionGPS; 
  *     double										speed; 
  *     int											   id; 
  *     double 								 acceleration; 

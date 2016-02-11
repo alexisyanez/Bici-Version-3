@@ -2,7 +2,7 @@
 # OMNeT++/OMNEST Makefile for bici_simu
 #
 # This file was generated with the command:
-#  opp_makemake -f --deep -O out -I../inet/src/util -I../inet/src/networklayer/common -I../inet/src/linklayer/contract -I../inet/src/base -I../inet/src/mobility -I../inet/src/networklayer/contract -I../MiXiM/src/base/utils -I../inet/src/mobility/models -I../MiXiM/src/base/modules -I../MiXiM/src -I../MiXiM/src/base -I../MiXiM/src/base/phyLayer -I../MiXiM/src/base/connectionManager -I../MiXiM/src/base/messages -L../inet/out/$$\(CONFIGNAME\)/src -L../MiXiM/out/$$\(CONFIGNAME\)/src -linet -lmixim -DINET_IMPORT -KINET_PROJ=../inet -KMIXIM_PROJ=../MiXiM
+#  opp_makemake -f --deep -O out -I/home/platoon/ws/inet/src/util -I/home/platoon/ws/inet/src/networklayer/common -I/home/platoon/ws/inet/src/linklayer/contract -I/home/platoon/ws/inet/src/base -I/home/platoon/ws/inet/src/mobility -I/home/platoon/ws/inet/src/networklayer/contract -I/home/platoon/ws/MiXiM/src/base/utils -I/home/platoon/ws/inet/src/mobility/models -I/home/platoon/ws/MiXiM/src/base/modules -I/home/platoon/ws/MiXiM/src -I/home/platoon/ws/MiXiM/src/base -I/home/platoon/ws/MiXiM/src/base/phyLayer -I/home/platoon/ws/MiXiM/src/base/connectionManager -I/home/platoon/ws/MiXiM/src/base/messages -L/home/platoon/ws/inet/out/$$\(CONFIGNAME\)/src -L/home/platoon/ws/MiXiM/out/$$\(CONFIGNAME\)/src -linet -lmixim -DINET_IMPORT -KINET_PROJ=/home/platoon/ws/inet -KMIXIM_PROJ=/home/platoon/ws/MiXiM
 #
 
 # Name of target to be created (-o option)
@@ -15,20 +15,20 @@ USERIF_LIBS = $(ALL_ENV_LIBS) # that is, $(TKENV_LIBS) $(CMDENV_LIBS)
 
 # C++ include paths (with -I)
 INCLUDE_PATH = \
-    -I../inet/src/util \
-    -I../inet/src/networklayer/common \
-    -I../inet/src/linklayer/contract \
-    -I../inet/src/base \
-    -I../inet/src/mobility \
-    -I../inet/src/networklayer/contract \
-    -I../MiXiM/src/base/utils \
-    -I../inet/src/mobility/models \
-    -I../MiXiM/src/base/modules \
-    -I../MiXiM/src \
-    -I../MiXiM/src/base \
-    -I../MiXiM/src/base/phyLayer \
-    -I../MiXiM/src/base/connectionManager \
-    -I../MiXiM/src/base/messages \
+    -I$(INET_PROJ)/src/util \
+    -I$(INET_PROJ)/src/networklayer/common \
+    -I$(INET_PROJ)/src/linklayer/contract \
+    -I$(INET_PROJ)/src/base \
+    -I$(INET_PROJ)/src/mobility \
+    -I$(INET_PROJ)/src/networklayer/contract \
+    -I$(MIXIM_PROJ)/src/base/utils \
+    -I$(INET_PROJ)/src/mobility/models \
+    -I$(MIXIM_PROJ)/src/base/modules \
+    -I$(MIXIM_PROJ)/src \
+    -I$(MIXIM_PROJ)/src/base \
+    -I$(MIXIM_PROJ)/src/base/phyLayer \
+    -I$(MIXIM_PROJ)/src/base/connectionManager \
+    -I$(MIXIM_PROJ)/src/base/messages \
     -I. \
     -Isrc \
     -Isrc/modules \
@@ -36,6 +36,8 @@ INCLUDE_PATH = \
     -Isrc/modules/messages \
     -Isrc/modules/mobility \
     -Isrc/modules/mobility/models \
+    -Isrc/modules/models \
+    -Isrc/modules/models/mobility \
     -Isrc/modules/nodes \
     -Isrc/networks \
     -Isrc/networks/scenario1 \
@@ -45,8 +47,8 @@ INCLUDE_PATH = \
 EXTRA_OBJS =
 
 # Additional libraries (-L, -l options)
-LIBS = -L../inet/out/$(CONFIGNAME)/src -L../MiXiM/out/$(CONFIGNAME)/src  -linet -lmixim
-LIBS += -Wl,-rpath,`abspath ../inet/out/$(CONFIGNAME)/src` -Wl,-rpath,`abspath ../MiXiM/out/$(CONFIGNAME)/src`
+LIBS = -L$(INET_PROJ)/out/$(CONFIGNAME)/src -L$(MIXIM_PROJ)/out/$(CONFIGNAME)/src  -linet -lmixim
+LIBS += -Wl,-rpath,`abspath $(INET_PROJ)/out/$(CONFIGNAME)/src` -Wl,-rpath,`abspath $(MIXIM_PROJ)/out/$(CONFIGNAME)/src`
 
 # Output directory
 PROJECT_OUTPUT_DIR = out
@@ -62,6 +64,10 @@ OBJS = \
     $O/src/modules/mobility/models/CustomRectangleMobility.o \
     $O/src/modules/mobility/models/CustomLinearMobility.o \
     $O/src/modules/mobility/models/CustomMobilityAccess.o \
+    $O/src/modules/models/mobility/CustomMovingMobilityBase.o \
+    $O/src/modules/models/mobility/CustomRectangleMobility.o \
+    $O/src/modules/models/mobility/CustomLinearMobility.o \
+    $O/src/modules/models/mobility/CustomMobilityAccess.o \
     $O/src/modules/messages/CustomApplPkt_m.o
 
 # Message files
@@ -69,8 +75,8 @@ MSGFILES = \
     src/modules/messages/CustomApplPkt.msg
 
 # Other makefile variables (-K)
-INET_PROJ=../inet
-MIXIM_PROJ=../MiXiM
+INET_PROJ=/home/platoon/ws/inet
+MIXIM_PROJ=/home/platoon/ws/MiXiM
 
 #------------------------------------------------------------------------------
 
@@ -150,6 +156,8 @@ clean:
 	$(Q)-rm -f src/modules/messages/*_m.cc src/modules/messages/*_m.h
 	$(Q)-rm -f src/modules/mobility/*_m.cc src/modules/mobility/*_m.h
 	$(Q)-rm -f src/modules/mobility/models/*_m.cc src/modules/mobility/models/*_m.h
+	$(Q)-rm -f src/modules/models/*_m.cc src/modules/models/*_m.h
+	$(Q)-rm -f src/modules/models/mobility/*_m.cc src/modules/models/mobility/*_m.h
 	$(Q)-rm -f src/modules/nodes/*_m.cc src/modules/nodes/*_m.h
 	$(Q)-rm -f src/networks/*_m.cc src/networks/*_m.h
 	$(Q)-rm -f src/networks/scenario1/*_m.cc src/networks/scenario1/*_m.h
@@ -160,7 +168,7 @@ cleanall: clean
 
 depend:
 	$(qecho) Creating dependencies...
-	$(Q)$(MAKEDEPEND) $(INCLUDE_PATH) -f Makefile -P\$$O/ -- $(MSG_CC_FILES)  ./*.cc src/*.cc src/modules/*.cc src/modules/application/*.cc src/modules/messages/*.cc src/modules/mobility/*.cc src/modules/mobility/models/*.cc src/modules/nodes/*.cc src/networks/*.cc src/networks/scenario1/*.cc src/networks/scenario1/results/*.cc
+	$(Q)$(MAKEDEPEND) $(INCLUDE_PATH) -f Makefile -P\$$O/ -- $(MSG_CC_FILES)  ./*.cc src/*.cc src/modules/*.cc src/modules/application/*.cc src/modules/messages/*.cc src/modules/mobility/*.cc src/modules/mobility/models/*.cc src/modules/models/*.cc src/modules/models/mobility/*.cc src/modules/nodes/*.cc src/networks/*.cc src/networks/scenario1/*.cc src/networks/scenario1/results/*.cc
 
 # DO NOT DELETE THIS LINE -- make depend depends on it.
 $O/src/modules/application/CustomAppLayer.o: src/modules/application/CustomAppLayer.cc \
@@ -182,6 +190,10 @@ $O/src/modules/application/CustomAppLayer.o: src/modules/application/CustomAppLa
 	src/modules/mobility/models/CustomMobilityAccess.h \
 	src/modules/mobility/models/CustomMovingMobilityBase.h \
 	src/modules/mobility/models/CustomRectangleMobility.h \
+	src/modules/models/mobility/CustomLinearMobility.h \
+	src/modules/models/mobility/CustomMobilityAccess.h \
+	src/modules/models/mobility/CustomMovingMobilityBase.h \
+	src/modules/models/mobility/CustomRectangleMobility.h \
 	$(INET_PROJ)/src/base/BasicModule.h \
 	$(INET_PROJ)/src/base/Coord.h \
 	$(INET_PROJ)/src/base/INETDefs.h \
@@ -223,6 +235,8 @@ $O/src/modules/mobility/models/CustomLinearMobility.o: src/modules/mobility/mode
 	$(MIXIM_PROJ)/src/base/utils/FindModule.h \
 	src/modules/mobility/models/CustomLinearMobility.h \
 	src/modules/mobility/models/CustomMovingMobilityBase.h \
+	src/modules/models/mobility/CustomLinearMobility.h \
+	src/modules/models/mobility/CustomMovingMobilityBase.h \
 	$(INET_PROJ)/src/base/BasicModule.h \
 	$(INET_PROJ)/src/base/Coord.h \
 	$(INET_PROJ)/src/base/INETDefs.h \
@@ -238,6 +252,10 @@ $O/src/modules/mobility/models/CustomMobilityAccess.o: src/modules/mobility/mode
 	src/modules/mobility/models/CustomMobilityAccess.h \
 	src/modules/mobility/models/CustomMovingMobilityBase.h \
 	src/modules/mobility/models/CustomRectangleMobility.h \
+	src/modules/models/mobility/CustomLinearMobility.h \
+	src/modules/models/mobility/CustomMobilityAccess.h \
+	src/modules/models/mobility/CustomMovingMobilityBase.h \
+	src/modules/models/mobility/CustomRectangleMobility.h \
 	$(INET_PROJ)/src/base/BasicModule.h \
 	$(INET_PROJ)/src/base/Coord.h \
 	$(INET_PROJ)/src/base/INETDefs.h \
@@ -250,6 +268,7 @@ $O/src/modules/mobility/models/CustomMobilityAccess.o: src/modules/mobility/mode
 	$(INET_PROJ)/src/util/FWMath.h
 $O/src/modules/mobility/models/CustomMovingMobilityBase.o: src/modules/mobility/models/CustomMovingMobilityBase.cc \
 	src/modules/mobility/models/CustomMovingMobilityBase.h \
+	src/modules/models/mobility/CustomMovingMobilityBase.h \
 	$(INET_PROJ)/src/base/BasicModule.h \
 	$(INET_PROJ)/src/base/Coord.h \
 	$(INET_PROJ)/src/base/INETDefs.h \
@@ -264,6 +283,72 @@ $O/src/modules/mobility/models/CustomRectangleMobility.o: src/modules/mobility/m
 	$(MIXIM_PROJ)/src/base/utils/FindModule.h \
 	src/modules/mobility/models/CustomMovingMobilityBase.h \
 	src/modules/mobility/models/CustomRectangleMobility.h \
+	src/modules/models/mobility/CustomMovingMobilityBase.h \
+	src/modules/models/mobility/CustomRectangleMobility.h \
+	$(INET_PROJ)/src/base/BasicModule.h \
+	$(INET_PROJ)/src/base/Coord.h \
+	$(INET_PROJ)/src/base/INETDefs.h \
+	$(INET_PROJ)/src/base/INotifiable.h \
+	$(INET_PROJ)/src/base/ModuleAccess.h \
+	$(INET_PROJ)/src/base/NotificationBoard.h \
+	$(INET_PROJ)/src/base/NotifierConsts.h \
+	$(INET_PROJ)/src/mobility/IMobility.h \
+	$(INET_PROJ)/src/mobility/models/MobilityBase.h \
+	$(INET_PROJ)/src/util/FWMath.h
+$O/src/modules/models/mobility/CustomLinearMobility.o: src/modules/models/mobility/CustomLinearMobility.cc \
+	$(MIXIM_PROJ)/src/base/utils/FindModule.h \
+	src/modules/mobility/models/CustomLinearMobility.h \
+	src/modules/mobility/models/CustomMovingMobilityBase.h \
+	src/modules/models/mobility/CustomLinearMobility.h \
+	src/modules/models/mobility/CustomMovingMobilityBase.h \
+	$(INET_PROJ)/src/base/BasicModule.h \
+	$(INET_PROJ)/src/base/Coord.h \
+	$(INET_PROJ)/src/base/INETDefs.h \
+	$(INET_PROJ)/src/base/INotifiable.h \
+	$(INET_PROJ)/src/base/ModuleAccess.h \
+	$(INET_PROJ)/src/base/NotificationBoard.h \
+	$(INET_PROJ)/src/base/NotifierConsts.h \
+	$(INET_PROJ)/src/mobility/IMobility.h \
+	$(INET_PROJ)/src/mobility/models/MobilityBase.h \
+	$(INET_PROJ)/src/util/FWMath.h
+$O/src/modules/models/mobility/CustomMobilityAccess.o: src/modules/models/mobility/CustomMobilityAccess.cc \
+	src/modules/mobility/models/CustomLinearMobility.h \
+	src/modules/mobility/models/CustomMobilityAccess.h \
+	src/modules/mobility/models/CustomMovingMobilityBase.h \
+	src/modules/mobility/models/CustomRectangleMobility.h \
+	src/modules/models/mobility/CustomLinearMobility.h \
+	src/modules/models/mobility/CustomMobilityAccess.h \
+	src/modules/models/mobility/CustomMovingMobilityBase.h \
+	src/modules/models/mobility/CustomRectangleMobility.h \
+	$(INET_PROJ)/src/base/BasicModule.h \
+	$(INET_PROJ)/src/base/Coord.h \
+	$(INET_PROJ)/src/base/INETDefs.h \
+	$(INET_PROJ)/src/base/INotifiable.h \
+	$(INET_PROJ)/src/base/ModuleAccess.h \
+	$(INET_PROJ)/src/base/NotificationBoard.h \
+	$(INET_PROJ)/src/base/NotifierConsts.h \
+	$(INET_PROJ)/src/mobility/IMobility.h \
+	$(INET_PROJ)/src/mobility/models/MobilityBase.h \
+	$(INET_PROJ)/src/util/FWMath.h
+$O/src/modules/models/mobility/CustomMovingMobilityBase.o: src/modules/models/mobility/CustomMovingMobilityBase.cc \
+	src/modules/mobility/models/CustomMovingMobilityBase.h \
+	src/modules/models/mobility/CustomMovingMobilityBase.h \
+	$(INET_PROJ)/src/base/BasicModule.h \
+	$(INET_PROJ)/src/base/Coord.h \
+	$(INET_PROJ)/src/base/INETDefs.h \
+	$(INET_PROJ)/src/base/INotifiable.h \
+	$(INET_PROJ)/src/base/ModuleAccess.h \
+	$(INET_PROJ)/src/base/NotificationBoard.h \
+	$(INET_PROJ)/src/base/NotifierConsts.h \
+	$(INET_PROJ)/src/mobility/IMobility.h \
+	$(INET_PROJ)/src/mobility/models/MobilityBase.h \
+	$(INET_PROJ)/src/util/FWMath.h
+$O/src/modules/models/mobility/CustomRectangleMobility.o: src/modules/models/mobility/CustomRectangleMobility.cc \
+	$(MIXIM_PROJ)/src/base/utils/FindModule.h \
+	src/modules/mobility/models/CustomMovingMobilityBase.h \
+	src/modules/mobility/models/CustomRectangleMobility.h \
+	src/modules/models/mobility/CustomMovingMobilityBase.h \
+	src/modules/models/mobility/CustomRectangleMobility.h \
 	$(INET_PROJ)/src/base/BasicModule.h \
 	$(INET_PROJ)/src/base/Coord.h \
 	$(INET_PROJ)/src/base/INETDefs.h \
