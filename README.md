@@ -1,2 +1,2 @@
 # bici_simu
-Simulación de las bicicletas (CACC + Beaconing)
+Simulación de las bicicletas (CACC + Beaconing + GPS Error)
