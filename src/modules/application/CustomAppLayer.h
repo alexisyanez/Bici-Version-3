@@ -123,6 +123,9 @@ class MIXIM_API CustomAppLayer : public MyTestAppLayer
         double position_error_a;
 		double position_error_b;
 
+		//RTT calculing distace method
+	    bool RTTEnabled;
+
         //Values for calculating Spacing Error
         double length_vehicle_front;
         double desiredSpacing;

@@ -33,7 +33,8 @@ packet CustomApplPkt {
     double										speed; // Velocidad del módulo
     int											   id; // ID consecutivo del paquete
     double 								 acceleration; // Aceleración del módulo
-    double						   leaderAcceleration; //Aceleraci�n del l�der
-    double 								  leaderSpeed; //Velocidad del l�der
-    bool 							 beaconingEnabled; //Habilitaci�n del beaconing --> true - habilitado; false - deshabilitado
+    double						   leaderAcceleration; // Aceleraci�n del l�der
+    double 								  leaderSpeed; // Velocidad del l�der
+    bool 							 beaconingEnabled; // Habilitaci�n del beaconing --> true - habilitado; false - deshabilitado
+	double										   TS; // Timestamp del paquete
 }

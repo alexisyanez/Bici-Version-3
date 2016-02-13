@@ -47,6 +47,9 @@ simple CustomAppLayer like IBaseApplLayer
         bool GPS_error;
         double position_error_a = default(0);
         double position_error_b = default(0);
+        
+        //RTT Calculing distance method
+        bool RTT_on;
     	
     	//Values for spacing error
     	double spacing;

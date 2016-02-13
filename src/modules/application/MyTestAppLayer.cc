@@ -125,7 +125,6 @@ void MyTestAppLayer::sendBroadcast(int id, double xpos, double ypos, double spee
     pkt->setXposition(xpos);
     pkt->setYposition(ypos);
     pkt->setSpeed(speed);
-
     // set the control info to tell the network layer the layer 3
     // address;
     NetwControlInfo::setControlInfo(pkt, LAddress::L3BROADCAST);
@@ -172,6 +171,7 @@ void MyTestAppLayer::sendNodeInfo(int id, double xpos, double ypos, double xposG
     pkt->setSpeed(speed);
     pkt->setAcceleration(acceleration);
     pkt->setBeaconingEnabled(beaconingEnabled);
+    pkt->setTS(SIMTIME_DBL(simTime()));
 
     //Agregar datos del l�der
     if (beaconingEnabled)

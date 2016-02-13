@@ -85,6 +85,9 @@ void CustomAppLayer::initialize(int stage)
     position_error_a = par("position_error_a"); // Corresponde al Parametro Sigma de la distribución de raylegh (setear en 5)
     position_error_b = par("position_error_b"); // Corresponde a que tan desviados estan los datos (setear en 1.5)
 
+    // Activar RTT para calcular distancia
+    RTTEnabled = par("RTT_on");
+
     length_vehicle_front = par("lenghtVehicle");
     desiredSpacing = par("spacing");
     beaconInterval = par("beaconInterval");
@@ -130,6 +133,8 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                 double speed = getModuleSpeed();
                 double acceleration = getModuleAcceleration();
 
+
+
                 totalDistance = par("totalDistance");
 
                 //Detener a todos los nodos al estar en x_final y en el 70% del y_final
@@ -150,6 +155,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                     //Enviar paquete con la posicion y velocidad al resto de nodos
                     sendNodeInfo(packageID, xposition, yposition, xpositionGPSerror, speed, acceleration, LAddress::L3BROADCAST,
                             localLeaderAcceleration, localLeaderSpeed, beaconingEnabled);
+                    //msg->setTimestamp(simTime()); // enviar Timestamp
 
                 }
                 else
@@ -158,7 +164,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                     //Enviar paquete con la posicion y velocidad al resto de nodos
                     sendNodeInfo(packageID, xposition, yposition, xpositionGPSerror, speed, acceleration, LAddress::L3BROADCAST,
                             localLeaderAcceleration, localLeaderSpeed, beaconingEnabled);
-
+                    //msg->setTimestamp(simTime()); // enviar Timestamp
                 }
 
                 //Actualizar GUI con numero de paquetes enviados
@@ -187,9 +193,13 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                 // 1. PREPARACION
 
                 //Lista sin duplicados
+                double TS = SIMTIME_DBL(simTime());
+
                 std::vector<NodeInfo*> noDuplicateInfo;
                 double distanceBetweenActualAndFront;
                 double distanceBetweenActualAndFrontGPS;
+                double distanceBetweenActualAndFrontRTT;
+
 
 
                 //Se agrega la informacion a la lista sin duplicados
@@ -285,10 +295,13 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
 
                     double spacing_error;
                     double spacing_error_GPS;
+                    double spacing_error_RTT;
                     double nodeFrontAcceleration;
+                    double RTT;
 
                     if (nearestNode != NULL)
                     {
+
                         //Velocidad relativa al vehiculo del frente
                         rel_speed_front = getModuleSpeed() - nearestNode->getSpeed();
 
@@ -300,6 +313,12 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                         distanceBetweenActualAndFrontGPS = getDistanceBetweenNodes2(posxGPS, nearestNode->getXPositionGPSerror());
                         spacing_error_GPS = -distanceBetweenActualAndFrontGPS + length_vehicle_front + desiredSpacing;
 
+                        // obtener spacing error con RTT
+
+                        RTT = 2 * ( TS - nearestNode->getTS());
+                        distanceBetweenActualAndFrontRTT = ( (3 * (10 ^ 8)) * RTT )/ 2;
+                        spacing_error_RTT = -distanceBetweenActualAndFrontRTT + length_vehicle_front + desiredSpacing;
+
                         nodeFrontAcceleration = nearestNode->getAcceleration();
 
                     }
@@ -308,6 +327,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                         rel_speed_front = 0;
                         spacing_error = 0;
                         spacing_error_GPS = 0;
+                        spacing_error_RTT = 0;
                         nodeFrontAcceleration = 0;
                     }
 
@@ -362,6 +382,12 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
 						A_des = alpha1 * nodeFrontAcceleration + alpha2 * leaderAcceleration
 								- alpha3 * rel_speed_front - alpha4 * (getModuleSpeed() - leaderSpeed)
 								- alpha5 * spacing_error_GPS;
+					}
+					else if (RTTEnabled == true)
+					{
+                        A_des = alpha1 * nodeFrontAcceleration + alpha2 * leaderAcceleration
+                                - alpha3 * rel_speed_front - alpha4 * (getModuleSpeed() - leaderSpeed)
+                                - alpha5 * spacing_error_RTT;
 					}
 					else
 					{

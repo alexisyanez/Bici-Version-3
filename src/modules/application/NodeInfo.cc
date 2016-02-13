@@ -28,6 +28,7 @@ NodeInfo::NodeInfo()
     acceleration = 0;
     leaderAcceleration = 0;
     leaderSpeed = 0;
+    TS = 0;
 
 }
 
@@ -81,6 +82,11 @@ double NodeInfo::getLeaderSpeed()
     return leaderSpeed;
 }
 
+double NodeInfo::getTS()
+{
+    return TS;
+}
+
 void NodeInfo::setSrcAddress(int sA)
 {
     srcAddress = sA;
@@ -126,3 +132,7 @@ void NodeInfo::setLeaderSpeed(double s)
     leaderSpeed = s;
 }
 
+void NodeInfo::setTS(double timeS)
+{
+    TS = timeS;
+}

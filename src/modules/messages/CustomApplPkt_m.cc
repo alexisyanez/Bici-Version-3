@@ -47,6 +47,7 @@ CustomApplPkt::CustomApplPkt(const char *name, int kind) : ::cPacket(name,kind)
     this->leaderAcceleration_var = 0;
     this->leaderSpeed_var = 0;
     this->beaconingEnabled_var = 0;
+    this->TS_var = 0;
 }
 
 CustomApplPkt::CustomApplPkt(const CustomApplPkt& other) : ::cPacket(other)
@@ -79,6 +80,7 @@ void CustomApplPkt::copy(const CustomApplPkt& other)
     this->leaderAcceleration_var = other.leaderAcceleration_var;
     this->leaderSpeed_var = other.leaderSpeed_var;
     this->beaconingEnabled_var = other.beaconingEnabled_var;
+    this->TS_var = other.TS_var;
 }
 
 void CustomApplPkt::parsimPack(cCommBuffer *b)
@@ -95,6 +97,7 @@ void CustomApplPkt::parsimPack(cCommBuffer *b)
     doPacking(b,this->leaderAcceleration_var);
     doPacking(b,this->leaderSpeed_var);
     doPacking(b,this->beaconingEnabled_var);
+    doPacking(b,this->TS_var);
 }
 
 void CustomApplPkt::parsimUnpack(cCommBuffer *b)
@@ -111,6 +114,7 @@ void CustomApplPkt::parsimUnpack(cCommBuffer *b)
     doUnpacking(b,this->leaderAcceleration_var);
     doUnpacking(b,this->leaderSpeed_var);
     doUnpacking(b,this->beaconingEnabled_var);
+    doUnpacking(b,this->TS_var);
 }
 
 LAddress::L3Type& CustomApplPkt::getDestAddr()
@@ -223,6 +227,16 @@ void CustomApplPkt::setBeaconingEnabled(bool beaconingEnabled)
     this->beaconingEnabled_var = beaconingEnabled;
 }
 
+double CustomApplPkt::getTS() const
+{
+    return TS_var;
+}
+
+void CustomApplPkt::setTS(double TS)
+{
+    this->TS_var = TS;
+}
+
 class CustomApplPktDescriptor : public cClassDescriptor
 {
   public:
@@ -293,8 +307,9 @@ unsigned int CustomApplPktDescriptor::getFieldTypeFlags(void *object, int field)
         FD_ISEDITABLE,
         FD_ISEDITABLE,
         FD_ISEDITABLE,
+        FD_ISEDITABLE,
     };
-    return (field>=0 && field<11) ? fieldTypeFlags[field] : 0;
+    return (field>=0 && field<12) ? fieldTypeFlags[field] : 0;
 }
 
 const char *CustomApplPktDescriptor::getFieldName(void *object, int field) const
@@ -317,8 +332,9 @@ const char *CustomApplPktDescriptor::getFieldName(void *object, int field) const
         "leaderAcceleration",
         "leaderSpeed",
         "beaconingEnabled",
+        "TS",
     };
-    return (field>=0 && field<11) ? fieldNames[field] : NULL;
+    return (field>=0 && field<12) ? fieldNames[field] : NULL;
 }
 
 int CustomApplPktDescriptor::findField(void *object, const char *fieldName) const
@@ -336,6 +352,7 @@ int CustomApplPktDescriptor::findField(void *object, const char *fieldName) cons
     if (fieldName[0]=='l' && strcmp(fieldName, "leaderAcceleration")==0) return base+8;
     if (fieldName[0]=='l' && strcmp(fieldName, "leaderSpeed")==0) return base+9;
     if (fieldName[0]=='b' && strcmp(fieldName, "beaconingEnabled")==0) return base+10;
+    if (fieldName[0]=='t' && strcmp(fieldName, "TS")==0) return base+11;
     return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
@@ -359,6 +376,7 @@ const char *CustomApplPktDescriptor::getFieldTypeString(void *object, int field)
         "double",
         "double",
         "bool",
+        "double",
     };
     return (field>=0 && field<11) ? fieldTypeStrings[field] : NULL;
 }
@@ -411,6 +429,7 @@ std::string CustomApplPktDescriptor::getFieldAsString(void *object, int field, i
         case 8: return double2string(pp->getLeaderAcceleration());
         case 9: return double2string(pp->getLeaderSpeed());
         case 10: return bool2string(pp->getBeaconingEnabled());
+        case 11: return double2string(pp->getTS());
         default: return "";
     }
 }
@@ -434,6 +453,7 @@ bool CustomApplPktDescriptor::setFieldAsString(void *object, int field, int i, c
         case 8: pp->setLeaderAcceleration(string2double(value)); return true;
         case 9: pp->setLeaderSpeed(string2double(value)); return true;
         case 10: pp->setBeaconingEnabled(string2bool(value)); return true;
+        case 11: pp->setTS(string2double(value)); return true;
         default: return false;
     }
 }
@@ -449,6 +469,7 @@ const char *CustomApplPktDescriptor::getFieldStructName(void *object, int field)
     static const char *fieldStructNames[] = {
         "LAddress::L3Type",
         "LAddress::L3Type",
+        NULL,
         NULL,
         NULL,
         NULL,
