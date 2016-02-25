@@ -87,6 +87,10 @@ module HostBici extends MyWirelessNode
         @signal[distanceToFwd](type="double");
         @statistic[distanceToFwd](title="distance to fwd"; source="distanceToFwd"; record=vector,stats; interpolationmode=none);
 
+		//Se�al para indicar la distancia al nodo del frente en base al RTT
+        @signal[distanceToFwdRTT](type="double");
+        @statistic[distanceToFwdRTT](title="distance to fwd RTT"; source="distanceToFwdRTT"; record=vector,stats; interpolationmode=none);
+        
         //Se�al para indicar la aceleraci�n del l�der
         @signal[accelerationLeader](type="double");
         @statistic[accelerationLeader](title="leader acceleration"; source="accelerationLeader"; record=vector,stats; interpolationmode=none);

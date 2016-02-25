@@ -43,6 +43,7 @@ void CustomAppLayer::initialize(int stage)
     accelerationErrorSignal = registerSignal("accelerationError");
     accelerationSinSignal = registerSignal("accelerationSin");
     distanceToFwdSignal = registerSignal("distanceToFwd");
+    distanceToFwdRTTSignal = registerSignal("distanceToFwdRTT");
     leaderInfoSignal = registerSignal("leaderInfo");
     leaderInfoDirectSignal = registerSignal("leaderInfoDirect");
     leaderInfoMultihopSignal = registerSignal("leaderInfoMultihop");
@@ -193,7 +194,8 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                 // 1. PREPARACION
 
                 //Lista sin duplicados
-                double TS = SIMTIME_DBL(simTime());
+
+                //double TS = SIMTIME_DBL(simTime()); // setear el tiempo de simulación
 
                 std::vector<NodeInfo*> noDuplicateInfo;
                 double distanceBetweenActualAndFront;
@@ -297,7 +299,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                     double spacing_error_GPS;
                     double spacing_error_RTT;
                     double nodeFrontAcceleration;
-                    double RTT;
+                    //double RTT;
 
                     if (nearestNode != NULL)
                     {
@@ -315,9 +317,11 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
 
                         // obtener spacing error con RTT
 
-                        RTT = 2 * ( TS - nearestNode->getTS());
-                        distanceBetweenActualAndFrontRTT = ( (3 * (10 ^ 8)) * RTT )/ 2;
+                        //RTT = 2 * ( TS - nearestNode->getTS());
+                        distanceBetweenActualAndFrontRTT = SIMTIME_DBL( ((3 * (10 ^ 8)) * (2 * (simTime()- nearestNode->getTS())) )/ 2);
                         spacing_error_RTT = -distanceBetweenActualAndFrontRTT + length_vehicle_front + desiredSpacing;
+
+                        emit(distanceToFwdRTTSignal, distanceBetweenActualAndFrontRTT);
 
                         nodeFrontAcceleration = nearestNode->getAcceleration();
 

@@ -64,6 +64,9 @@ class MIXIM_API CustomAppLayer : public MyTestAppLayer
         //Se�al para emitir la distancia del nodo actual al nodo frontal
         simsignal_t distanceToFwdSignal;
 
+        //Se�al para emitir la distancia del nodo actual al nodo frontal
+        simsignal_t distanceToFwdRTTSignal;
+
         //Señal para emitir tiempo de llegada del nodo a la meta
         simsignal_t arrivalTimeSignal;
 
@@ -123,7 +126,7 @@ class MIXIM_API CustomAppLayer : public MyTestAppLayer
         double position_error_a;
 		double position_error_b;
 
-		//RTT calculing distace method
+		//RTT calculing distance method
 	    bool RTTEnabled;
 
         //Values for calculating Spacing Error

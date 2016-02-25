@@ -125,6 +125,7 @@ void MyTestAppLayer::sendBroadcast(int id, double xpos, double ypos, double spee
     pkt->setXposition(xpos);
     pkt->setYposition(ypos);
     pkt->setSpeed(speed);
+    pkt->setTS(SIMTIME_DBL(simTime()));
     // set the control info to tell the network layer the layer 3
     // address;
     NetwControlInfo::setControlInfo(pkt, LAddress::L3BROADCAST);

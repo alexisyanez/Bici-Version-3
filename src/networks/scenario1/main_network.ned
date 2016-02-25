@@ -27,10 +27,9 @@ network Main_Network extends BaseNetwork
 
 
     submodules:
-        node[numNodes]: HostBici 
-        {
+        node[numNodes]: HostBici {
             parameters:
-                @display("i=old/x_blank");
+                @display("i=old/ball;b=1,1,oval,,,0;p=237,80;is=vs");
 
         }
 
