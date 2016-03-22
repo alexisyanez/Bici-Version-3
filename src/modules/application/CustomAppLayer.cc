@@ -120,6 +120,8 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
 
         switch (msg->getKind())
         {
+        double ST; //Inicializar simtime para poteriormente calcular el RTT
+        //double NNST;
 
             //El mensaje POSITION_TIMER indica que es tiempo de enviar sus datos en broadcast
             case POSITION_TIMER:
@@ -133,6 +135,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                 double xpositionGPSerror = getModuleXPositionGPSError();
                 double speed = getModuleSpeed();
                 double acceleration = getModuleAcceleration();
+                ST = SIMTIME_DBL(simTime()); //Setear valor para simtime para poteriormente calcular el RTT
 
 
 
@@ -195,7 +198,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
 
                 //Lista sin duplicados
 
-                //double TS = SIMTIME_DBL(simTime()); // setear el tiempo de simulación
+                // setear el tiempo de simulación
 
                 std::vector<NodeInfo*> noDuplicateInfo;
                 double distanceBetweenActualAndFront;
@@ -299,7 +302,8 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                     double spacing_error_GPS;
                     double spacing_error_RTT;
                     double nodeFrontAcceleration;
-                    //double RTT;
+                    double Speed_Ligth = 3 * (10 ^ 8);
+                    double RTT;
 
                     if (nearestNode != NULL)
                     {
@@ -317,8 +321,8 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
 
                         // obtener spacing error con RTT
 
-                        //RTT = 2 * ( TS - nearestNode->getTS());
-                        distanceBetweenActualAndFrontRTT = SIMTIME_DBL( ((3 * (10 ^ 8)) * (2 * (simTime()- nearestNode->getTS())) )/ 2);
+                        RTT = 2 * ( ST - nearestNode->getTS());
+                        distanceBetweenActualAndFrontRTT =  (Speed_Ligth * RTT )/ 2;
                         spacing_error_RTT = -distanceBetweenActualAndFrontRTT + length_vehicle_front + desiredSpacing;
 
                         emit(distanceToFwdRTTSignal, distanceBetweenActualAndFrontRTT);
