@@ -17,6 +17,7 @@
 #include "NetwControlInfo.h"
 #include "SimpleAddress.h"
 #include "CustomApplPkt_m.h"
+double TS;
 
 using std::endl;
 
@@ -95,6 +96,7 @@ void MyTestAppLayer::handleSelfMsg(cMessage *msg)
 {
     switch (msg->getKind())
     {
+    msg->setTimestamp(simTime()); //setTS(SIMTIME_DBL(simTime()));
         case SEND_BROADCAST_TIMER:
             //sendBroadcast();
             delete msg;
@@ -125,7 +127,8 @@ void MyTestAppLayer::sendBroadcast(int id, double xpos, double ypos, double spee
     pkt->setXposition(xpos);
     pkt->setYposition(ypos);
     pkt->setSpeed(speed);
-    pkt->setTS(SIMTIME_DBL(simTime()));
+    pkt->setTimestamp();
+    //pkt->setTS(SIMTIME_DBL(simTime()));
     // set the control info to tell the network layer the layer 3
     // address;
     NetwControlInfo::setControlInfo(pkt, LAddress::L3BROADCAST);
@@ -172,7 +175,8 @@ void MyTestAppLayer::sendNodeInfo(int id, double xpos, double ypos, double xposG
     pkt->setSpeed(speed);
     pkt->setAcceleration(acceleration);
     pkt->setBeaconingEnabled(beaconingEnabled);
-    pkt->setTS(SIMTIME_DBL(simTime()));
+    pkt->setTimestamp();
+    //pkt->setTS(SIMTIME_DBL(simTime()));
 
     //Agregar datos del l�der
     if (beaconingEnabled)
@@ -199,4 +203,3 @@ MyTestAppLayer::~MyTestAppLayer()
     cancelAndDelete(positionTimer);
 //    cancelAndDelete(platoonTimer);
 }
-

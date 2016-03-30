@@ -27,6 +27,7 @@ using namespace std;
 using std::endl;
 
 Define_Module(CustomAppLayer);
+double RTT;
 
 void CustomAppLayer::initialize(int stage)
 {
@@ -120,8 +121,8 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
 
         switch (msg->getKind())
         {
-        double ST; //Inicializar simtime para poteriormente calcular el RTT
-        //double NNST;
+        //double ST; //Inicializar simtime para poteriormente calcular el RTT
+
 
             //El mensaje POSITION_TIMER indica que es tiempo de enviar sus datos en broadcast
             case POSITION_TIMER:
@@ -135,7 +136,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                 double xpositionGPSerror = getModuleXPositionGPSError();
                 double speed = getModuleSpeed();
                 double acceleration = getModuleAcceleration();
-                ST = SIMTIME_DBL(simTime()); //Setear valor para simtime para poteriormente calcular el RTT
+              //  ST = SIMTIME_DBL(simTime()); //Setear valor para simtime para poteriormente calcular el RTT
 
 
 
@@ -182,7 +183,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                 //Se emiten dos senales con la posicion x e y del nodo al enviar un paquete
                 emit(positionXSignal, xposition);
                 emit(positionYSignal, yposition);
-				emit(positionXGPSErrorSignal, xpositionGPSerror);
+                emit(positionXGPSErrorSignal, xpositionGPSerror);
 
                 //Volver a iniciar el timer para enviar el siguiente paquete
                 positionTimer = new cMessage("position-timer", POSITION_TIMER);
@@ -303,7 +304,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                     double spacing_error_RTT;
                     double nodeFrontAcceleration;
                     double Speed_Ligth = 3 * (10 ^ 8);
-                    double RTT;
+                    //double RTT;
 
                     if (nearestNode != NULL)
                     {
@@ -315,17 +316,17 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                         distanceBetweenActualAndFront = getDistanceBetweenNodes2(posx, nearestNode->getXPosition());
                         spacing_error = -distanceBetweenActualAndFront + length_vehicle_front + desiredSpacing;
 
-						//Obtener spacing error con GPS
+                        //Obtener spacing error con GPS
                         distanceBetweenActualAndFrontGPS = getDistanceBetweenNodes2(posxGPS, nearestNode->getXPositionGPSerror());
                         spacing_error_GPS = -distanceBetweenActualAndFrontGPS + length_vehicle_front + desiredSpacing;
 
                         // obtener spacing error con RTT
 
-                        RTT = 2 * ( ST - nearestNode->getTS());
+                        //RTT = 2 * ( ST - nearestNode->getTS());
                         distanceBetweenActualAndFrontRTT =  (Speed_Ligth * RTT )/ 2;
                         spacing_error_RTT = -distanceBetweenActualAndFrontRTT + length_vehicle_front + desiredSpacing;
 
-                        emit(distanceToFwdRTTSignal, distanceBetweenActualAndFrontRTT);
+                        emit(distanceToFwdRTTSignal,distanceBetweenActualAndFrontRTT );
 
                         nodeFrontAcceleration = nearestNode->getAcceleration();
 
@@ -373,6 +374,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                     //Print data for calculation
                     EV << "Node[" << myApplAddr() << "]: Platoon parameters" << endl;
                     EV << "distance to Vehicle in Front=" << distanceBetweenActualAndFront << endl;
+                    EV << "distance to vehicle in Front RTT =" << distanceBetweenActualAndFrontRTT << endl;
                     EV << "Vehicle in Front Acceleration=" << nodeFrontAcceleration << endl;
                     EV << "Leader Acceleration=" << leaderAcceleration << endl;
                     EV << "Relative speed vehicule in front=" << rel_speed_front << endl;
@@ -384,25 +386,25 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                     emit(velNodeSignal,getModuleSpeed());
                     double A_des;
 
-					if (GPSErrorEnabled == true) // se activa solo si el usurio quiere incluir el error del GPS
-					{
-						 //d. Calcular A_des (Acceleration desired)
-						A_des = alpha1 * nodeFrontAcceleration + alpha2 * leaderAcceleration
-								- alpha3 * rel_speed_front - alpha4 * (getModuleSpeed() - leaderSpeed)
-								- alpha5 * spacing_error_GPS;
-					}
-					else if (RTTEnabled == true)
-					{
+                    if (GPSErrorEnabled == true) // se activa solo si el usurio quiere incluir el error del GPS
+                    {
+                         //d. Calcular A_des (Acceleration desired)
+                        A_des = alpha1 * nodeFrontAcceleration + alpha2 * leaderAcceleration
+                                - alpha3 * rel_speed_front - alpha4 * (getModuleSpeed() - leaderSpeed)
+                                - alpha5 * spacing_error_GPS;
+                    }
+                    else if (RTTEnabled == true)
+                    {
                         A_des = alpha1 * nodeFrontAcceleration + alpha2 * leaderAcceleration
                                 - alpha3 * rel_speed_front - alpha4 * (getModuleSpeed() - leaderSpeed)
                                 - alpha5 * spacing_error_RTT;
-					}
-					else
-					{
-						A_des = alpha1 * nodeFrontAcceleration + alpha2 * leaderAcceleration
-								- alpha3 * rel_speed_front - alpha4 * (getModuleSpeed() - leaderSpeed)
-								- alpha5 * spacing_error;
-					}
+                    }
+                    else
+                    {
+                        A_des = alpha1 * nodeFrontAcceleration + alpha2 * leaderAcceleration
+                                - alpha3 * rel_speed_front - alpha4 * (getModuleSpeed() - leaderSpeed)
+                                - alpha5 * spacing_error;
+                    }
 
                     emit(accelerationPlatoonSignal, A_des);
 
@@ -491,6 +493,11 @@ void CustomAppLayer::handleLowerMsg(cMessage* msg)
         double xpositionGPSerror = m->getXpositionGPS();
         double speed = m->getSpeed();
         double acceleration = m->getAcceleration();
+
+        //Calculo del RTT
+        double ST = SIMTIME_DBL(simTime());  // Obtener tiempo de simulación
+        double GTS=SIMTIME_DBL(m->getTimestamp()); // Obtener tiempo de envio del paquete
+        RTT = 2 * ( ST - GTS);
 
         EV << "srcAddress" << m->getSrcAddr();
 
