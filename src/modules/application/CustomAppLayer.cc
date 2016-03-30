@@ -27,7 +27,6 @@ using namespace std;
 using std::endl;
 
 Define_Module(CustomAppLayer);
-double RTT;
 
 void CustomAppLayer::initialize(int stage)
 {
@@ -107,7 +106,6 @@ void CustomAppLayer::initialize(int stage)
             bSendReply = par("burstReply");
         else
             bSendReply = true;
-
     }
 }
 
@@ -121,10 +119,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
 
         switch (msg->getKind())
         {
-        //double ST; //Inicializar simtime para poteriormente calcular el RTT
-
-
-            //El mensaje POSITION_TIMER indica que es tiempo de enviar sus datos en broadcast
+             //El mensaje POSITION_TIMER indica que es tiempo de enviar sus datos en broadcast
             case POSITION_TIMER:
             {
                 //Aumentar el ID actual para asignar al paquete que se va a enviar
@@ -136,9 +131,6 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                 double xpositionGPSerror = getModuleXPositionGPSError();
                 double speed = getModuleSpeed();
                 double acceleration = getModuleAcceleration();
-              //  ST = SIMTIME_DBL(simTime()); //Setear valor para simtime para poteriormente calcular el RTT
-
-
 
                 totalDistance = par("totalDistance");
 
@@ -323,7 +315,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                         // obtener spacing error con RTT
 
                         //RTT = 2 * ( ST - nearestNode->getTS());
-                        distanceBetweenActualAndFrontRTT =  (Speed_Ligth * RTT )/ 2;
+                        distanceBetweenActualAndFrontRTT =  (Speed_Ligth * nearestNode->getRTTBack())/ 2;
                         spacing_error_RTT = -distanceBetweenActualAndFrontRTT + length_vehicle_front + desiredSpacing;
 
                         emit(distanceToFwdRTTSignal,distanceBetweenActualAndFrontRTT );
@@ -493,11 +485,16 @@ void CustomAppLayer::handleLowerMsg(cMessage* msg)
         double xpositionGPSerror = m->getXpositionGPS();
         double speed = m->getSpeed();
         double acceleration = m->getAcceleration();
+        double RTTB;
 
         //Calculo del RTT
+        if (m->getSrcAddr() == myApplAddr()+1 &&  myApplAddr() != 3 ) // Solo hace el calculo si el paquete recibido es del nodo de atras y si no es el último, *ver como obtener el numero de nodos
+        {
         double ST = SIMTIME_DBL(simTime());  // Obtener tiempo de simulación
-        double GTS=SIMTIME_DBL(m->getTimestamp()); // Obtener tiempo de envio del paquete
-        RTT = 2 * ( ST - GTS);
+        double GTS = SIMTIME_DBL(m->getTimestamp()); // Obtener tiempo de envio del paquete
+        RTTB = 2 * ( ST - GTS); //Calcular RTT al nodo del frente
+
+        }
 
         EV << "srcAddress" << m->getSrcAddr();
 
@@ -512,6 +509,8 @@ void CustomAppLayer::handleLowerMsg(cMessage* msg)
         nodeInfo->setAcceleration(acceleration);
         nodeInfo->setLeaderAcceleration(m->getLeaderAcceleration());
         nodeInfo->setLeaderSpeed(m->getLeaderSpeed());
+        nodeInfo->setRTTBack(RTTB);
+
 
         //Guardar aceleraci�n y velocidad si pertenecen al l�der
         if (m->getSrcAddr() == 0)

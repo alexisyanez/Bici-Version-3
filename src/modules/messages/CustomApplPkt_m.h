@@ -51,7 +51,7 @@ class CustomApplPkt : public ::cPacket
     double leaderAcceleration_var;
     double leaderSpeed_var;
     bool beaconingEnabled_var;
-    double TS_var;
+    double RTTBack_var;
 
   private:
     void copy(const CustomApplPkt& other);
@@ -94,8 +94,8 @@ class CustomApplPkt : public ::cPacket
     virtual void setLeaderSpeed(double leaderSpeed);
     virtual bool getBeaconingEnabled() const;
     virtual void setBeaconingEnabled(bool beaconingEnabled);
-    virtual double getTS() const;
-    virtual void setTS(double TS);
+    virtual double getRTTBack() const;
+    virtual void setRTTBack(double speed);
 };
 
 inline void doPacking(cCommBuffer *b, CustomApplPkt& obj) {obj.parsimPack(b);}

@@ -36,5 +36,5 @@ packet CustomApplPkt {
     double						   leaderAcceleration; // Aceleraci�n del l�der
     double 								  leaderSpeed; // Velocidad del l�der
     bool 							 beaconingEnabled; // Habilitaci�n del beaconing --> true - habilitado; false - deshabilitado
-	double										   TS; // Timestamp del paquete
+    double 								  	  RTTBack; // RTT con respecto al nodo de atrás
 }
