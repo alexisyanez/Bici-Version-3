@@ -31,7 +31,7 @@ private:
     double acceleration;
     double leaderAcceleration;
     double leaderSpeed;
-    double RTTBack;
+    double TS; // Time Stamp
 
 public:
     NodeInfo();
@@ -45,7 +45,7 @@ public:
     void setAcceleration(double a);
     void setLeaderAcceleration(double a);
     void setLeaderSpeed(double s);
-    void setRTTBack(double R);
+    void setTS(double timeS);
     int getSrcAddress();
     int getPackageID();
     double getXPosition();
@@ -55,7 +55,7 @@ public:
     double getAcceleration();
     double getLeaderAcceleration();
     double getLeaderSpeed();
-    double getRTTBack();
+    double getTS();
 
 
 };
