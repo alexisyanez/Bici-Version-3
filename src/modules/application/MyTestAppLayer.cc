@@ -18,6 +18,7 @@
 #include "SimpleAddress.h"
 #include "CustomApplPkt_m.h"
 
+
 using std::endl;
 
 MyTestAppLayer::MyTestAppLayer() :
@@ -127,6 +128,7 @@ void MyTestAppLayer::sendBroadcast(int id, double xpos, double ypos, double spee
     pkt->setYposition(ypos);
     pkt->setSpeed(speed);
     pkt->setTimestamp(simTime());
+
     //pkt->setTS(SIMTIME_DBL(simTime()));
     // set the control info to tell the network layer the layer 3
     // address;
