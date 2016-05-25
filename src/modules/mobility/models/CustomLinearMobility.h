@@ -38,6 +38,9 @@ class INET_API CustomLinearMobility : public CustomMovingMobilityBase
 
    protected:
         double speed;          ///< speed of the host
+        double speed2;          ///< speed of the host
+        double speed3;          ///< speed of the host
+        double speedDuration;
         double angle;          ///< angle of linear motion
         double acceleration;   ///< acceleration of linear motion
         // configuration

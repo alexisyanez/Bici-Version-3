@@ -25,6 +25,9 @@ Define_Module(CustomLinearMobility);
 CustomLinearMobility::CustomLinearMobility()
 {
     speed = 0;
+    speed2 = 0;
+    speed3 = 0;
+    speedDuration = 0;
     angle = 0;
     acceleration = 0;
     stopModule = false;
@@ -112,7 +115,23 @@ void CustomLinearMobility::move()
         if (leader == true)
         {
             //Minima velocidad permitida en la simulacion
-            double vObj = speed;
+            double vObj;
+
+            if (SIMTIME_DBL(simTime()) < speedDuration)
+            {
+               vObj = speed;
+            }
+
+            if (speedDuration < SIMTIME_DBL(simTime()) && SIMTIME_DBL(simTime()) < 2*speedDuration)
+            {
+               vObj = speed2;
+            }
+
+            if (2*speedDuration < SIMTIME_DBL(simTime()) && SIMTIME_DBL(simTime()) < 3*speedDuration)
+            {
+               vObj = speed2;
+            }
+
             EV << logName() << "::" << getClassName() << " Minimum speed: " << vObj << endl;
 
             //Recalcular la velocidad mientras sea menor o mayor a la permitida

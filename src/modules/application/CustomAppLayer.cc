@@ -295,7 +295,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                     double spacing_error_GPS;
                     double spacing_error_RTT;
                     double nodeFrontAcceleration;
-                    double Speed_Ligth = 300000000;
+                    double Speed_Ligth = 299792458.0;
                     //double RTT;
 
                     if (nearestNode != NULL)
@@ -495,8 +495,8 @@ void CustomAppLayer::handleLowerMsg(cMessage* msg)
         //{
         double ST = SIMTIME_DBL(simTime());  // Obtener tiempo de simulación
         double GTS = SIMTIME_DBL(m->getTimestamp()); // Obtener tiempo de envio del paquete
-        RTTB = (ST - GTS); //Calcular RTT al nodo del frente
-        EV << "RTT(s)=" << RTTB << endl;
+        RTTB = SIMTIME_DBL(m->getTimestamp()); //Calcular RTT al nodo del frente
+        EV << "RTT(s)=" << m->getTimestamp()<< endl;
         EV << "SimTime=" << ST << endl;
         EV << "GetTimestamp=" << GTS << endl;
         //}
