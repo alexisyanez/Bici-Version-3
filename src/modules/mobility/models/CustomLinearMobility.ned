@@ -39,6 +39,7 @@ simple CustomLinearMobility extends CustomMovingMobilityBase
         double speed1 @unit(mps) = default(0mps); // speed of the host
         double speed2 @unit(mps) = default(0mps); // speed of the host
         double speedDuration @unit(s) = default(0s); // Duration Speed
+        int repSpeeds @unit(s) = default(0s); // times of speeds cycle 
         double angle @unit(deg) = default(uniform(0deg,360deg)); // angle of linear motion
         double acceleration = default(0); // acceleration of linear motion (m/s2)
         @class(CustomLinearMobility);
