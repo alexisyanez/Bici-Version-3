@@ -27,7 +27,7 @@ CustomLinearMobility::CustomLinearMobility()
     speed = 0;
     speed2 = 0;
     speed3 = 0;
-    speedDuration = 0;
+
     angle = 0;
     acceleration = 0;
     stopModule = false;
@@ -69,7 +69,13 @@ void CustomLinearMobility::initialize(int stage)
     if (stage == 0)
     {
         currentSpeed = totalDistance / totalTime;
+
         speed = par("speed");
+        speed2 = par("speed2");
+        speed3 = par("speed3");
+
+        speedDuration = par("speedDuration");
+
         angle = fmod((double) par("angle"), 360);
         acceleration = par("acceleration");
         stationary = (currentSpeed == 0) && (acceleration == 0.0);
@@ -95,6 +101,51 @@ void CustomLinearMobility::initialize(int stage)
 
 void CustomLinearMobility::move()
 {
+
+    if (MultiSpeed == true)
+    {
+        if ((simTime()).dbl() <= speedDuration) // 6*speedDuration <(simTime()).dbl() && (simTime()).dbl() <= 7*speedDuration)  )
+        {
+            speed = par("speed");
+        }
+
+        if (speedDuration < (simTime()).dbl() && (simTime()).dbl() <= 2*speedDuration) // || ( 4*speedDuration <(simTime()).dbl() && (simTime()).dbl() <= 5*speedDuration) || ( 7*speedDuration <(simTime()).dbl() && (simTime()).dbl() <= 8*speedDuration))
+        {
+            speed = speed2;
+        }
+
+        if (2*speedDuration < (simTime()).dbl() && (simTime()).dbl() <= 3*speedDuration) // || ( 5*speedDuration <(simTime()).dbl() && (simTime()).dbl() <= 6*speedDuration) || ( 8*speedDuration <(simTime()).dbl() && (simTime()).dbl() <= 9*speedDuration))
+        {
+            speed = speed3;
+        }
+        if (3*speedDuration <(simTime()).dbl() && (simTime()).dbl() <= 4*speedDuration)
+        {
+            speed = par("speed");
+        }
+        if (4*speedDuration <(simTime()).dbl() && (simTime()).dbl() <= 5*speedDuration) // || ( 7*speedDuration <(simTime()).dbl() && (simTime()).dbl() <= 8*speedDuration))
+        {
+            speed = speed2;
+        }
+        if (5*speedDuration <(simTime()).dbl() && (simTime()).dbl() <= 6*speedDuration) // || ( 8*speedDuration <(simTime()).dbl() && (simTime()).dbl() <= 9*speedDuration))
+        {
+            speed = speed3;
+        }
+        if (6*speedDuration <(simTime()).dbl() && (simTime()).dbl() <= 7*speedDuration)
+        {
+            speed = par("speed");
+        }
+        if (7*speedDuration <(simTime()).dbl() && (simTime()).dbl() <= 8*speedDuration)
+        {
+            speed = speed2;
+        }
+        if (8*speedDuration <(simTime()).dbl() && (simTime()).dbl() <= 9*speedDuration)
+        {
+            speed = speed3;
+        }
+
+    }
+
+
     double rad = PI * angle / 180;
     Coord direction(cos(rad), sin(rad));
     // lastSpeed = direction * speed;
@@ -116,22 +167,7 @@ void CustomLinearMobility::move()
         {
             //Minima velocidad permitida en la simulacion
             double vObj;
-
-            if (SIMTIME_DBL(simTime()) < speedDuration)
-            {
-               vObj = speed;
-            }
-
-            if (speedDuration < SIMTIME_DBL(simTime()) && SIMTIME_DBL(simTime()) < 2*speedDuration)
-            {
-               vObj = speed2;
-            }
-
-            if (2*speedDuration < SIMTIME_DBL(simTime()) && SIMTIME_DBL(simTime()) < 3*speedDuration)
-            {
-               vObj = speed2;
-            }
-
+            vObj = speed;
             EV << logName() << "::" << getClassName() << " Minimum speed: " << vObj << endl;
 
             //Recalcular la velocidad mientras sea menor o mayor a la permitida
@@ -200,6 +236,15 @@ double CustomLinearMobility::getMyAcceleration()
     return acceleration;
 }
 
+bool CustomLinearMobility::getMultiSpeed()
+{
+    return MultiSpeed;
+}
+
+double CustomLinearMobility::getSpeedDuration()
+{
+    return speedDuration;
+}
 /**
  * Modificar aceleración actual del módulo
  */

@@ -176,6 +176,13 @@ class MIXIM_API CustomAppLayer : public MyTestAppLayer
         /** @brief Permite obtener la aceleración del módulo */
         virtual double getModuleAcceleration();
 
+        /** @brief Permite obtener boolean MultiSpeed*/
+        virtual bool getMS();
+
+        /** @brief Permite obtener la Duración de cada velocidad (SpeedDuration)*/
+        virtual double getSD();
+
+
         /** @brief Permite actualizar el tag del módulo donde se muestran los datos*/
         virtual void updateDisplay();
 
