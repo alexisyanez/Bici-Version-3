@@ -453,7 +453,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                     EV << "Node[" << myApplAddr() << "]: New desired acceleration: " << getModuleAcceleration() << endl;
 
                     emit(distanceToFwdSignal, spacing_error); // Spacing Real
-                    emit(accelerationPlatoonSignal, A_des_lag);
+                    //emit(accelerationPlatoonSignal, A_des_lag);
 
                 }
                 else

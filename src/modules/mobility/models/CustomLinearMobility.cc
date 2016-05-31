@@ -40,6 +40,8 @@ CustomLinearMobility::CustomLinearMobility()
     totalDistance = 0;
 
     variability = 0;
+    variability2 = 0;
+    variability3 = 0;
 }
 
 std::string CustomLinearMobility::logName(void) const
@@ -86,7 +88,8 @@ void CustomLinearMobility::initialize(int stage)
         //Obtener la aceleracion
         acceleration = par("acceleration");
         variability = par("variability");
-
+        variability2 = par("variability2");
+        variability3 = par("variability3");
         //Obtener bandera para saber si es lider
         leader = par("leader");
         //Inicializa a todos los nodos con una velocidad fija (objetivo)
@@ -101,46 +104,55 @@ void CustomLinearMobility::initialize(int stage)
 
 void CustomLinearMobility::move()
 {
-
+    // Aplicar diferentes velocidades y variabilidad de la misma según corresponda al intervalo
     if (MultiSpeed == true)
     {
-        if ((simTime()).dbl() <= speedDuration) // 6*speedDuration <(simTime()).dbl() && (simTime()).dbl() <= 7*speedDuration)  )
+        if ((simTime()).dbl() <= speedDuration) //
         {
             speed = par("speed");
+            variability = par("variability");
         }
 
-        if (speedDuration < (simTime()).dbl() && (simTime()).dbl() <= 2*speedDuration) // || ( 4*speedDuration <(simTime()).dbl() && (simTime()).dbl() <= 5*speedDuration) || ( 7*speedDuration <(simTime()).dbl() && (simTime()).dbl() <= 8*speedDuration))
+        if (speedDuration < (simTime()).dbl() && (simTime()).dbl() <= 2*speedDuration)
         {
             speed = speed2;
+            variability = variability2;
         }
 
-        if (2*speedDuration < (simTime()).dbl() && (simTime()).dbl() <= 3*speedDuration) // || ( 5*speedDuration <(simTime()).dbl() && (simTime()).dbl() <= 6*speedDuration) || ( 8*speedDuration <(simTime()).dbl() && (simTime()).dbl() <= 9*speedDuration))
+        if (2*speedDuration < (simTime()).dbl() && (simTime()).dbl() <= 3*speedDuration)
         {
             speed = speed3;
+            variability = variability3;
         }
         if (3*speedDuration <(simTime()).dbl() && (simTime()).dbl() <= 4*speedDuration)
         {
             speed = par("speed");
+            variability = par("variability");
         }
-        if (4*speedDuration <(simTime()).dbl() && (simTime()).dbl() <= 5*speedDuration) // || ( 7*speedDuration <(simTime()).dbl() && (simTime()).dbl() <= 8*speedDuration))
+        if (4*speedDuration <(simTime()).dbl() && (simTime()).dbl() <= 5*speedDuration)
         {
             speed = speed2;
+            variability = variability2;
         }
-        if (5*speedDuration <(simTime()).dbl() && (simTime()).dbl() <= 6*speedDuration) // || ( 8*speedDuration <(simTime()).dbl() && (simTime()).dbl() <= 9*speedDuration))
+        if (5*speedDuration <(simTime()).dbl() && (simTime()).dbl() <= 6*speedDuration)
         {
             speed = speed3;
+            variability = variability3;
         }
         if (6*speedDuration <(simTime()).dbl() && (simTime()).dbl() <= 7*speedDuration)
         {
             speed = par("speed");
+            variability = par("variability");
         }
         if (7*speedDuration <(simTime()).dbl() && (simTime()).dbl() <= 8*speedDuration)
         {
             speed = speed2;
+            variability = variability2;
         }
         if (8*speedDuration <(simTime()).dbl() && (simTime()).dbl() <= 9*speedDuration)
         {
             speed = speed3;
+            variability = variability3;
         }
 
     }
