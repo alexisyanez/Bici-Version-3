@@ -48,6 +48,8 @@ class INET_API CustomLinearMobility : public CustomMovingMobilityBase
         double totalTime; //Tiempo objetivo para llegar a la meta
         double totalDistance; //Distancia total para llegar a la meta
         double variability; //Variabilidad en la velocidad objetivo
+        double variability2; //Variabilidad en la velocidad objetivo
+        double variability3; //Variabilidad en la velocidad objetivo
         bool leader; //Bandera para indicar si es lider o no
         bool stopModule;
         bool MultiSpeed;

@@ -49,6 +49,8 @@ simple CustomLinearMobility extends CustomMovingMobilityBase
       //  double startPosition; // in range [0.0,4.0): topleft=0, topright=1, bottomright=2, bottomleft=3
         bool leader;
         double variability;
+        double variability2;
+        double variability3;
         
         bool MultiSpeed;
 }

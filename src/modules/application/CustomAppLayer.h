@@ -55,10 +55,10 @@ class MIXIM_API CustomAppLayer : public MyTestAppLayer
         //Se�al para emitir la aceleraci�n aplicada
         simsignal_t accelerationPlatoonSignal;
 
-        //Se�al para emitir la aceleraci�n aplicada con error
+        //Se�al para emitir la aceleraci�n aplicada con error humano
         simsignal_t accelerationErrorSignal;
 
-        //Se�al para emitir la aceleraci�n aplicada sin error
+        //Se�al para emitir la aceleraci�n aplicada sin error humano
         simsignal_t accelerationSinSignal;
 
         //Se�al para emitir la distancia del nodo actual al nodo frontal
