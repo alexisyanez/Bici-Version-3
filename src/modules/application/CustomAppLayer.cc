@@ -295,7 +295,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                     double spacing_error_GPS;
                     double spacing_error_RTT;
                     double nodeFrontAcceleration;
-                    double Speed_Ligth = 299792458.0;
+                    double Speed_Ligth = 300000000;
                     //double RTT;
 
                     if (nearestNode != NULL)
@@ -408,36 +408,6 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                     double vel_error = normal(mean_error,std_error);
                     double human_error = (mean_vel_obj + vel_error)/(mean_vel_obj);
 
-
-
-                    if (getMS())
-                    {
-                        /* Se tienen los siguentes parametros paras las 3 diferentes velocidades
-                         Main_Network.node[*].appl.mean_error = 0.214   #${ mean= -0.1934, -0.1934, 0.214, 0.214, 0.429, 0.429}  #Para velocidades 10,15 y 18 el error humano es diferente
-                         Main_Network.node[*].appl.std_error = 0.46  #${ std= 0.432, 0.432, 0.46, 0.46, 0.889, 0.889 ! mean}
-                         Main_Network.node[*].appl.mean_vel_obj = 4.1667   #${ vel= 2.77, 2.77, 4.1667, 4.1667, 5, 5 ! mean}
-                        */
-                        double C=SIMTIME_DBL(simTime())/getSD();
-                        if ((C <= 1) || (C > 3 &&  C <= 4) || (C > 6 && C <= 7) || (C > 9 && C <= 10) || (C > 12 && C <= 13))
-                        {
-                            vel_error = normal(-0.1934,0.432);
-                            human_error = (2.77 + vel_error)/(2.77);
-                        }
-
-                        if ((C > 1 && C <= 2) || (C > 4 &&  C <= 5) || (C > 7 && C <= 8) || (C > 10 && C <= 11) || (C > 13 && C <= 14))
-                        {
-                            vel_error = normal(0.214,0.46);
-                            human_error = (4.1667 + vel_error)/(4.1667);
-                        }
-
-                        if ((C > 2 && C <= 3)  || (C > 5 &&  C <= 6) || (C > 8 && C <= 9)  || (C > 11 && C < 12) || (C > 14 && C < 15) )
-                        {
-                            vel_error = normal(0.429,0.889);
-                            human_error = (5 + vel_error)/(5);
-                        }
-                    }
-
-
                     //e. Calcular la aceleración deseada incluyéndole el retardo
                     double A_des_lag = ((alphaLag * A_des) + ((1 - alphaLag) * lastAccelerationPlatoon)) * human_error;
 
@@ -453,7 +423,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                     EV << "Node[" << myApplAddr() << "]: New desired acceleration: " << getModuleAcceleration() << endl;
 
                     emit(distanceToFwdSignal, spacing_error); // Spacing Real
-                    //emit(accelerationPlatoonSignal, A_des_lag);
+                    emit(accelerationPlatoonSignal, A_des_lag);
 
                 }
                 else
@@ -525,8 +495,8 @@ void CustomAppLayer::handleLowerMsg(cMessage* msg)
         //{
         double ST = SIMTIME_DBL(simTime());  // Obtener tiempo de simulación
         double GTS = SIMTIME_DBL(m->getTimestamp()); // Obtener tiempo de envio del paquete
-        RTTB = SIMTIME_DBL(m->getTimestamp()); //Calcular RTT al nodo del frente
-        EV << "RTT(s)=" << m->getTimestamp()<< endl;
+        RTTB = (ST - GTS); //Calcular RTT al nodo del frente
+        EV << "RTT(s)=" << RTTB << endl;
         EV << "SimTime=" << ST << endl;
         EV << "GetTimestamp=" << GTS << endl;
         //}
@@ -665,18 +635,6 @@ double CustomAppLayer::getModuleSpeed()
 double CustomAppLayer::getModuleAcceleration()
 {
     return CustomMobilityAccess().get(findHost())->getMyAcceleration();
-}
-
-//Obtener boolean MultiSpeed
-bool CustomAppLayer::getMS()
-{
-    return CustomMobilityAccess().get(findHost())->getMultiSpeed();
-}
-
-//Obtener tiempo de duración de cada velocidad
-double CustomAppLayer::getSD()
-{
-    return CustomMobilityAccess().get(findHost())->getSpeedDuration();
 }
 
 /**

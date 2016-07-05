@@ -55,10 +55,10 @@ class MIXIM_API CustomAppLayer : public MyTestAppLayer
         //Se�al para emitir la aceleraci�n aplicada
         simsignal_t accelerationPlatoonSignal;
 
-        //Se�al para emitir la aceleraci�n aplicada con error humano
+        //Se�al para emitir la aceleraci�n aplicada con error
         simsignal_t accelerationErrorSignal;
 
-        //Se�al para emitir la aceleraci�n aplicada sin error humano
+        //Se�al para emitir la aceleraci�n aplicada sin error
         simsignal_t accelerationSinSignal;
 
         //Se�al para emitir la distancia del nodo actual al nodo frontal
@@ -175,13 +175,6 @@ class MIXIM_API CustomAppLayer : public MyTestAppLayer
 
         /** @brief Permite obtener la aceleración del módulo */
         virtual double getModuleAcceleration();
-
-        /** @brief Permite obtener boolean MultiSpeed*/
-        virtual bool getMS();
-
-        /** @brief Permite obtener la Duración de cada velocidad (SpeedDuration)*/
-        virtual double getSD();
-
 
         /** @brief Permite actualizar el tag del módulo donde se muestran los datos*/
         virtual void updateDisplay();

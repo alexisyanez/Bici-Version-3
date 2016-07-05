@@ -38,9 +38,6 @@ class INET_API CustomLinearMobility : public CustomMovingMobilityBase
 
    protected:
         double speed;          ///< speed of the host
-        double speed2;          ///< speed of the host
-        double speed3;          ///< speed of the host
-        double speedDuration;   ///< time in each speed
         double angle;          ///< angle of linear motion
         double acceleration;   ///< acceleration of linear motion
         // configuration
@@ -48,11 +45,8 @@ class INET_API CustomLinearMobility : public CustomMovingMobilityBase
         double totalTime; //Tiempo objetivo para llegar a la meta
         double totalDistance; //Distancia total para llegar a la meta
         double variability; //Variabilidad en la velocidad objetivo
-        double variability2; //Variabilidad en la velocidad objetivo
-        double variability3; //Variabilidad en la velocidad objetivo
         bool leader; //Bandera para indicar si es lider o no
         bool stopModule;
-        bool MultiSpeed;
 
     protected:
         virtual int numInitStages() const
@@ -78,10 +72,7 @@ class INET_API CustomLinearMobility : public CustomMovingMobilityBase
         virtual double getMyAcceleration();
         //Modificar aceleracion del modulo
         virtual void setAcceleration(double newAcceleration);
-        //Obtener MultiSpeed
-        virtual bool getMultiSpeed();
-        //Obtener duración
-        virtual double getSpeedDuration();
+
         /**
          * @brief Function to get the logging name of the host
          *

@@ -25,9 +25,6 @@ Define_Module(CustomLinearMobility);
 CustomLinearMobility::CustomLinearMobility()
 {
     speed = 0;
-    speed2 = 0;
-    speed3 = 0;
-
     angle = 0;
     acceleration = 0;
     stopModule = false;
@@ -40,8 +37,6 @@ CustomLinearMobility::CustomLinearMobility()
     totalDistance = 0;
 
     variability = 0;
-    variability2 = 0;
-    variability3 = 0;
 }
 
 std::string CustomLinearMobility::logName(void) const
@@ -71,13 +66,7 @@ void CustomLinearMobility::initialize(int stage)
     if (stage == 0)
     {
         currentSpeed = totalDistance / totalTime;
-
         speed = par("speed");
-        speed2 = par("speed2");
-        speed3 = par("speed3");
-
-        speedDuration = par("speedDuration");
-
         angle = fmod((double) par("angle"), 360);
         acceleration = par("acceleration");
         stationary = (currentSpeed == 0) && (acceleration == 0.0);
@@ -88,8 +77,7 @@ void CustomLinearMobility::initialize(int stage)
         //Obtener la aceleracion
         acceleration = par("acceleration");
         variability = par("variability");
-        variability2 = par("variability2");
-        variability3 = par("variability3");
+
         //Obtener bandera para saber si es lider
         leader = par("leader");
         //Inicializa a todos los nodos con una velocidad fija (objetivo)
@@ -104,60 +92,6 @@ void CustomLinearMobility::initialize(int stage)
 
 void CustomLinearMobility::move()
 {
-    // Aplicar diferentes velocidades y variabilidad de la misma según corresponda al intervalo
-    if (MultiSpeed == true)
-    {
-        if ((simTime()).dbl() <= speedDuration) //
-        {
-            speed = par("speed");
-            variability = par("variability");
-        }
-
-        if (speedDuration < (simTime()).dbl() && (simTime()).dbl() <= 2*speedDuration)
-        {
-            speed = speed2;
-            variability = variability2;
-        }
-
-        if (2*speedDuration < (simTime()).dbl() && (simTime()).dbl() <= 3*speedDuration)
-        {
-            speed = speed3;
-            variability = variability3;
-        }
-        if (3*speedDuration <(simTime()).dbl() && (simTime()).dbl() <= 4*speedDuration)
-        {
-            speed = par("speed");
-            variability = par("variability");
-        }
-        if (4*speedDuration <(simTime()).dbl() && (simTime()).dbl() <= 5*speedDuration)
-        {
-            speed = speed2;
-            variability = variability2;
-        }
-        if (5*speedDuration <(simTime()).dbl() && (simTime()).dbl() <= 6*speedDuration)
-        {
-            speed = speed3;
-            variability = variability3;
-        }
-        if (6*speedDuration <(simTime()).dbl() && (simTime()).dbl() <= 7*speedDuration)
-        {
-            speed = par("speed");
-            variability = par("variability");
-        }
-        if (7*speedDuration <(simTime()).dbl() && (simTime()).dbl() <= 8*speedDuration)
-        {
-            speed = speed2;
-            variability = variability2;
-        }
-        if (8*speedDuration <(simTime()).dbl() && (simTime()).dbl() <= 9*speedDuration)
-        {
-            speed = speed3;
-            variability = variability3;
-        }
-
-    }
-
-
     double rad = PI * angle / 180;
     Coord direction(cos(rad), sin(rad));
     // lastSpeed = direction * speed;
@@ -178,8 +112,7 @@ void CustomLinearMobility::move()
         if (leader == true)
         {
             //Minima velocidad permitida en la simulacion
-            double vObj;
-            vObj = speed;
+            double vObj = speed;
             EV << logName() << "::" << getClassName() << " Minimum speed: " << vObj << endl;
 
             //Recalcular la velocidad mientras sea menor o mayor a la permitida
@@ -248,15 +181,6 @@ double CustomLinearMobility::getMyAcceleration()
     return acceleration;
 }
 
-bool CustomLinearMobility::getMultiSpeed()
-{
-    return MultiSpeed;
-}
-
-double CustomLinearMobility::getSpeedDuration()
-{
-    return speedDuration;
-}
 /**
  * Modificar aceleración actual del módulo
  */

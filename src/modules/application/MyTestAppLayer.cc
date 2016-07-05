@@ -127,9 +127,8 @@ void MyTestAppLayer::sendBroadcast(int id, double xpos, double ypos, double spee
     pkt->setXposition(xpos);
     pkt->setYposition(ypos);
     pkt->setSpeed(speed);
-    //pkt->setTimestamp(simTime());
+    pkt->setTimestamp(simTime());
 
-    EV << "SetTimestamp=" << simTime() << endl;
     //pkt->setTS(SIMTIME_DBL(simTime()));
     // set the control info to tell the network layer the layer 3
     // address;
@@ -177,7 +176,7 @@ void MyTestAppLayer::sendNodeInfo(int id, double xpos, double ypos, double xposG
     pkt->setSpeed(speed);
     pkt->setAcceleration(acceleration);
     pkt->setBeaconingEnabled(beaconingEnabled);
-    //pkt->setTimestamp(simTime());
+    pkt->setTimestamp(simTime());
     //pkt->setTS(SIMTIME_DBL(simTime()));
 
     //Agregar datos del l�der
