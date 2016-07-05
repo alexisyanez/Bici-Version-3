@@ -157,7 +157,12 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                 }
                 else
                 {
-
+                   double Ns=5;
+                   double R=40;
+                   double Dij;
+                    Sij=Ns*ceil(1-(min(Dij,R)/R));
+                    Tslot=Sij*tau;
+                    delay(Tslot);
                     //Enviar paquete con la posicion y velocidad al resto de nodos
                     sendNodeInfo(packageID, xposition, yposition, xpositionGPSerror, speed, acceleration, LAddress::L3BROADCAST,
                             localLeaderAcceleration, localLeaderSpeed, beaconingEnabled);
