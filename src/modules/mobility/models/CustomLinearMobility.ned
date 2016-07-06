@@ -36,9 +36,6 @@ simple CustomLinearMobility extends CustomMovingMobilityBase
         double initialZ @unit(m) = default(uniform(this.constraintAreaMinZ, this.constraintAreaMaxZ));
         bool initFromDisplayString = default(true);
         double speed @unit(mps) = default(0mps); // speed of the host
-        double speed2 @unit(mps) = default(0mps); // speed of the host
-        double speed3 @unit(mps) = default(0mps); 
-        double speedDuration = default(0); // Duration Speed
         double angle @unit(deg) = default(uniform(0deg,360deg)); // angle of linear motion
         double acceleration = default(0); // acceleration of linear motion (m/s2)
         @class(CustomLinearMobility);
@@ -49,8 +46,4 @@ simple CustomLinearMobility extends CustomMovingMobilityBase
       //  double startPosition; // in range [0.0,4.0): topleft=0, topright=1, bottomright=2, bottomleft=3
         bool leader;
         double variability;
-        double variability2;
-        double variability3;
-        
-        bool MultiSpeed;
 }

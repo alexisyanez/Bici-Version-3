@@ -64,6 +64,12 @@ simple CustomAppLayer like IBaseApplLayer
     	//Beaconing
     	bool beaconing;
     	
+    	//Slotted-1-persistant
+    	bool Slotted1; 
+    	
+    	//Jerk Beaconing
+    	bool JerkBeaconing; 
+    	
     gates:
     	input lowerLayerIn; // from network layer
         output lowerLayerOut; // to network layer
