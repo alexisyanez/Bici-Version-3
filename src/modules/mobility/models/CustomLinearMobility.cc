@@ -94,6 +94,8 @@ void CustomLinearMobility::initialize(int stage)
         leader = par("leader");
         //Inicializa a todos los nodos con una velocidad fija (objetivo)
         currentSpeed = speed;
+        MultiSpeed = par("MultiSpeed");
+
 
     }
     else if (stage == 2)
