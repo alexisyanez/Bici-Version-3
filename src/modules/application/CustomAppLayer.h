@@ -150,10 +150,10 @@ class MIXIM_API CustomAppLayer : public MyTestAppLayer
         //Jerk Beaconing
         bool JerkBeaconingEnabled;
         double delta_u;
-        double jerkB_a;
-        double jerkB_b;
         double jerkB_p;
         double minJerk_bi;
+        double maxJerk_bi;
+        double d_umax;
 
     public:
         CustomAppLayer() :

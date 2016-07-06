@@ -99,10 +99,10 @@ void CustomAppLayer::initialize(int stage)
     Slotted1Enabled = par("Slotted1");
     JerkBeaconingEnabled = par("JerkBeaconing");
 
-    jerkB_a = par("jerk_a");
-    jerkB_b = par("jerk_b");
     jerkB_p = par("jerk_p");
     minJerk_bi = par("min_bi");
+    maxJerk_bi = par("max_bi");
+    d_umax = par("delta_umax");
 
 
     MyTestAppLayer::initialize(stage);
@@ -150,12 +150,14 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                 double R = 40;
                 double Dij = getDistanceBetweenNodes2(xposition,localLeaderPosition);
                 double Sij = Ns*(1-(min(Dij,R)/R));
-                double tau=0.5;
+                double tau= 0.32;
 
                 double Tslot=Sij*tau;
 
                 // Inicializar Variables para calcular retardo para JerkBeaconing
-                double delta_m = max(exp(-jerkB_a*pow(abs(delta_u),jerkB_p))*jerkB_b,minJerk_bi);
+                double a = - log(minJerk_bi/maxJerk_bi)*pow(d_umax,-jerkB_p);
+                double b = maxJerk_bi;
+                double delta_m = max(exp(-a*pow(abs(delta_u),jerkB_p))*b,minJerk_bi);
 
 
                 //Detener a todos los nodos al estar en x_final y en el 70% del y_final
@@ -174,15 +176,6 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                         llegada = true;
                     }
 
-                    if (Slotted1Enabled==true) // Aplicar Retardo según distancia
-                    {
-                        sleep(Tslot);
-                    }
-
-                    if (JerkBeaconingEnabled == true ) // Aplicar retardo según delta_u
-                    {
-                        sleep(delta_m);
-                    }
                     //Enviar paquete con la posicion y velocidad al resto de nodos
                     sendNodeInfo(packageID, xposition, yposition, xpositionGPSerror, speed, acceleration, LAddress::L3BROADCAST,
                             localLeaderAcceleration, localLeaderSpeed, beaconingEnabled);
@@ -192,14 +185,6 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                 else
                 {
 
-                    if (Slotted1Enabled==true) // Aplicar Retardo según distancia
-                    {
-                        sleep(Tslot);
-                    }
-                    if (JerkBeaconingEnabled == true ) // Aplicar retardo según delta_u
-                    {
-                        sleep(delta_m);
-                    }
                     //Enviar paquete con la posicion y velocidad al resto de nodos
                     sendNodeInfo(packageID, xposition, yposition, xpositionGPSerror, speed, acceleration, LAddress::L3BROADCAST,
                             localLeaderAcceleration, localLeaderSpeed, beaconingEnabled);
@@ -221,7 +206,23 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
 
                 //Volver a iniciar el timer para enviar el siguiente paquete
                 positionTimer = new cMessage("position-timer", POSITION_TIMER);
-                scheduleAt(simTime() + beaconInterval, positionTimer);
+
+                simtime_t Tslot_t=Tslot;
+                simtime_t delta_m_t=delta_m;
+
+                if (Slotted1Enabled==true) // Aplicar Retardo según distancia
+                {
+                    scheduleAt(simTime() + beaconInterval + Tslot_t , positionTimer);
+                }
+                else if (JerkBeaconingEnabled == true ) // Aplicar retardo según delta_u
+                {
+                    scheduleAt(simTime() + beaconInterval + delta_m_t, positionTimer);
+                }
+                else
+                {
+                    scheduleAt(simTime() + beaconInterval, positionTimer);
+                }
+
 
                 EV << "Node[" << myApplAddr() << "]: Sending Position Update" << endl;
 
@@ -459,7 +460,9 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
 
                     emit(accelerationSinSignal, A_des_lag_sin);
 
-                    lastAccelerationPlatoon = A_des_lag;
+                    delta_u = A_des-lastAccelerationPlatoon;
+
+                    lastAccelerationPlatoon = A_des;
                     setAcceleration(A_des_lag);
 
                     EV << "Node[" << myApplAddr() << "]: New desired acceleration: " << getModuleAcceleration() << endl;
