@@ -64,6 +64,7 @@ void CustomAppLayer::initialize(int stage)
     localLeaderAcceleration = 0;
     localLeaderSpeed = 0;
     localLeaderPosition = 0;
+    delta_u=0;
 
     WATCH(numSent);
     WATCH(numReceived);
@@ -97,6 +98,12 @@ void CustomAppLayer::initialize(int stage)
     beaconingEnabled = par("beaconing");
     Slotted1Enabled = par("Slotted1");
     JerkBeaconingEnabled = par("JerkBeaconing");
+
+    jerkB_a = par("jerk_a");
+    jerkB_b = par("jerk_b");
+    jerkB_p = par("jerk_p");
+    minJerk_bi = par("min_bi");
+
 
     MyTestAppLayer::initialize(stage);
     if (stage == 0)
@@ -137,7 +144,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
 
                 totalDistance = par("totalDistance");
 
-                // Inicializar variables para calcular el retardo del timeSlot
+                // Inicializar variables para calcular el retardo del timeSlot para slotted-1-persistant
 
                 double Ns= 5;
                 double R = 40;
@@ -146,6 +153,10 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                 double tau=0.5;
 
                 double Tslot=Sij*tau;
+
+                // Inicializar Variables para calcular retardo para JerkBeaconing
+                double delta_m = max(exp(-jerkB_a*pow(abs(delta_u),jerkB_p))*jerkB_b,minJerk_bi);
+
 
                 //Detener a todos los nodos al estar en x_final y en el 70% del y_final
                 if (xposition >= totalDistance)
@@ -167,6 +178,11 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                     {
                         sleep(Tslot);
                     }
+
+                    if (JerkBeaconingEnabled == true ) // Aplicar retardo según delta_u
+                    {
+                        sleep(delta_m);
+                    }
                     //Enviar paquete con la posicion y velocidad al resto de nodos
                     sendNodeInfo(packageID, xposition, yposition, xpositionGPSerror, speed, acceleration, LAddress::L3BROADCAST,
                             localLeaderAcceleration, localLeaderSpeed, beaconingEnabled);
@@ -179,6 +195,10 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                     if (Slotted1Enabled==true) // Aplicar Retardo según distancia
                     {
                         sleep(Tslot);
+                    }
+                    if (JerkBeaconingEnabled == true ) // Aplicar retardo según delta_u
+                    {
+                        sleep(delta_m);
                     }
                     //Enviar paquete con la posicion y velocidad al resto de nodos
                     sendNodeInfo(packageID, xposition, yposition, xpositionGPSerror, speed, acceleration, LAddress::L3BROADCAST,

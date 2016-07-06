@@ -69,7 +69,11 @@ simple CustomAppLayer like IBaseApplLayer
     	
     	//Jerk Beaconing
     	bool JerkBeaconing; 
-    	
+    	double jerk_a = default(0);
+        double jerk_b = default(0);
+        double jerk_p = default(0);
+        double min_bi = default(0);
+        
     gates:
     	input lowerLayerIn; // from network layer
         output lowerLayerOut; // to network layer
