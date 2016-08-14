@@ -99,6 +99,7 @@ void CustomAppLayer::initialize(int stage)
     Slotted1Enabled = par("Slotted1");
     JerkBeaconingEnabled = par("JerkBeaconing");
 
+    // Parametros de Jerk Beaconing
     jerkB_p = par("jerk_p");
     minJerk_bi = par("min_bi");
     maxJerk_bi = par("max_bi");
@@ -150,7 +151,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                 double R = 40;
                 double Dij = getDistanceBetweenNodes2(xposition,localLeaderPosition);
                 double Sij = Ns*(1-(min(Dij,R)/R));
-                double tau= 0.32;
+                double tau= 1.45;
 
                 double Tslot=Sij*tau;
 
