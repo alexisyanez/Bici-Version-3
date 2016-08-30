@@ -143,6 +143,9 @@ class MIXIM_API CustomAppLayer : public MyTestAppLayer
         //Beaconing
         bool beaconingEnabled;
 
+        //Acceleration threshold
+        double Thr_Ac;
+
     public:
         CustomAppLayer() :
                 MyTestAppLayer(), burstSize(0), bSendReply(true)

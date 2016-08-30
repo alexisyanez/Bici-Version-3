@@ -64,6 +64,9 @@ simple CustomAppLayer like IBaseApplLayer
     	//Beaconing
     	bool beaconing;
     	
+    	//Threshold Acceleration
+    	double Thr_Ac = default(0);
+    	
     gates:
     	input lowerLayerIn; // from network layer
         output lowerLayerOut; // to network layer

@@ -95,6 +95,9 @@ void CustomAppLayer::initialize(int stage)
     platoonInterval = par("platoonInterval");
     beaconingEnabled = par("beaconing");
 
+    // Umbral de Aceleración
+    Thr_Ac = par("Thr_Ac");
+
     MyTestAppLayer::initialize(stage);
     if (stage == 0)
     {
@@ -447,9 +450,11 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
 
                     emit(accelerationSinSignal, A_des_lag_sin);
 
-                    lastAccelerationPlatoon = A_des_lag;
-                    setAcceleration(A_des_lag);
-
+                    if(A_des_lag > abs(Thr_Ac))
+                    {
+                        lastAccelerationPlatoon = A_des_lag;
+                        setAcceleration(A_des_lag);
+                    }
                     EV << "Node[" << myApplAddr() << "]: New desired acceleration: " << getModuleAcceleration() << endl;
 
                     emit(distanceToFwdSignal, spacing_error); // Spacing Real
