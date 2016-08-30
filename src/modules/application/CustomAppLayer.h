@@ -146,6 +146,9 @@ class MIXIM_API CustomAppLayer : public MyTestAppLayer
 
         //Slotted-1-persistant
         bool Slotted1Enabled;
+        double Slotted_Ns;
+        double Slotted_R;
+        double Slotted_Tau;
 
         //Jerk Beaconing
         bool JerkBeaconingEnabled;

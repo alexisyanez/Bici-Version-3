@@ -96,10 +96,15 @@ void CustomAppLayer::initialize(int stage)
     beaconInterval = par("beaconInterval");
     platoonInterval = par("platoonInterval");
     beaconingEnabled = par("beaconing");
+
+    // Parametros Slotted-1-persistante
     Slotted1Enabled = par("Slotted1");
-    JerkBeaconingEnabled = par("JerkBeaconing");
+    Slotted_Ns = par("Slotted_Ns");
+    Slotted_R = par("Slotted_R");
+    Slotted_Tau = par("Slotted_Tau");
 
     // Parametros de Jerk Beaconing
+    JerkBeaconingEnabled = par("JerkBeaconing");
     jerkB_p = par("jerk_p");
     minJerk_bi = par("min_bi");
     maxJerk_bi = par("max_bi");
@@ -147,13 +152,10 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
 
                 // Inicializar variables para calcular el retardo del timeSlot para slotted-1-persistant
 
-                double Ns= 5;
-                double R = 40;
                 double Dij = getDistanceBetweenNodes2(xposition,localLeaderPosition);
-                double Sij = Ns*(1-(min(Dij,R)/R));
-                double tau= 1.45;
+                double Sij = Slotted_Ns*(1-(min(Dij,Slotted_R)/Slotted_R));
 
-                double Tslot=Sij*tau;
+                double Tslot=Sij*Slotted_Tau;
 
                 // Inicializar Variables para calcular retardo para JerkBeaconing
                 double a = - log(minJerk_bi/maxJerk_bi)*pow(d_umax,-jerkB_p);

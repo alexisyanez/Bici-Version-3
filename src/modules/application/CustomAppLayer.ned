@@ -66,6 +66,9 @@ simple CustomAppLayer like IBaseApplLayer
     	
     	//Slotted-1-persistant
     	bool Slotted1; 
+    	double Slotted_Ns = default(0);
+		double Slotted_R = default(0);    	
+    	double Slotted_Tau = default(0);
     	
     	//Jerk Beaconing
     	bool JerkBeaconing; 
