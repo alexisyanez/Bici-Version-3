@@ -121,6 +121,19 @@ class MIXIM_API CustomAppLayer : public MyTestAppLayer
         double std_error;
         double mean_vel_obj;
 
+        //Human error in velocity response for multi-Speed performance
+        //Speed 1
+        double mean_error_S1;
+        double std_error_S1;
+
+        //Speed 2
+        double mean_error_S2;
+        double std_error_S2;
+
+        //Speed 3
+        double mean_error_S3;
+        double std_error_S3;
+
         //GPS Measure error
         bool GPSErrorEnabled;
         double position_error_a;
@@ -184,6 +197,18 @@ class MIXIM_API CustomAppLayer : public MyTestAppLayer
 
         /** @brief Permite obtener la Duración de cada velocidad (SpeedDuration)*/
         virtual double getSD();
+
+        /** @brief Permite obtener la velocidad objetivo)*/
+        virtual double getTS();
+
+        //Obtener valor de la velocidad 1
+        virtual double getS1();
+
+        //Obtener valor de la velocidad 2
+        virtual double getS2();
+
+        //Obtener valor de la velocidad 3
+        virtual double getS3();
 
 
         /** @brief Permite actualizar el tag del módulo donde se muestran los datos*/

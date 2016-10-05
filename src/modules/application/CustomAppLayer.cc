@@ -81,6 +81,20 @@ void CustomAppLayer::initialize(int stage)
     std_error = par("std_error");
     mean_vel_obj = par("mean_vel_obj");
 
+    // Error humano asociado a la velocidad para performance de multiples velocidades
+    // Velocidad  1
+    mean_error_S1 = par("mean_error_S1");
+    std_error_S1 = par("std_error_S1");
+
+    // Velocidad  2
+    mean_error_S2 = par("mean_error_S2");
+    std_error_S2 = par("std_error_S2");
+
+    // Velocidad  3
+    mean_error_S3 = par("mean_error_S3");
+    std_error_S3 = par("std_error_S3");
+
+
     // Error en la posición debido al GPS
     GPSErrorEnabled = par("GPS_error");
     position_error_a = par("position_error_a"); // Corresponde al Parametro Sigma de la distribución de raylegh (setear en 5)
@@ -420,23 +434,23 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                          Main_Network.node[*].appl.std_error = 0.46  #${ std= 0.432, 0.432, 0.46, 0.46, 0.889, 0.889 ! mean}
                          Main_Network.node[*].appl.mean_vel_obj = 4.1667   #${ vel= 2.77, 2.77, 4.1667, 4.1667, 5, 5 ! mean}
                         */
-                        double C=SIMTIME_DBL(simTime())/getSD();
-                        if ((C <= 1) || (C > 3 &&  C <= 4) || (C > 6 && C <= 7) || (C > 9 && C <= 10) || (C > 12 && C <= 13))
+                        if (getTS()== getS1())
                         {
-                            vel_error = normal(-0.1934,0.432);
-                            human_error = (2.77 + vel_error)/(2.77);
+                            vel_error = normal(mean_error_S1,std_error_S1);
+                            human_error = (getS1() + vel_error)/(getS1());
                         }
 
-                        if ((C > 1 && C <= 2) || (C > 4 &&  C <= 5) || (C > 7 && C <= 8) || (C > 10 && C <= 11) || (C > 13 && C <= 14))
+                        if (getTS()== getS2())
                         {
-                            vel_error = normal(0.214,0.46);
-                            human_error = (4.1667 + vel_error)/(4.1667);
+                            vel_error = normal(mean_error_S2,std_error_S2);
+                            human_error = (getS2() + vel_error)/(getS2());
                         }
 
-                        if ((C > 2 && C <= 3)  || (C > 5 &&  C <= 6) || (C > 8 && C <= 9)  || (C > 11 && C < 12) || (C > 14 && C < 15) )
+                        if (getTS()== getS3())
                         {
-                            vel_error = normal(0.429,0.889);
-                            human_error = (5 + vel_error)/(5);
+                            vel_error = normal(mean_error_S3,std_error_S3);
+                            human_error = (getS3() + vel_error)/(getS3());
+                            Thr_Ac = 1/3;
                         }
                     }
 
@@ -682,6 +696,31 @@ bool CustomAppLayer::getMS()
 double CustomAppLayer::getSD()
 {
     return CustomMobilityAccess().get(findHost())->getSpeedDuration();
+}
+
+
+//Obtener valor de la velocidad
+double CustomAppLayer::getTS()
+{
+    return CustomMobilityAccess().get(findHost())->getTargetSpeed();
+}
+
+//Obtener valor de la velocidad 1
+double CustomAppLayer::getS1()
+{
+    return CustomMobilityAccess().get(findHost())->getSpeed1();
+}
+
+//Obtener valor de la velocidad 2
+double CustomAppLayer::getS2()
+{
+    return CustomMobilityAccess().get(findHost())->getSpeed2();
+}
+
+//Obtener valor de la velocidad 3
+double CustomAppLayer::getS3()
+{
+    return CustomMobilityAccess().get(findHost())->getSpeed3();
 }
 
 /**

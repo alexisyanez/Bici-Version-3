@@ -248,14 +248,38 @@ double CustomLinearMobility::getMyAcceleration()
     return acceleration;
 }
 
+// Obtener Activación de multi Speed
 bool CustomLinearMobility::getMultiSpeed()
 {
     return MultiSpeed;
 }
 
+// Obtener duración de velocidad
 double CustomLinearMobility::getSpeedDuration()
 {
     return speedDuration;
+}
+
+// Obtener Velocidad objetivo
+double CustomLinearMobility::getTargetSpeed()
+{
+    return speed;
+}
+
+double CustomLinearMobility::getSpeed1()
+{
+    speed = par("speed");
+    return speed;
+}
+
+double CustomLinearMobility::getSpeed2()
+{
+    return speed2;
+}
+
+double CustomLinearMobility::getSpeed3()
+{
+    return speed3;
 }
 /**
  * Modificar aceleración actual del módulo

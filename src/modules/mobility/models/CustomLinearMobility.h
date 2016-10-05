@@ -82,6 +82,15 @@ class INET_API CustomLinearMobility : public CustomMovingMobilityBase
         virtual bool getMultiSpeed();
         //Obtener duración
         virtual double getSpeedDuration();
+        //Obtener Velocidad Objetivo
+        virtual double getTargetSpeed();
+        //Obtener Velocidad 1
+        virtual double getSpeed1();
+        //Obtener Velocidad 2
+        virtual double getSpeed2();
+        //Obtener Velocidad 3
+        virtual double getSpeed3();
+
         /**
          * @brief Function to get the logging name of the host
          *

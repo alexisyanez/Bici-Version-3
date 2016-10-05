@@ -42,6 +42,19 @@ simple CustomAppLayer like IBaseApplLayer
     	double mean_error = default(0);
     	double std_error = default(0);
     	double mean_vel_obj = default(0); 
+    	
+    	//Human error in velocity response for multi-Speed performance
+    	//Speed 1
+    	double mean_error_S1 = default(0);
+    	double std_error_S1 = default(0);
+    	
+    	//Speed2
+    	double mean_error_S2 = default(0);
+    	double std_error_S2 = default(0);
+    	
+    	//Speed3
+    	double mean_error_S3 = default(0);
+    	double std_error_S3 = default(0);
         
         //GPS Measure error
         bool GPS_error;
