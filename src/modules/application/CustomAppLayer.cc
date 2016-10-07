@@ -94,6 +94,17 @@ void CustomAppLayer::initialize(int stage)
     mean_error_S3 = par("mean_error_S3");
     std_error_S3 = par("std_error_S3");
 
+    // Desviación estandar para cada nodo
+
+    STDac_s1_n1 = par("STDac_s1_n1");
+    STDac_s2_n1 = par("STDac_s2_n1");
+    STDac_s3_n1 = par("STDac_s3_n1");
+    STDac_s1_n2 = par("STDac_s1_n2");
+    STDac_s2_n2 = par("STDac_s2_n2");
+    STDac_s3_n2 = par("STDac_s3_n2");
+    STDac_s1_n3 = par("STDac_s1_n3");
+    STDac_s2_n3 = par("STDac_s2_n3");
+    STDac_s3_n3 = par("STDac_s3_n3");
 
     // Error en la posición debido al GPS
     GPSErrorEnabled = par("GPS_error");
@@ -425,32 +436,66 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                     double vel_error = normal(mean_error,std_error);
                     double human_error = (mean_vel_obj + vel_error)/(mean_vel_obj);
 
-
-
+                    // Umbral para aplicar a la aceleración
+                    double Umbral_Ac;
                     if (getMS())
                     {
-                        /* Se tienen los siguentes parametros paras las 3 diferentes velocidades
-                         Main_Network.node[*].appl.mean_error = 0.214   #${ mean= -0.1934, -0.1934, 0.214, 0.214, 0.429, 0.429}  #Para velocidades 10,15 y 18 el error humano es diferente
-                         Main_Network.node[*].appl.std_error = 0.46  #${ std= 0.432, 0.432, 0.46, 0.46, 0.889, 0.889 ! mean}
-                         Main_Network.node[*].appl.mean_vel_obj = 4.1667   #${ vel= 2.77, 2.77, 4.1667, 4.1667, 5, 5 ! mean}
-                        */
                         if (getTS()== getS1())
                         {
                             vel_error = normal(mean_error_S1,std_error_S1);
                             human_error = (getS1() + vel_error)/(getS1());
+
+                            if(myApplAddr()==1)
+                            {
+                               Umbral_Ac = STDac_s1_n1*Thr_Ac;
+                            }
+                            else if(myApplAddr()==2)
+                            {
+                               Umbral_Ac = STDac_s1_n2*Thr_Ac;
+                            }
+                            else if(myApplAddr()==3)
+                            {
+                               Umbral_Ac = STDac_s1_n3*Thr_Ac;
+                            }
+
                         }
 
                         if (getTS()== getS2())
                         {
                             vel_error = normal(mean_error_S2,std_error_S2);
                             human_error = (getS2() + vel_error)/(getS2());
+
+                            if(myApplAddr()==1)
+                            {
+                               Umbral_Ac = STDac_s2_n1*Thr_Ac;
+                            }
+                            else if(myApplAddr()==2)
+                            {
+                               Umbral_Ac = STDac_s2_n2*Thr_Ac;
+                            }
+                            else if(myApplAddr()==3)
+                            {
+                               Umbral_Ac = STDac_s2_n3*Thr_Ac;
+                            }
                         }
 
                         if (getTS()== getS3())
                         {
                             vel_error = normal(mean_error_S3,std_error_S3);
                             human_error = (getS3() + vel_error)/(getS3());
-                            Thr_Ac = 1/3;
+
+                            if(myApplAddr()==1)
+                            {
+                               Umbral_Ac = STDac_s3_n1*Thr_Ac;
+                            }
+                            else if(myApplAddr()==2)
+                            {
+                               Umbral_Ac = STDac_s3_n2*Thr_Ac;
+                            }
+                            else if(myApplAddr()==3)
+                            {
+                               Umbral_Ac = STDac_s3_n3*Thr_Ac;
+                            }
                         }
                     }
 
@@ -464,7 +509,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
 
                     emit(accelerationSinSignal, A_des_lag_sin);
 
-                    if(A_des_lag > abs(Thr_Ac))
+                    if(abs(A_des_lag) > abs(Umbral_Ac))
                     {
                         lastAccelerationPlatoon = A_des_lag;
                         setAcceleration(A_des_lag);

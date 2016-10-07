@@ -81,6 +81,7 @@ void CustomLinearMobility::initialize(int stage)
         angle = fmod((double) par("angle"), 360);
         acceleration = par("acceleration");
         stationary = (currentSpeed == 0) && (acceleration == 0.0);
+
         //Obtener tiempo y distancia totales para llegar a la meta
         totalTime = par("totalTime");
         totalDistance = par("totalDistance");
