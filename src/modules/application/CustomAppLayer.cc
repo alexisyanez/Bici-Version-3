@@ -438,6 +438,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
 
                     // Umbral para aplicar a la aceleración
                     double Umbral_Ac;
+
                     if (getMS())
                     {
                         if (getTS()== getS1())
@@ -509,11 +510,31 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
 
                     emit(accelerationSinSignal, A_des_lag_sin);
 
-                    if(abs(A_des_lag) > abs(Umbral_Ac))
+                    EV << "The Acceleration threshold is:  " << Umbral_Ac << endl;
+
+                    if(myApplAddr()==0)
+                    {
+                       Umbral_Ac = 100;
+                    }
+
+                    if(fabs(A_des_lag) > Umbral_Ac)
+                    {
+                        A_des_lag= signo(A_des_lag)*Umbral_Ac;
+                        lastAccelerationPlatoon = A_des_lag;
+                        setAcceleration(A_des_lag);
+                    }
+                    else
                     {
                         lastAccelerationPlatoon = A_des_lag;
                         setAcceleration(A_des_lag);
                     }
+
+                   /* if(myApplAddr()==0)
+                    {
+                        lastAccelerationPlatoon = A_des_lag;
+                        setAcceleration(A_des_lag);
+                    }*/
+
                     EV << "Node[" << myApplAddr() << "]: New desired acceleration: " << getModuleAcceleration() << endl;
 
                     emit(distanceToFwdSignal, spacing_error); // Spacing Real
@@ -702,6 +723,13 @@ double CustomAppLayer::getModuleXPositionGPSError()
     return posxGPS;
 }
 
+// Función signo
+int CustomAppLayer::signo(double x)
+{
+    if (x > 0) return 1;
+    if (x < 0) return -1;
+    return 0;
+}
 
 /*
  * Obtener la posición y del módulo

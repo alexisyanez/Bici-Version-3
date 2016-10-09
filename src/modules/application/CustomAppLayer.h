@@ -241,6 +241,9 @@ class MIXIM_API CustomAppLayer : public MyTestAppLayer
         /** @brief Permite modificar la aceleracion de un nodo */
         virtual void setAcceleration(double acceleration);
 
+        //Función signo
+        virtual int signo(double x);
+
         /** @brief Number of messages to send in a burst*/
         int burstSize;
         /** @brief If true, send a unicast BROADCAST_REPLY message to each
