@@ -441,6 +441,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
 
                     if (getMS())
                     {
+                        // Setear valores en base a la desviacion estandar de cada nodo según su velocidad.
                         if (getTS()== getS1())
                         {
                             vel_error = normal(mean_error_S1,std_error_S1);
@@ -512,22 +513,28 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
 
                     EV << "The Acceleration threshold is:  " << Umbral_Ac << endl;
 
+                   // Aplicr el umbral a la aceleración
+
                     if(myApplAddr()==0)
                     {
-                       Umbral_Ac = 100;
+                       Umbral_Ac = 0;
                     }
 
-                    if(fabs(A_des_lag) > Umbral_Ac)
+                    if(fabs(A_des_lag) > Umbral_Ac) // Si la aceleración es mayor o menor que el Umbral
+                    {
+                        lastAccelerationPlatoon = A_des_lag;
+                        setAcceleration(A_des_lag);
+                        EV << "The Acceleration asigned is:  " << A_des_lag << endl;
+
+                    }
+                    /*else
                     {
                         A_des_lag= signo(A_des_lag)*Umbral_Ac;
                         lastAccelerationPlatoon = A_des_lag;
                         setAcceleration(A_des_lag);
-                    }
-                    else
-                    {
-                        lastAccelerationPlatoon = A_des_lag;
-                        setAcceleration(A_des_lag);
-                    }
+                        EV << "The Acceleration asigned is:  " << A_des_lag << endl;
+
+                    }*/
 
                    /* if(myApplAddr()==0)
                     {
