@@ -94,7 +94,19 @@ void CustomAppLayer::initialize(int stage)
     mean_error_S3 = par("mean_error_S3");
     std_error_S3 = par("std_error_S3");
 
-    // Desviación estandar para cada nodo
+    // Promedio de Aceleración para cada nodo con la velocidad respectiva
+
+    MEANac_s1_n1 = par("MEANac_s1_n1");
+    MEANac_s2_n1 = par("MEANac_s2_n1");
+    MEANac_s3_n1 = par("MEANac_s3_n1");
+    MEANac_s1_n2 = par("MEANac_s1_n2");
+    MEANac_s2_n2 = par("MEANac_s2_n2");
+    MEANac_s3_n2 = par("MEANac_s3_n2");
+    MEANac_s1_n3 = par("MEANac_s1_n3");
+    MEANac_s2_n3 = par("MEANac_s2_n3");
+    MEANac_s3_n3 = par("MEANac_s3_n3");
+
+    // Desviación estandar para cada nodo con la velocidad respectiva
 
     STDac_s1_n1 = par("STDac_s1_n1");
     STDac_s2_n1 = par("STDac_s2_n1");
@@ -438,6 +450,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
 
                     // Umbral para aplicar a la aceleración
                     double Umbral_Ac;
+                    double Mean_Ac;
 
                     if (getMS())
                     {
@@ -449,15 +462,18 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
 
                             if(myApplAddr()==1)
                             {
-                               Umbral_Ac = STDac_s1_n1*Thr_Ac;
+                               Umbral_Ac = STDac_s1_n1*Thr_Ac/2;
+                               Mean_Ac = MEANac_s1_n1;
                             }
                             else if(myApplAddr()==2)
                             {
-                               Umbral_Ac = STDac_s1_n2*Thr_Ac;
+                               Umbral_Ac = STDac_s1_n2*Thr_Ac/2;
+                               Mean_Ac = MEANac_s1_n2;
                             }
                             else if(myApplAddr()==3)
                             {
-                               Umbral_Ac = STDac_s1_n3*Thr_Ac;
+                               Umbral_Ac = STDac_s1_n3*Thr_Ac/2;
+                               Mean_Ac = MEANac_s1_n3;
                             }
 
                         }
@@ -469,15 +485,18 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
 
                             if(myApplAddr()==1)
                             {
-                               Umbral_Ac = STDac_s2_n1*Thr_Ac;
+                               Umbral_Ac = STDac_s2_n1*Thr_Ac/2;
+                               Mean_Ac = MEANac_s2_n1;
                             }
                             else if(myApplAddr()==2)
                             {
-                               Umbral_Ac = STDac_s2_n2*Thr_Ac;
+                               Umbral_Ac = STDac_s2_n2*Thr_Ac/2;
+                               Mean_Ac = MEANac_s2_n2;
                             }
                             else if(myApplAddr()==3)
                             {
-                               Umbral_Ac = STDac_s2_n3*Thr_Ac;
+                               Umbral_Ac = STDac_s2_n3*Thr_Ac/2;
+                               Mean_Ac = MEANac_s2_n3;
                             }
                         }
 
@@ -488,15 +507,19 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
 
                             if(myApplAddr()==1)
                             {
-                               Umbral_Ac = STDac_s3_n1*Thr_Ac;
+                               Umbral_Ac = STDac_s3_n1*Thr_Ac/2;
+                               Mean_Ac = MEANac_s3_n1;
                             }
                             else if(myApplAddr()==2)
                             {
-                               Umbral_Ac = STDac_s3_n2*Thr_Ac;
+                               Umbral_Ac = STDac_s3_n2*Thr_Ac/2;
+                               Mean_Ac = MEANac_s3_n2;
                             }
                             else if(myApplAddr()==3)
                             {
-                               Umbral_Ac = STDac_s3_n3*Thr_Ac;
+                               Umbral_Ac = STDac_s3_n3*Thr_Ac/2;
+                               Mean_Ac = MEANac_s3_n3;
+
                             }
                         }
                     }
@@ -505,7 +528,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                     //e. Calcular la aceleración deseada incluyéndole el retardo
                     double A_des_lag = ((alphaLag * A_des) + ((1 - alphaLag) * lastAccelerationPlatoon)) * human_error;
 
-                    emit(accelerationErrorSignal, A_des_lag);
+                    //emit(accelerationErrorSignal, A_des_lag);
 
                     double A_des_lag_sin = A_des_lag/human_error;
 
@@ -520,11 +543,12 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                        Umbral_Ac = 0;
                     }
 
-                    if(fabs(A_des_lag) > Umbral_Ac) // Si la aceleración es mayor o menor que el Umbral
+                    if(A_des_lag_sin > Mean_Ac + Umbral_Ac || A_des_lag_sin < Mean_Ac - Umbral_Ac) // Si la aceleración es mayor o menor que el Umbral
                     {
                         lastAccelerationPlatoon = A_des_lag;
                         setAcceleration(A_des_lag);
                         EV << "The Acceleration asigned is:  " << A_des_lag << endl;
+                        emit(accelerationErrorSignal, A_des_lag);
 
                     }
                     /*else

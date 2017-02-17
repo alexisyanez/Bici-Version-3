@@ -56,6 +56,17 @@ simple CustomAppLayer like IBaseApplLayer
     	double mean_error_S3 = default(0);
     	double std_error_S3 = default(0);
     	
+    	//MEAN acceleration for each node
+    	double MEANac_s1_n1 = default(0);
+		double MEANac_s2_n1 = default(0);
+		double MEANac_s3_n1 = default(0);
+		double MEANac_s1_n2 = default(0);
+		double MEANac_s2_n2 = default(0);
+		double MEANac_s3_n2 = default(0);
+		double MEANac_s1_n3 = default(0);
+		double MEANac_s2_n3 = default(0);
+		double MEANac_s3_n3 = default(0);
+    	
     	//STD acceleration for each node
     	double STDac_s1_n1 = default(0);
 		double STDac_s2_n1 = default(0);

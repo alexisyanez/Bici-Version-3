@@ -134,6 +134,17 @@ class MIXIM_API CustomAppLayer : public MyTestAppLayer
         double mean_error_S3;
         double std_error_S3;
 
+        //MEAN acceleration for each node
+        double MEANac_s1_n1;
+        double MEANac_s2_n1;
+        double MEANac_s3_n1;
+        double MEANac_s1_n2;
+        double MEANac_s2_n2;
+        double MEANac_s3_n2;
+        double MEANac_s1_n3;
+        double MEANac_s2_n3;
+        double MEANac_s3_n3;
+
         //STD acceleration for each node
         double STDac_s1_n1;
         double STDac_s2_n1;
