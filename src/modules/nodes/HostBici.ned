@@ -59,6 +59,10 @@ module HostBici extends MyWirelessNode
         @signal[vel](type="double");
         @statistic[velNodo](title="velocidad nodo"; source="vel"; record=vector,stats; interpolationmode=none);
         
+        //Señal para indicar la velocidad objetivo
+        @signal[targetSpeed](type="double");
+        @statistic[targetSpeed](title="velocidad objetiva nodo"; source="targetSpeed"; record=vector,stats; interpolationmode=none);
+        
         //Señal para indicar la posición y cuando se recibe un paquete
         @signal[yposition](type="double");
         @statistic[yPosition](title="position y"; source="yposition"; record=vector,stats; interpolationmode=none);

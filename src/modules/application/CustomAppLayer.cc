@@ -48,6 +48,7 @@ void CustomAppLayer::initialize(int stage)
     leaderInfoDirectSignal = registerSignal("leaderInfoDirect");
     leaderInfoMultihopSignal = registerSignal("leaderInfoMultihop");
     leaderInfoMultihopUsedSignal = registerSignal("leaderInfoMultihopUsed");
+    targetSpeedSignal = registerSignal("targetSpeed");
 
 
     // Inicializar variables
@@ -415,6 +416,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                     EV << "Relative speed vehicule in front=" << rel_speed_front << endl;
                     EV << "Leader speed=" << leaderSpeed << endl;
                     EV << "My speed=" << getModuleSpeed() << endl;
+                    EV << "Target speed=" << getTS() << endl;
                     EV << "Spacing Error=" << spacing_error << endl;
 
                     // Enviar valores de la velocidad
@@ -451,6 +453,8 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                     // Umbral para aplicar a la aceleración
                     double Umbral_Ac;
                     double Mean_Ac;
+
+                    emit(targetSpeedSignal,getTS());
 
                     if (getMS())
                     {
@@ -534,8 +538,9 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
 
                     emit(accelerationSinSignal, A_des_lag_sin);
 
-                    EV << "The Acceleration threshold is:  " << Umbral_Ac << endl;
+                    EV << "The Acceleration threshold is:  " << Mean_Ac - Umbral_Ac << " y " <<  Mean_Ac + Umbral_Ac << endl;
 
+                    emit(accelerationErrorSignal, A_des_lag);
                    // Aplicr el umbral a la aceleración
 
                     if(myApplAddr()==0)
@@ -548,7 +553,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                         lastAccelerationPlatoon = A_des_lag;
                         setAcceleration(A_des_lag);
                         EV << "The Acceleration asigned is:  " << A_des_lag << endl;
-                        emit(accelerationErrorSignal, A_des_lag);
+                        //emit(accelerationErrorSignal, A_des_lag);
 
                     }
                     /*else

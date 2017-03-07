@@ -85,6 +85,9 @@ class MIXIM_API CustomAppLayer : public MyTestAppLayer
         //Señal para emitir la velocidad del nodo
         simsignal_t velNodeSignal;
 
+        //Señal para emitir la velocidad objetiva del nodo
+        simsignal_t targetSpeedSignal;
+
         //Señal para emitir la posición y del módulo cuando se recibe un paquete
         simsignal_t positionYSignal;
 
