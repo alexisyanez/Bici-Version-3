@@ -61,6 +61,9 @@ class MIXIM_API CustomAppLayer : public MyTestAppLayer
         //Se�al para emitir la aceleraci�n aplicada sin error humano
         simsignal_t accelerationSinSignal;
 
+        //Se�al para emitir la aceleraci�n filtrada por el umbral
+        simsignal_t accelerationFilteredSignal;
+
         //Se�al para emitir la distancia del nodo actual al nodo frontal
         simsignal_t distanceToFwdSignal;
 

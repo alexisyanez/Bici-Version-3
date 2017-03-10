@@ -42,6 +42,7 @@ void CustomAppLayer::initialize(int stage)
     accelerationPlatoonSignal = registerSignal("accelerationPlatoon");
     accelerationErrorSignal = registerSignal("accelerationError");
     accelerationSinSignal = registerSignal("accelerationSin");
+    accelerationFilteredSignal = registerSignal("accelerationFiltered");
     distanceToFwdSignal = registerSignal("distanceToFwd");
     distanceToFwdRTTSignal = registerSignal("distanceToFwdRTT");
     leaderInfoSignal = registerSignal("leaderInfo");
@@ -534,8 +535,8 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
 
                     emit(accelerationSinSignal, A_des_lag_sin);
 
-                    // Calculuar aceleración con error humano
-                    double A_des_lag_Err = A_des_lag_sin*human_error;
+                    // Calcular aceleración con error humano
+                    double A_des_lag_Err = 0;
 
                     EV << "The Acceleration threshold is:  " << Mean_Ac - Umbral_Ac << " y " <<  Mean_Ac + Umbral_Ac << endl;
 
@@ -548,16 +549,22 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
 
                     if(A_des_lag_sin > Mean_Ac + Umbral_Ac || A_des_lag_sin < Mean_Ac - Umbral_Ac) // Si la aceleración es mayor o menor que el Umbral
                     {
-                        setAcceleration(A_des_lag_Err); // se aplica la aceleración al nodo con error humano
-                        lastAccelerationPlatoon = A_des_lag_Err;
-                        EV << "The Acceleration asigned is:  " << A_des_lag_Err << endl;
+                        emit(accelerationFilteredSignal, A_des_lag_sin);
+                        A_des_lag_Err = A_des_lag_sin*human_error;
+
                     }
                     else
                     {
+                        emit(accelerationFilteredSignal,0);
                         A_des_lag_Err = ((alphaLag * 0) + ((1 - alphaLag) * lastAccelerationPlatoon)) * human_error; //Aceleración deseada en cero
 
                     }
-                    emit(accelerationSinSignal, A_des_lag_Err);
+                    setAcceleration(A_des_lag_Err); // se aplica la aceleración al nodo con error humano
+
+                    lastAccelerationPlatoon = A_des_lag_Err;
+                    EV << "The Acceleration asigned is: " << A_des_lag_Err << endl;
+                    emit(accelerationErrorSignal, A_des_lag_Err);
+
 
                     EV << "Node[" << myApplAddr() << "]: New desired acceleration: " << getModuleAcceleration() << endl;
 

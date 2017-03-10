@@ -87,6 +87,10 @@ module HostBici extends MyWirelessNode
 		@signal[accelerationSin](type="double");
         @statistic[accelerationSin](title="acceleration platoon sin error"; source="accelerationSin"; record=vector,stats; interpolationmode=none);
         
+        //Señal para indicar la aceleracion filtrada por el umbral
+		@signal[accelerationFiltered](type="double");
+        @statistic[accelerationFiltered](title="acceleration filtrada"; source="accelerationFiltered"; record=vector,stats; interpolationmode=none);
+        
         //Se�al para indicar la distancia al nodo del frente
         @signal[distanceToFwd](type="double");
         @statistic[distanceToFwd](title="distance to fwd"; source="distanceToFwd"; record=vector,stats; interpolationmode=none);
