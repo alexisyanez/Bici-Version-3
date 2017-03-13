@@ -43,7 +43,9 @@ void CustomAppLayer::initialize(int stage)
     accelerationErrorSignal = registerSignal("accelerationError");
     accelerationSinSignal = registerSignal("accelerationSin");
     accelerationFilteredSignal = registerSignal("accelerationFiltered");
-    distanceToFwdSignal = registerSignal("distanceToFwd");
+    distanceToFwdS1Signal = registerSignal("distanceToFwdS1");
+    distanceToFwdS2Signal = registerSignal("distanceToFwdS2");
+    distanceToFwdS3Signal = registerSignal("distanceToFwdS3");
     distanceToFwdRTTSignal = registerSignal("distanceToFwdRTT");
     leaderInfoSignal = registerSignal("leaderInfo");
     leaderInfoDirectSignal = registerSignal("leaderInfoDirect");
@@ -568,7 +570,28 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
 
                     EV << "Node[" << myApplAddr() << "]: New desired acceleration: " << getModuleAcceleration() << endl;
 
-                    emit(distanceToFwdSignal, spacing_error); // Spacing Real
+
+                    if (getMS())
+                    {
+                        // Setear valores en base a la desviacion estandar de cada nodo según su velocidad.
+                        if (getTS()== getS1())
+                        {
+                            emit(distanceToFwdS1Signal, spacing_error); // Spacing Real
+                        }
+
+                        if (getTS()== getS2())
+                        {
+                            emit(distanceToFwdS2Signal, spacing_error); // Spacing Real
+                        }
+
+                        if (getTS()== getS3())
+                        {
+                            emit(distanceToFwdS3Signal, spacing_error); // Spacing Real
+
+                        }
+                    }
+
+                    //emit(distanceToFwdSignal, spacing_error); // Spacing Real
                     //emit(accelerationPlatoonSignal, A_des_lag);
 
                 }

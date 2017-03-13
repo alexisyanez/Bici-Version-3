@@ -64,8 +64,14 @@ class MIXIM_API CustomAppLayer : public MyTestAppLayer
         //Se�al para emitir la aceleraci�n filtrada por el umbral
         simsignal_t accelerationFilteredSignal;
 
-        //Se�al para emitir la distancia del nodo actual al nodo frontal
-        simsignal_t distanceToFwdSignal;
+        //Se�al para emitir la distancia del nodo actual al nodo frontal velocidad baja, Speed 1
+        simsignal_t distanceToFwdS1Signal;
+
+        //Se�al para emitir la distancia del nodo actual al nodo frontal velocidad media, Speed 2
+        simsignal_t distanceToFwdS2Signal;
+
+        //Se�al para emitir la distancia del nodo actual al nodo frontal velocidad alta, Speed 3
+        simsignal_t distanceToFwdS3Signal;
 
         //Se�al para emitir la distancia del nodo actual al nodo frontal
         simsignal_t distanceToFwdRTTSignal;
