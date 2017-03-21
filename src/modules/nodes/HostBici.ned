@@ -91,17 +91,9 @@ module HostBici extends MyWirelessNode
 		@signal[accelerationFiltered](type="double");
         @statistic[accelerationFiltered](title="acceleration filtrada"; source="accelerationFiltered"; record=vector,stats; interpolationmode=none);
         
-        //Se�al para indicar la distancia al nodo del frente velocidad baja S1
-        @signal[distanceToFwdS1](type="double");
-        @statistic[distanceToFwdS1](title="distance to fwd S1"; source="distanceToFwdS1"; record=vector,stats; interpolationmode=none);
-        
-        //Se�al para indicar la distancia al nodo del frente velocidad media S2
-        @signal[distanceToFwdS2](type="double");
-        @statistic[distanceToFwdS2](title="distance to fwd S2"; source="distanceToFwdS2"; record=vector,stats; interpolationmode=none);
-        
-        //Se�al para indicar la distancia al nodo del frente velocidad alta S3
-        @signal[distanceToFwdS3](type="double");
-        @statistic[distanceToFwdS3](title="distance to fwd S3"; source="distanceToFwdS3"; record=vector,stats; interpolationmode=none);
+        //Se�al para indicar la distancia al nodo del frente
+        @signal[distanceToFwd](type="double");
+        @statistic[distanceToFwd](title="distance to fwd"; source="distanceToFwd"; record=vector,stats; interpolationmode=none);
 
 		//Se�al para indicar la distancia al nodo del frente en base al RTT
         @signal[distanceToFwdRTT](type="double");
@@ -126,4 +118,10 @@ module HostBici extends MyWirelessNode
         //Señal para indicar el USO de un paquete con informacion del lider recibido por MULTISALTO
         @signal[leaderInfoMultihopUsed](type="int");
         @statistic[leaderInfoMultihopUsed](title="leader info multihop used"; source="leaderInfoMultihopUsed"; record=vector,stats; interpolationmode=none);
+
+		//Señal para indicar el calculo de la exactitud
+		@signal[accuracy](type="double");
+        @statistic[accuracy](title="calculo de la exactitud"; source="accuracy"; record=vector,stats; interpolationmode=none);
+        
+        
 }
