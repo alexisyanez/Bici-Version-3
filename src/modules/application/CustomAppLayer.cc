@@ -465,7 +465,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                         if (getTS()== getS1())
                         {
                             vel_error = normal(mean_error_S1,std_error_S1);
-                            human_error = (getS1() + vel_error)/(getS1());
+                            human_error = vel_error;  //(getS1() + vel_error)/(getS1());
 
                             if(myApplAddr()==1)
                             {
@@ -488,7 +488,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                         if (getTS()== getS2())
                         {
                             vel_error = normal(mean_error_S2,std_error_S2);
-                            human_error = (getS2() + vel_error)/(getS2());
+                            human_error = vel_error;//(getS2() + vel_error)/(getS2());
 
                             if(myApplAddr()==1)
                             {
@@ -510,7 +510,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                         if (getTS()== getS3())
                         {
                             vel_error = normal(mean_error_S3,std_error_S3);
-                            human_error = (getS3() + vel_error)/(getS3());
+                            human_error = vel_error; //(getS3() + vel_error)/(getS3());
 
                             if(myApplAddr()==1)
                             {
@@ -555,7 +555,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                     if(A_des_lag_sin > Mean_Ac + Umbral_Ac || A_des_lag_sin < Mean_Ac - Umbral_Ac) // Si la aceleración es mayor o menor que el Umbral
                     {
                         emit(accelerationFilteredSignal, A_des_lag_sin);
-                        A_des_lag_Err = A_des_lag_sin*human_error;
+                        A_des_lag_Err = A_des_lag_sin + human_error;
 
                         if(A_des_lag_sin>0 && A_des_lag_Err>0){Node_precision=1;}
                         else if(A_des_lag_sin<0 && A_des_lag_Err<0){Node_precision=1;}

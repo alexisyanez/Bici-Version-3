@@ -119,6 +119,10 @@ module HostBici extends MyWirelessNode
         @signal[leaderInfoMultihopUsed](type="int");
         @statistic[leaderInfoMultihopUsed](title="leader info multihop used"; source="leaderInfoMultihopUsed"; record=vector,stats; interpolationmode=none);
 
+		//Señal para indicar el calculo de la precision
+		@signal[precision](type="int");
+        @statistic[precision](title="calculo de la precision"; source="precision"; record=vector,stats; interpolationmode=none);
+		
 		//Señal para indicar el calculo de la exactitud
 		@signal[accuracy](type="double");
         @statistic[accuracy](title="calculo de la exactitud"; source="accuracy"; record=vector,stats; interpolationmode=none);
