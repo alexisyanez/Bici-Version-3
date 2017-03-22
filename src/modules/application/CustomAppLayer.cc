@@ -569,7 +569,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                     else
                     {
                         emit(accelerationFilteredSignal,0);
-                        A_des_lag_Err = ((alphaLag * 0) + ((1 - alphaLag) * lastAccelerationPlatoon)) * human_error; //Aceleración deseada en cero
+                        A_des_lag_Err = human_error; //Corresponde solo al error humano dado que la aceleración deseada es cero
 
                         //emit(precisionSignal,Node_precision);
                     }
