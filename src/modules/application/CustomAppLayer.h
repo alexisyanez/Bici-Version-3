@@ -115,6 +115,9 @@ class MIXIM_API CustomAppLayer : public MyTestAppLayer
         //Señal para emitir el calculo de la exactitud por nodo
         simsignal_t accuracySignal;
 
+        //Señal para emitir el error humano obtenido
+        simsignal_t humanErrorSignal;
+
         //Aceleracion del ultimo platoon
         double lastAccelerationPlatoon;
 

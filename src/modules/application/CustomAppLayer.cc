@@ -52,6 +52,7 @@ void CustomAppLayer::initialize(int stage)
     targetSpeedSignal = registerSignal("targetSpeed");
     precisionSignal = registerSignal("precision");
     accuracySignal = registerSignal("accuracy");
+    humanErrorSignal = registerSignal("humanError");
 
 
     // Inicializar variables
@@ -410,6 +411,8 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                         leaderSpeed = leaderNode->getSpeed();
                     }
 
+                    double TargetS = getTS();
+
                     //Print data for calculation
                     EV << "Node[" << myApplAddr() << "]: Platoon parameters" << endl;
                     EV << "distance to Vehicle in Front=" << distanceBetweenActualAndFront << endl;
@@ -419,7 +422,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                     EV << "Relative speed vehicule in front=" << rel_speed_front << endl;
                     EV << "Leader speed=" << leaderSpeed << endl;
                     EV << "My speed=" << getModuleSpeed() << endl;
-                    EV << "Target speed=" << getTS() << endl;
+                    EV << "Target speed=" << TargetS << endl;
                     EV << "Spacing Error=" << spacing_error << endl;
 
                     // Enviar valores de la velocidad
@@ -450,22 +453,22 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
 
 
                     // Calcular el error en base a una normal con parámetros de resultados en simulación
-                    double vel_error = normal(mean_error,std_error);
-                    double human_error = (mean_vel_obj + vel_error)/(mean_vel_obj);
+                    //double vel_error; = normal(mean_error,std_error);
+                    double human_error;// = (mean_vel_obj + vel_error)/(mean_vel_obj);
 
                     // Umbral para aplicar a la aceleración
                     double Umbral_Ac;
                     double Mean_Ac;
 
-                    emit(targetSpeedSignal,getTS());
-
                     if (getMS())
                     {
+                        //EV << "TargetSpeed= " << getTS() << " S1= " << getS1() << " S2= " << getS2() << " S3= " << getS3() << endl;
+
                         // Setear valores en base a la desviacion estandar de cada nodo según su velocidad.
-                        if (getTS()== getS1())
+                        if (TargetS == getS1())
                         {
-                            vel_error = normal(mean_error_S1,std_error_S1);
-                            human_error = vel_error;  //(getS1() + vel_error)/(getS1());
+                            human_error = normal(mean_error_S1,std_error_S1);
+                              //(getS1() + vel_error)/(getS1());
 
                             if(myApplAddr()==1)
                             {
@@ -485,10 +488,10 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
 
                         }
 
-                        if (getTS()== getS2())
+                        if (TargetS== getS2())
                         {
-                            vel_error = normal(mean_error_S2,std_error_S2);
-                            human_error = vel_error;//(getS2() + vel_error)/(getS2());
+                            human_error = normal(mean_error_S2,std_error_S2);
+                            //(getS2() + vel_error)/(getS2());
 
                             if(myApplAddr()==1)
                             {
@@ -507,10 +510,10 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                             }
                         }
 
-                        if (getTS()== getS3())
+                        if (TargetS== getS3())
                         {
-                            vel_error = normal(mean_error_S3,std_error_S3);
-                            human_error = vel_error; //(getS3() + vel_error)/(getS3());
+                            human_error = normal(mean_error_S3,std_error_S3);
+                            //(getS3() + vel_error)/(getS3());
 
                             if(myApplAddr()==1)
                             {
@@ -531,6 +534,9 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                         }
                     }
 
+                    emit(targetSpeedSignal,TargetS);
+
+                    EV << "The Human Error is:  " << human_error << endl ;
 
                     //e. Calcular la aceleración deseada incluyéndole el retardo
                     double A_des_lag_sin = ((alphaLag * A_des) + ((1 - alphaLag) * lastAccelerationPlatoon));
@@ -550,7 +556,9 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                     if(myApplAddr()==0)
                     {
                        Umbral_Ac = 0;
+                       Mean_Ac = 0;
                     }
+
 
                     if(A_des_lag_sin > Mean_Ac + Umbral_Ac || A_des_lag_sin < Mean_Ac - Umbral_Ac) // Si la aceleración es mayor o menor que el Umbral
                     {
@@ -573,6 +581,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
 
                         //emit(precisionSignal,Node_precision);
                     }
+
                     setAcceleration(A_des_lag_Err); // se aplica la aceleración al nodo con error humano
 
                     lastAccelerationPlatoon = A_des_lag_Err;
@@ -584,8 +593,10 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
 
                     emit(distanceToFwdSignal, spacing_error); // Spacing Real
                     //emit(accelerationPlatoonSignal, A_des_lag);
+                    emit(humanErrorSignal, human_error);
+                    }
 
-                }
+
                 else
                 {
                     EV << "No near nodes " << endl;

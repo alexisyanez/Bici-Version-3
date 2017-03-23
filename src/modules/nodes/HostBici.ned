@@ -126,6 +126,11 @@ module HostBici extends MyWirelessNode
 		//Señal para indicar el calculo de la exactitud
 		@signal[accuracy](type="double");
         @statistic[accuracy](title="calculo de la exactitud"; source="accuracy"; record=vector,stats; interpolationmode=none);
+       
+       //Señal para indicar el calculo del error humano
+		@signal[humanError](type="double");
+        @statistic[humanError](title="Error humano"; source="humanError"; record=vector,stats; interpolationmode=none);
+        
         
         
 }
