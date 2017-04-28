@@ -101,27 +101,27 @@ void CustomAppLayer::initialize(int stage)
 
     // Promedio de Aceleración para cada nodo con la velocidad respectiva
 
-    MEANac_s1_n1 = par("MEANac_s1_n1");
-    MEANac_s2_n1 = par("MEANac_s2_n1");
-    MEANac_s3_n1 = par("MEANac_s3_n1");
-    MEANac_s1_n2 = par("MEANac_s1_n2");
-    MEANac_s2_n2 = par("MEANac_s2_n2");
-    MEANac_s3_n2 = par("MEANac_s3_n2");
-    MEANac_s1_n3 = par("MEANac_s1_n3");
-    MEANac_s2_n3 = par("MEANac_s2_n3");
-    MEANac_s3_n3 = par("MEANac_s3_n3");
+    MEANac_n1 = par("MEANac_n1");
+    MEANac_n2 = par("MEANac_n2");
+    MEANac_n3 = par("MEANac_n3");
+    MEANac_n4 = par("MEANac_n4");
+    MEANac_n5 = par("MEANac_n5");
+    MEANac_n6 = par("MEANac_n6");
+    MEANac_n7 = par("MEANac_n7");
+    MEANac_n8 = par("MEANac_n8");
+    MEANac_n9 = par("MEANac_n9");
 
     // Desviación estandar para cada nodo con la velocidad respectiva
 
-    STDac_s1_n1 = par("STDac_s1_n1");
-    STDac_s2_n1 = par("STDac_s2_n1");
-    STDac_s3_n1 = par("STDac_s3_n1");
-    STDac_s1_n2 = par("STDac_s1_n2");
-    STDac_s2_n2 = par("STDac_s2_n2");
-    STDac_s3_n2 = par("STDac_s3_n2");
-    STDac_s1_n3 = par("STDac_s1_n3");
-    STDac_s2_n3 = par("STDac_s2_n3");
-    STDac_s3_n3 = par("STDac_s3_n3");
+    STDac_n1 = par("STDac_n1");
+    STDac_n2 = par("STDac_n2");
+    STDac_n3 = par("STDac_n3");
+    STDac_n4 = par("STDac_n4");
+    STDac_n5 = par("STDac_n5");
+    STDac_n6 = par("STDac_n6");
+    STDac_n7 = par("STDac_n7");
+    STDac_n8 = par("STDac_n8");
+    STDac_n9 = par("STDac_n9");
 
     // Error en la posición debido al GPS
     GPSErrorEnabled = par("GPS_error");
@@ -465,30 +465,59 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                         //EV << "TargetSpeed= " << getTS() << " S1= " << getS1() << " S2= " << getS2() << " S3= " << getS3() << endl;
 
                         // Setear valores en base a la desviacion estandar de cada nodo según su velocidad.
-                        if (TargetS == getS1())
+                       if (TargetS == getS1())
                         {
                             human_error = normal(mean_error_S1,std_error_S1);
                               //(getS1() + vel_error)/(getS1());
 
                             if(myApplAddr()==1)
                             {
-                               Umbral_Ac = STDac_s1_n1*Thr_Ac/2;
-                               Mean_Ac = MEANac_s1_n1;
+                               Umbral_Ac = STDac_n1*Thr_Ac/2;
+                               Mean_Ac = MEANac_n1;
                             }
                             else if(myApplAddr()==2)
                             {
-                               Umbral_Ac = STDac_s1_n2*Thr_Ac/2;
-                               Mean_Ac = MEANac_s1_n2;
+                               Umbral_Ac = STDac_n2*Thr_Ac/2;
+                               Mean_Ac = MEANac_n2;
                             }
                             else if(myApplAddr()==3)
                             {
-                               Umbral_Ac = STDac_s1_n3*Thr_Ac/2;
-                               Mean_Ac = MEANac_s1_n3;
+                               Umbral_Ac = STDac_n3*Thr_Ac/2;
+                               Mean_Ac = MEANac_n3;
                             }
-
+                            else if(myApplAddr()==4)
+                            {
+                               Umbral_Ac = STDac_n4*Thr_Ac/2;
+                               Mean_Ac = MEANac_n4;
+                            }
+                            else if(myApplAddr()==5)
+                            {
+                               Umbral_Ac = STDac_n5*Thr_Ac/2;
+                               Mean_Ac = MEANac_n5;
+                            }
+                            else if(myApplAddr()==6)
+                            {
+                               Umbral_Ac = STDac_n6*Thr_Ac/2;
+                               Mean_Ac = MEANac_n6;
+                            }
+                            else if(myApplAddr()==7)
+                            {
+                               Umbral_Ac = STDac_n7*Thr_Ac/2;
+                               Mean_Ac = MEANac_n7;
+                            }
+                            else if(myApplAddr()==8)
+                            {
+                               Umbral_Ac = STDac_n8*Thr_Ac/2;
+                               Mean_Ac = MEANac_n8;
+                            }
+                            else if(myApplAddr()==9)
+                            {
+                               Umbral_Ac = STDac_n9*Thr_Ac/2;
+                               Mean_Ac = MEANac_n9;
+                            }
                         }
 
-                        if (TargetS== getS2())
+                        /*if (TargetS== getS2())
                         {
                             human_error = normal(mean_error_S2,std_error_S2);
                             //(getS2() + vel_error)/(getS2());
@@ -531,9 +560,14 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                                Mean_Ac = MEANac_s3_n3;
 
                             }
-                        }
+                        }*/
                     }
+                    /*else {
+                        human_error = normal(mean_error_S1,std_error_S1);
+                        Mean_Ac = 0;
+                        Umbral_Ac =0;
 
+                    }*/
                     emit(targetSpeedSignal,TargetS);
 
                     EV << "The Human Error is:  " << human_error << endl ;

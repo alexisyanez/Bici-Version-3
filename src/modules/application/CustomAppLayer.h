@@ -150,26 +150,26 @@ class MIXIM_API CustomAppLayer : public MyTestAppLayer
         double std_error_S3;
 
         //MEAN acceleration for each node
-        double MEANac_s1_n1;
-        double MEANac_s2_n1;
-        double MEANac_s3_n1;
-        double MEANac_s1_n2;
-        double MEANac_s2_n2;
-        double MEANac_s3_n2;
-        double MEANac_s1_n3;
-        double MEANac_s2_n3;
-        double MEANac_s3_n3;
+        double MEANac_n1;
+        double MEANac_n2;
+        double MEANac_n3;
+        double MEANac_n4;
+        double MEANac_n5;
+        double MEANac_n6;
+        double MEANac_n7;
+        double MEANac_n8;
+        double MEANac_n9;
 
         //STD acceleration for each node
-        double STDac_s1_n1;
-        double STDac_s2_n1;
-        double STDac_s3_n1;
-        double STDac_s1_n2;
-        double STDac_s2_n2;
-        double STDac_s3_n2;
-        double STDac_s1_n3;
-        double STDac_s2_n3;
-        double STDac_s3_n3;
+        double STDac_n1;
+        double STDac_n2;
+        double STDac_n3;
+        double STDac_n4;
+        double STDac_n5;
+        double STDac_n6;
+        double STDac_n7;
+        double STDac_n8;
+        double STDac_n9;
 
         //GPS Measure error
         bool GPSErrorEnabled;
