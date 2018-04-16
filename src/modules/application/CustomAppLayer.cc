@@ -227,6 +227,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                 scheduleAt(simTime() + beaconInterval, positionTimer);
 
                 EV << "Node[" << myApplAddr() << "]: Sending Position Update" << endl;
+                //EV << "My X Position=" << xposition << "; My X GPS position = " << xpositionGPSerror << endl;
 
                 break;
             }
@@ -704,6 +705,7 @@ void CustomAppLayer::handleLowerMsg(cMessage* msg)
         EV << "RTT(s)=" << m->getTimestamp()<< endl;
         EV << "SimTime=" << ST << endl;
         EV << "GetTimestamp=" << GTS << endl;
+        EV << "My X Position=" << xposition << "; My X GPS position = " << xpositionGPSerror << endl;
         //}
 
         EV << "srcAddress" << m->getSrcAddr();
@@ -806,10 +808,11 @@ double CustomAppLayer::getModuleXPositionGPSError()
     double posxGPS = 0;
     c = MobilityAccess().get(findHost())->getCurrentPosition();
     posxGPS = c.x;
-    double r = (rand() % 2) * 2 - 1;
+
+    //double r = (rand() % 2) * 2 - 1;
     double u = uniform(0,1);
     double position_error = position_error_a * sqrt(-position_error_b * log(u)); /* generating Rayleigh-distributed variates */
-    posxGPS = posxGPS + r*position_error;
+    posxGPS = posxGPS + position_error;
     return posxGPS;
 }
 

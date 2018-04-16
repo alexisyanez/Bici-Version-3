@@ -173,7 +173,7 @@ void MyTestAppLayer::sendNodeInfo(int id, double xpos, double ypos, double xposG
     pkt->setId(id);
     pkt->setXposition(xpos);
     pkt->setYposition(ypos);
-    pkt->setXposition(xposGPS);
+    pkt->setXpositionGPS(xposGPS);
     pkt->setSpeed(speed);
     pkt->setAcceleration(acceleration);
     pkt->setBeaconingEnabled(beaconingEnabled);
