@@ -40,6 +40,9 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
+					<fileInfo id="org.omnetpp.cdt.gnu.config.debug.698335423.1439863708" name="Mydist.cc" rcbsApplicability="disable" resourcePath="src/modules/application/Mydist.cc" toolsToInvoke="cdt.managedbuild.tool.gnu.cpp.compiler.base.1227971809.1579468042">
+						<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.base.1227971809.1579468042" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.base.1227971809"/>
+					</fileInfo>
 					<sourceEntries>
 						<entry excluding="src" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
