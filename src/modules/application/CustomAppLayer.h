@@ -20,6 +20,7 @@
 #include <MyTestAppLayer.h>
 #include <NodeInfo.h>
 #include <fstream>
+#include <stdio.h>
 
 class MIXIM_API CustomAppLayer : public MyTestAppLayer
 {
@@ -197,9 +198,6 @@ class MIXIM_API CustomAppLayer : public MyTestAppLayer
         //Acceleration threshold
         double Thr_Ac;
 
-        // Funciones y vectores para implementar distribución propia
-        void readCSV(const std::string &s,std::vector<double> &elems);
-
         std::vector<double> VectorDistLS;
         std::vector<double> VectorDistMS;
         std::vector<double> VectorDistHS;
@@ -214,7 +212,6 @@ class MIXIM_API CustomAppLayer : public MyTestAppLayer
 
         /** @brief Initialize module parameters*/
         virtual void initialize(int);
-
 
     protected:
         /** @brief Handle self messages such as timer... */
@@ -279,16 +276,17 @@ class MIXIM_API CustomAppLayer : public MyTestAppLayer
         //Función signo
         virtual int signo(double x);
 
-        // Funciones para obtener valores aleatorios referentes a las PDF experimentales
-        virtual double getRandValLowSpeed();
-        virtual double getRandValMediumSpeed();
-        virtual double getRandValHighSpeed();
-
         /** @brief Number of messages to send in a burst*/
         int burstSize;
         /** @brief If true, send a unicast BROADCAST_REPLY message to each
          * received BROADCAST message. */
         bool bSendReply;
+
+        void readCSV(const std::string &s,std::vector<double> &elems);
+
+        virtual double getRandValLowSpeed();
+        virtual double getRandValMediumSpeed();
+        virtual double getRandValHighSpeed();
 };
 
 #endif /* CUSTOMAPPLAYER_H_ */

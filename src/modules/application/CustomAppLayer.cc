@@ -144,6 +144,16 @@ void CustomAppLayer::initialize(int stage)
     readCSV("DistVectorMediumSpeed.csv",VectorDistMS);
     readCSV("DistVectorHighSpeed.csv",VectorDistHS);
 
+    for (int i = 0; i < VectorDistLS.size(); i++) {
+        EV <<"distvector values: "<< VectorDistLS.at(i) << endl;
+    }
+    /*for (int i = 0; i < VectorDistMS.size(); i++) {
+        EV <<"distvector values: "<< VectorDistMS.at(i) <<endl;
+    }
+    for (int i = 0; i < VectorDistHS.size(); i++) {
+        EV <<"distvector values: "<<VectorDistHS.at(i) <<endl;
+    }*/
+
     MyTestAppLayer::initialize(stage);
     if (stage == 0)
     {
@@ -472,7 +482,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                         // Setear valores en base a la desviacion estandar de cada nodo según su velocidad.
                        if (TargetS == getS1())
                         {
-                            human_error = getRandValMediumSpeed(); //normal(mean_error_S1,std_error_S1);
+                            human_error = getRandValMediumSpeed();//normal(mean_error_S1,std_error_S1);
                               //(getS1() + vel_error)/(getS1());
 
                             if(myApplAddr()==1)
@@ -960,14 +970,18 @@ double CustomAppLayer::getAbsoluteDistance(double posx, double posy, int zona)
 
 void CustomAppLayer::readCSV(const std::string &s,std::vector<double> &elems)
 {
+    EV << "entro a la función values: "<< endl;
     string line;
-    ifstream myfile (s.c_str());
+    ifstream myfile;//myfile(s.c_str(),ios::app);
+    //myfile.open();
+    myfile.open(s.c_str());
     if (myfile.is_open())
     {
+        EV << "entro al if: "<< endl;
         while ( getline (myfile,line) )
         {
             double a = atof(line.c_str());
-            //cout << a << '\n';
+            EV << "values: " << a << endl;
             elems.push_back(a);
         }
         myfile.close();
@@ -975,20 +989,20 @@ void CustomAppLayer::readCSV(const std::string &s,std::vector<double> &elems)
 }
 
 double CustomAppLayer::getRandValLowSpeed(){
-    int i = intuniform(0,sizeof(VectorDistLS));
-    return VectorDistLS[i];
+    int iLS = intuniform(0,sizeof(VectorDistLS));
+    return VectorDistLS.at(iLS);
 }
 
 double CustomAppLayer::getRandValMediumSpeed(){
-    int i = intuniform(0,sizeof(VectorDistMS));
-    return VectorDistMS[i];
+    //int iMS = intuniform(0,sizeof(VectorDistMS));
+
+    return 1; //VectorDistMS.at(1);
 }
 
 double CustomAppLayer::getRandValHighSpeed(){
-    int i = intuniform(0,sizeof(VectorDistHS));
-    return VectorDistHS[i];
+    int iHS = intuniform(0,sizeof(VectorDistHS));
+    return VectorDistHS.at(iHS);
 }
-
 
 CustomAppLayer::~CustomAppLayer()
 {
