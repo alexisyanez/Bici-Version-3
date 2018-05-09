@@ -140,6 +140,10 @@ void CustomAppLayer::initialize(int stage)
     // Umbral de Aceleración
     Thr_Ac = par("Thr_Ac");
 
+    readCSV("DistVectorLowSpeed.csv",VectorDistLS);
+    readCSV("DistVectorMediumSpeed.csv",VectorDistMS);
+    readCSV("DistVectorHighSpeed.csv",VectorDistHS);
+
     MyTestAppLayer::initialize(stage);
     if (stage == 0)
     {
@@ -468,7 +472,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                         // Setear valores en base a la desviacion estandar de cada nodo según su velocidad.
                        if (TargetS == getS1())
                         {
-                            human_error = normal(mean_error_S1,std_error_S1);
+                            human_error = getRandValMediumSpeed(); //normal(mean_error_S1,std_error_S1);
                               //(getS1() + vel_error)/(getS1());
 
                             if(myApplAddr()==1)
@@ -953,6 +957,38 @@ double CustomAppLayer::getAbsoluteDistance(double posx, double posy, int zona)
     return absoluteDistance;
 
 }
+
+void CustomAppLayer::readCSV(const std::string &s,std::vector<double> &elems)
+{
+    string line;
+    ifstream myfile (s);
+    if (myfile.is_open())
+    {
+        while ( getline (myfile,line) )
+        {
+            double a = atof(line.c_str());
+            //cout << a << '\n';
+            elems.push_back(a);
+        }
+        myfile.close();
+    }
+}
+
+double CustomAppLayer::getRandValLowSpeed(){
+    int i = intuniform(0,sizeof(VectorDistLS));
+    return VectorDistLS[i];
+}
+
+double CustomAppLayer::getRandValMediumSpeed(){
+    int i = intuniform(0,sizeof(VectorDistMS));
+    return VectorDistMS[i];
+}
+
+double CustomAppLayer::getRandValHighSpeed(){
+    int i = intuniform(0,sizeof(VectorDistHS));
+    return VectorDistHS[i];
+}
+
 
 CustomAppLayer::~CustomAppLayer()
 {
