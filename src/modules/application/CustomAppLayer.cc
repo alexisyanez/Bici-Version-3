@@ -961,7 +961,7 @@ double CustomAppLayer::getAbsoluteDistance(double posx, double posy, int zona)
 void CustomAppLayer::readCSV(const std::string &s,std::vector<double> &elems)
 {
     string line;
-    ifstream myfile (s);
+    ifstream myfile (s.c_str());
     if (myfile.is_open())
     {
         while ( getline (myfile,line) )
