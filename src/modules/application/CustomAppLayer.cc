@@ -140,13 +140,13 @@ void CustomAppLayer::initialize(int stage)
     // Umbral de Aceleración
     Thr_Ac = par("Thr_Ac");
 
-    readCSV("DistVectorLowSpeed.csv",VectorDistLS);
+    /*readCSV("DistVectorLowSpeed.csv",VectorDistLS);
     readCSV("DistVectorMediumSpeed.csv",VectorDistMS);
     readCSV("DistVectorHighSpeed.csv",VectorDistHS);
 
     for (int i = 0; i < VectorDistLS.size(); i++) {
         EV <<"distvector values: "<< VectorDistLS.at(i) << endl;
-    }
+    }*/
     /*for (int i = 0; i < VectorDistMS.size(); i++) {
         EV <<"distvector values: "<< VectorDistMS.at(i) <<endl;
     }
@@ -240,7 +240,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                 positionTimer = new cMessage("position-timer", POSITION_TIMER);
                 scheduleAt(simTime() + beaconInterval, positionTimer);
 
-                EV << "Node[" << myApplAddr() << "]: Sending Position Update" << endl;
+                //EV << "Node[" << myApplAddr() << "]: Sending Position Update" << endl;
                 //EV << "My X Position=" << xposition << "; My X GPS position = " << xpositionGPSerror << endl;
 
                 break;
@@ -308,8 +308,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                 {
 
                     //a. Determinar nodo mas cercano y nodo lider
-                    for (std::vector<NodeInfo*>::iterator it = noDuplicateInfo.begin(); it != noDuplicateInfo.end();
-                            ++it)
+                    for (std::vector<NodeInfo*>::iterator it = noDuplicateInfo.begin(); it != noDuplicateInfo.end();++it)
                     {
                         NodeInfo* nodeInfo = *it;
 
@@ -323,6 +322,11 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                         {
                             leaderNode = *it;
                         }
+
+                        /*if (addr_node == myApplAddr()-1 )
+                        {
+                            nearestNode = *it;
+                        }*/
 
                         //Si actualmente no hay un nodo mas cercano y la distancia del nodo al actual es mayor a cero,
                         //este es el nodo mas cercano por el momento
@@ -444,7 +448,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                     emit(velNodeSignal,getModuleSpeed());
                     double A_des;
 
-                    if (GPSErrorEnabled == true) // se activa solo si el usurio quiere incluir el error del GPS
+                    if (GPSErrorEnabled == true) // se activa solo si el usuario quiere incluir el error del GPS
                     {
                          //d. Calcular A_des (Acceleration desired)
                         A_des = alpha1 * nodeFrontAcceleration + alpha2 * leaderAcceleration
@@ -464,6 +468,8 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                                 - alpha5 * spacing_error;
                     }
 
+                    if(spacing_error>desiredSpacing){A_des=0;} // Si un nodo sobrepasa a su antecesor no aplica ninguna aceleración
+
                     emit(accelerationPlatoonSignal, A_des);
 
 
@@ -482,7 +488,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                         // Setear valores en base a la desviacion estandar de cada nodo según su velocidad.
                        if (TargetS == getS1())
                         {
-                            human_error = getRandValMediumSpeed();//normal(mean_error_S1,std_error_S1);
+                            human_error = normal(mean_error_S1,std_error_S1); //getRandValMediumSpeed();
                               //(getS1() + vel_error)/(getS1());
 
                             if(myApplAddr()==1)
@@ -529,6 +535,106 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                             {
                                Umbral_Ac = STDac_n9*Thr_Ac/2;
                                Mean_Ac = MEANac_n9;
+                            }
+                            else if(myApplAddr()==10)
+                            {
+                               Umbral_Ac = STDac_n10*Thr_Ac/2;
+                               Mean_Ac = MEANac_n10;
+                            }
+                            else if(myApplAddr()==11)
+                            {
+                               Umbral_Ac = STDac_n11*Thr_Ac/2;
+                               Mean_Ac = MEANac_n11;
+                            }
+                            else if(myApplAddr()==12)
+                            {
+                               Umbral_Ac = STDac_n12*Thr_Ac/2;
+                               Mean_Ac = MEANac_n12;
+                            }
+                            else if(myApplAddr()==13)
+                            {
+                               Umbral_Ac = STDac_n13*Thr_Ac/2;
+                               Mean_Ac = MEANac_n13;
+                            }
+                            else if(myApplAddr()==14)
+                            {
+                               Umbral_Ac = STDac_n14*Thr_Ac/2;
+                               Mean_Ac = MEANac_n14;
+                            }
+                            else if(myApplAddr()==15)
+                            {
+                               Umbral_Ac = STDac_n15*Thr_Ac/2;
+                               Mean_Ac = MEANac_n15;
+                            }
+                            else if(myApplAddr()==16)
+                            {
+                               Umbral_Ac = STDac_n16*Thr_Ac/2;
+                               Mean_Ac = MEANac_n16;
+                            }
+                            else if(myApplAddr()==17)
+                            {
+                               Umbral_Ac = STDac_n17*Thr_Ac/2;
+                               Mean_Ac = MEANac_n17;
+                            }
+                            else if(myApplAddr()==18)
+                            {
+                               Umbral_Ac = STDac_n18*Thr_Ac/2;
+                               Mean_Ac = MEANac_n18;
+                            }
+                            else if(myApplAddr()==19)
+                            {
+                               Umbral_Ac = STDac_n19*Thr_Ac/2;
+                               Mean_Ac = MEANac_n19;
+                            }
+                            else if(myApplAddr()==20)
+                            {
+                               Umbral_Ac = STDac_n20*Thr_Ac/2;
+                               Mean_Ac = MEANac_n20;
+                            }
+                            else if(myApplAddr()==21)
+                            {
+                               Umbral_Ac = STDac_n21*Thr_Ac/2;
+                               Mean_Ac = MEANac_n21;
+                            }
+                            else if(myApplAddr()==22)
+                            {
+                               Umbral_Ac = STDac_n22*Thr_Ac/2;
+                               Mean_Ac = MEANac_n22;
+                            }
+                            else if(myApplAddr()==23)
+                            {
+                               Umbral_Ac = STDac_n23*Thr_Ac/2;
+                               Mean_Ac = MEANac_n23;
+                            }
+                            else if(myApplAddr()==24)
+                            {
+                               Umbral_Ac = STDac_n24*Thr_Ac/2;
+                               Mean_Ac = MEANac_n24;
+                            }
+                            else if(myApplAddr()==25)
+                            {
+                               Umbral_Ac = STDac_n25*Thr_Ac/2;
+                               Mean_Ac = MEANac_n25;
+                            }
+                            else if(myApplAddr()==26)
+                            {
+                               Umbral_Ac = STDac_n26*Thr_Ac/2;
+                               Mean_Ac = MEANac_n26;
+                            }
+                            else if(myApplAddr()==27)
+                            {
+                               Umbral_Ac = STDac_n27*Thr_Ac/2;
+                               Mean_Ac = MEANac_n27;
+                            }
+                            else if(myApplAddr()==28)
+                            {
+                               Umbral_Ac = STDac_n28*Thr_Ac/2;
+                               Mean_Ac = MEANac_n28;
+                            }
+                            else if(myApplAddr()==29)
+                            {
+                               Umbral_Ac = STDac_n29*Thr_Ac/2;
+                               Mean_Ac = MEANac_n29;
                             }
                         }
 
@@ -589,6 +695,8 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
 
                     //e. Calcular la aceleración deseada incluyéndole el retardo
                     double A_des_lag_sin = ((alphaLag * A_des) + ((1 - alphaLag) * lastAccelerationPlatoon));
+
+                    //if(distanceBetweenActualAndFront-length_vehicle_front<0){A_des_lag_sin=-0.5;} // Si un nodo sobrepasa a su antecesor no aplica ninguna aceleración
 
                     emit(accelerationSinSignal, A_des_lag_sin);
 
