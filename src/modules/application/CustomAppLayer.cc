@@ -110,6 +110,26 @@ void CustomAppLayer::initialize(int stage)
     MEANac_n7 = par("MEANac_n7");
     MEANac_n8 = par("MEANac_n8");
     MEANac_n9 = par("MEANac_n9");
+    MEANac_n10 = par("MEANac_n10");
+    MEANac_n11 = par("MEANac_n11");
+    MEANac_n12 = par("MEANac_n12");
+    MEANac_n13 = par("MEANac_n13");
+    MEANac_n14 = par("MEANac_n14");
+    MEANac_n15 = par("MEANac_n15");
+    MEANac_n16 = par("MEANac_n16");
+    MEANac_n17 = par("MEANac_n17");
+    MEANac_n18 = par("MEANac_n18");
+    MEANac_n19 = par("MEANac_n19");
+    MEANac_n20 = par("MEANac_n20");
+    MEANac_n21 = par("MEANac_n21");
+    MEANac_n22 = par("MEANac_n22");
+    MEANac_n23 = par("MEANac_n23");
+    MEANac_n24 = par("MEANac_n24");
+    MEANac_n25 = par("MEANac_n25");
+    MEANac_n26 = par("MEANac_n26");
+    MEANac_n27 = par("MEANac_n27");
+    MEANac_n28 = par("MEANac_n28");
+    MEANac_n29 = par("MEANac_n29");
 
     // Desviación estandar para cada nodo con la velocidad respectiva
 
@@ -122,6 +142,26 @@ void CustomAppLayer::initialize(int stage)
     STDac_n7 = par("STDac_n7");
     STDac_n8 = par("STDac_n8");
     STDac_n9 = par("STDac_n9");
+    STDac_n10 = par("STDac_n10");
+    STDac_n11 = par("STDac_n11");
+    STDac_n12 = par("STDac_n12");
+    STDac_n13 = par("STDac_n13");
+    STDac_n14 = par("STDac_n14");
+    STDac_n15 = par("STDac_n15");
+    STDac_n16 = par("STDac_n16");
+    STDac_n17 = par("STDac_n17");
+    STDac_n18 = par("STDac_n18");
+    STDac_n19 = par("STDac_n19");
+    STDac_n20 = par("STDac_n20");
+    STDac_n11 = par("STDac_n21");
+    STDac_n22 = par("STDac_n22");
+    STDac_n23 = par("STDac_n23");
+    STDac_n24 = par("STDac_n24");
+    STDac_n25 = par("STDac_n25");
+    STDac_n26 = par("STDac_n26");
+    STDac_n27 = par("STDac_n27");
+    STDac_n28 = par("STDac_n28");
+    STDac_n29 = par("STDac_n29");
 
     // Error en la posición debido al GPS
     GPSErrorEnabled = par("GPS_error");

@@ -58,17 +58,37 @@ simple CustomAppLayer like IBaseApplLayer
     	
     	//MEAN acceleration for each node
     	double MEANac_n1 = default(0);
-		double MEANac_n2 = default(0);
-		double MEANac_n3 = default(0);
-		double MEANac_n4 = default(0);
-		double MEANac_n5 = default(0);
-		double MEANac_n6 = default(0);
-		double MEANac_n7 = default(0);
-		double MEANac_n8 = default(0);
-		double MEANac_n9 = default(0);
-    	
-    	//STD acceleration for each node
-    	double STDac_n1 = default(0);
+	double MEANac_n2 = default(0);
+	double MEANac_n3 = default(0);
+	double MEANac_n4 = default(0);
+	double MEANac_n5 = default(0);
+	double MEANac_n6 = default(0);
+	double MEANac_n7 = default(0);
+	double MEANac_n8 = default(0);
+	double MEANac_n9 = default(0);
+	double MEANac_n10 = default(0);
+        double MEANac_n11 = default(0);
+        double MEANac_n12 = default(0);
+        double MEANac_n13 = default(0);
+        double MEANac_n14 = default(0);
+        double MEANac_n15 = default(0);
+        double MEANac_n16 = default(0);
+        double MEANac_n17 = default(0);
+        double MEANac_n18 = default(0);
+        double MEANac_n19 = default(0);
+        double MEANac_n20 = default(0);
+        double MEANac_n21 = default(0);
+        double MEANac_n22 = default(0);
+        double MEANac_n23 = default(0);
+        double MEANac_n24 = default(0);
+        double MEANac_n25 = default(0);
+        double MEANac_n26 = default(0);
+        double MEANac_n27 = default(0);
+        double MEANac_n28 = default(0);
+        double MEANac_n29 = default(0);    	
+    
+	//STD acceleration for each node
+    	        double STDac_n1 = default(0);
 		double STDac_n2 = default(0);
 		double STDac_n3 = default(0);
 		double STDac_n4 = default(0);
@@ -77,6 +97,27 @@ simple CustomAppLayer like IBaseApplLayer
 		double STDac_n7 = default(0);
 		double STDac_n8 = default(0);
 		double STDac_n9 = default(0);
+		double STDac_n10 = default(0);
+		double STDac_n11 = default(0);
+		double STDac_n12 = default(0);
+		double STDac_n13 = default(0);
+		double STDac_n14 = default(0);
+		double STDac_n15 = default(0);
+		double STDac_n16 = default(0);
+		double STDac_n17 = default(0);
+		double STDac_n18 = default(0);
+		double STDac_n19 = default(0);
+		double STDac_n20 = default(0);
+		double STDac_n21 = default(0);
+		double STDac_n22 = default(0);
+		double STDac_n23 = default(0);
+		double STDac_n24 = default(0);
+		double STDac_n25 = default(0);
+		double STDac_n26 = default(0);
+		double STDac_n27 = default(0);
+		double STDac_n28 = default(0);
+		double STDac_n29 = default(0);
+		
         
         //GPS Measure error
         bool GPS_error;
