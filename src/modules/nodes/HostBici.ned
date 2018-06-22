@@ -40,97 +40,101 @@ module HostBici extends MyWirelessNode
         battery.numDevices = default(1);
 
 
-        //Señal para indicar el envío de un paquete
-        @signal[sent](type="int");
-        @statistic[sentPackages](title="sent package"; source="sent"; record=vector,stats; interpolationmode=none);
-
-        //Señal para indicar la recepción de un paquete
-        @signal[received](type="int");
-        @statistic[receivedPackages](title="received package"; source="received"; record=vector,stats; interpolationmode=none);
-
-        //Señal para indicar la posición x cuando se recibe un paquete
-        @signal[xposition](type="double");
-        @statistic[xPosition](title="position x"; source="xposition"; record=vector,stats; interpolationmode=none);
-		
-		@signal[xpositionGPSerror](type="double");
-        @statistic[xPositionGPSerror](title="position x GPS error"; source="xpositionGPSerror"; record=vector,stats; interpolationmode=none);
+//        //Señal para indicar el envío de un paquete
+//        @signal[sent](type="int");
+//        @statistic[sentPackages](title="sent package"; source="sent"; record=vector,stats; interpolationmode=none);
+//
+//        //Señal para indicar la recepción de un paquete
+//        @signal[received](type="int");
+//        @statistic[receivedPackages](title="received package"; source="received"; record=vector,stats; interpolationmode=none);
+//
+//        //Señal para indicar la posición x cuando se recibe un paquete
+//        @signal[xposition](type="double");
+//        @statistic[xPosition](title="position x"; source="xposition"; record=vector,stats; interpolationmode=none);
+//		
+//		@signal[xpositionGPSerror](type="double");
+//        @statistic[xPositionGPSerror](title="position x GPS error"; source="xpositionGPSerror"; record=vector,stats; interpolationmode=none);
+//        
+//		//Señal para indicar la velocidad 
+//        @signal[vel](type="double");
+//        @statistic[velNodo](title="velocidad nodo"; source="vel"; record=vector,stats; interpolationmode=none);
+//        
+//        //Señal para indicar la velocidad objetivo
+//        @signal[targetSpeed](type="double");
+//        @statistic[targetSpeed](title="velocidad objetiva nodo"; source="targetSpeed"; record=vector,stats; interpolationmode=none);
+//        
+//        //Señal para indicar la posición y cuando se recibe un paquete
+//        @signal[yposition](type="double");
+//        @statistic[yPosition](title="position y"; source="yposition"; record=vector,stats; interpolationmode=none);
+//
+//        //Señal para indicar la recepción de un paquete broadcast
+//        @signal[received_broadcast](type="int");
+//        @statistic[received_broadcast](title="received broadcast"; source="received_broadcast"; record=vector,stats; interpolationmode=none);
+//
+//        //Señal para indicar el tiempo de llegada del nodo a la meta
+//        @signal[arrival_time](type="double");
+//        @statistic[arrival_time](title="arrival time"; source="arrival_time"; record=last);
+//
+//        //Se�al para indicar la aceleraci�n que se aplica al nodo
+//        @signal[accelerationPlatoon](type="double");
+//        @statistic[accelerationPlatoon](title="acceleration platoon"; source="accelerationPlatoon"; record=vector,stats; interpolationmode=none);
+//        
+//        //Señal para indicar la aceleracion con error y lag
+//        @signal[accelerationError](type="double");
+//        @statistic[accelerationError](title="acceleration platoon con error"; source="accelerationError"; record=vector,stats; interpolationmode=none);
+//		
+//		//Señal para indicar la aceleracion sin error con lag
+//		@signal[accelerationSin](type="double");
+//        @statistic[accelerationSin](title="acceleration platoon sin error"; source="accelerationSin"; record=vector,stats; interpolationmode=none);
+//        
+//        //Señal para indicar la aceleracion filtrada por el umbral
+//		@signal[accelerationFiltered](type="double");
+//        @statistic[accelerationFiltered](title="acceleration filtrada"; source="accelerationFiltered"; record=vector,stats; interpolationmode=none);
+//        
+//        //Se�al para indicar la distancia al nodo del frente
+//        @signal[distanceToFwd](type="double");
+//        @statistic[distanceToFwd](title="distance to fwd"; source="distanceToFwd"; record=vector,stats; interpolationmode=none);
+//
+//		//Se�al para indicar la distancia al nodo del frente en base al RTT
+//        @signal[distanceToFwdRTT](type="double");
+//        @statistic[distanceToFwdRTT](title="distance to fwd RTT"; source="distanceToFwdRTT"; record=vector,stats; interpolationmode=none);
+//        
+//        //Se�al para indicar la aceleraci�n del l�der
+//        @signal[accelerationLeader](type="double");
+//        @statistic[accelerationLeader](title="leader acceleration"; source="accelerationLeader"; record=vector,stats; interpolationmode=none);
+//
+//		//Señal para indicar la recepcion de un paquete con informacion del lider
+//        @signal[leaderInfo](type="int");
+//        @statistic[leaderInfo](title="leader info"; source="leaderInfo"; record=vector,stats; interpolationmode=none);
+//
+//		//Señal para indicar la recepcion DIRECTA de un paquete con informacion del lider
+//        @signal[leaderInfoDirect](type="int");
+//        @statistic[leaderInfoDirect](title="leader info direct"; source="leaderInfoDirect"; record=vector,stats; interpolationmode=none);
+//
+//        //Señal para indicar la recepcion POR MULTISALTO de un paquete con informacion del lider
+//        @signal[leaderInfoMultihop](type="int");
+//        @statistic[leaderInfoMultihop](title="leader info multihop"; source="leaderInfoMultihop"; record=vector,stats; interpolationmode=none);
+//
+//        //Señal para indicar el USO de un paquete con informacion del lider recibido por MULTISALTO
+//        @signal[leaderInfoMultihopUsed](type="int");
+//        @statistic[leaderInfoMultihopUsed](title="leader info multihop used"; source="leaderInfoMultihopUsed"; record=vector,stats; interpolationmode=none);
+//
+//		//Señal para indicar el calculo de la precision
+//		@signal[precision](type="int");
+//        @statistic[precision](title="calculo de la precision"; source="precision"; record=vector,stats; interpolationmode=none);
+//		
+//		//Señal para indicar el calculo de la exactitud
+//		@signal[accuracy](type="double");
+//        @statistic[accuracy](title="calculo de la exactitud"; source="accuracy"; record=vector,stats; interpolationmode=none);
+//       
+//       //Señal para indicar el calculo del error humano
+//		@signal[humanError](type="double");
+//        @statistic[humanError](title="Error humano"; source="humanError"; record=vector,stats; interpolationmode=none);
         
-		//Señal para indicar la velocidad 
-        @signal[vel](type="double");
-        @statistic[velNodo](title="velocidad nodo"; source="vel"; record=vector,stats; interpolationmode=none);
-        
-        //Señal para indicar la velocidad objetivo
-        @signal[targetSpeed](type="double");
-        @statistic[targetSpeed](title="velocidad objetiva nodo"; source="targetSpeed"; record=vector,stats; interpolationmode=none);
-        
-        //Señal para indicar la posición y cuando se recibe un paquete
-        @signal[yposition](type="double");
-        @statistic[yPosition](title="position y"; source="yposition"; record=vector,stats; interpolationmode=none);
-
-        //Señal para indicar la recepción de un paquete broadcast
-        @signal[received_broadcast](type="int");
-        @statistic[received_broadcast](title="received broadcast"; source="received_broadcast"; record=vector,stats; interpolationmode=none);
-
-        //Señal para indicar el tiempo de llegada del nodo a la meta
-        @signal[arrival_time](type="double");
-        @statistic[arrival_time](title="arrival time"; source="arrival_time"; record=last);
-
-        //Se�al para indicar la aceleraci�n que se aplica al nodo
-        @signal[accelerationPlatoon](type="double");
-        @statistic[accelerationPlatoon](title="acceleration platoon"; source="accelerationPlatoon"; record=vector,stats; interpolationmode=none);
-        
-        //Señal para indicar la aceleracion con error y lag
-        @signal[accelerationError](type="double");
-        @statistic[accelerationError](title="acceleration platoon con error"; source="accelerationError"; record=vector,stats; interpolationmode=none);
-		
-		//Señal para indicar la aceleracion sin error con lag
-		@signal[accelerationSin](type="double");
+        @signal[accelerationSin](type="double");
         @statistic[accelerationSin](title="acceleration platoon sin error"; source="accelerationSin"; record=vector,stats; interpolationmode=none);
         
-        //Señal para indicar la aceleracion filtrada por el umbral
-		@signal[accelerationFiltered](type="double");
-        @statistic[accelerationFiltered](title="acceleration filtrada"; source="accelerationFiltered"; record=vector,stats; interpolationmode=none);
-        
-        //Se�al para indicar la distancia al nodo del frente
         @signal[distanceToFwd](type="double");
-        @statistic[distanceToFwd](title="distance to fwd"; source="distanceToFwd"; record=vector,stats; interpolationmode=none);
-
-		//Se�al para indicar la distancia al nodo del frente en base al RTT
-        @signal[distanceToFwdRTT](type="double");
-        @statistic[distanceToFwdRTT](title="distance to fwd RTT"; source="distanceToFwdRTT"; record=vector,stats; interpolationmode=none);
-        
-        //Se�al para indicar la aceleraci�n del l�der
-        @signal[accelerationLeader](type="double");
-        @statistic[accelerationLeader](title="leader acceleration"; source="accelerationLeader"; record=vector,stats; interpolationmode=none);
-
-		//Señal para indicar la recepcion de un paquete con informacion del lider
-        @signal[leaderInfo](type="int");
-        @statistic[leaderInfo](title="leader info"; source="leaderInfo"; record=vector,stats; interpolationmode=none);
-
-		//Señal para indicar la recepcion DIRECTA de un paquete con informacion del lider
-        @signal[leaderInfoDirect](type="int");
-        @statistic[leaderInfoDirect](title="leader info direct"; source="leaderInfoDirect"; record=vector,stats; interpolationmode=none);
-
-        //Señal para indicar la recepcion POR MULTISALTO de un paquete con informacion del lider
-        @signal[leaderInfoMultihop](type="int");
-        @statistic[leaderInfoMultihop](title="leader info multihop"; source="leaderInfoMultihop"; record=vector,stats; interpolationmode=none);
-
-        //Señal para indicar el USO de un paquete con informacion del lider recibido por MULTISALTO
-        @signal[leaderInfoMultihopUsed](type="int");
-        @statistic[leaderInfoMultihopUsed](title="leader info multihop used"; source="leaderInfoMultihopUsed"; record=vector,stats; interpolationmode=none);
-
-		//Señal para indicar el calculo de la precision
-		@signal[precision](type="int");
-        @statistic[precision](title="calculo de la precision"; source="precision"; record=vector,stats; interpolationmode=none);
-		
-		//Señal para indicar el calculo de la exactitud
-		@signal[accuracy](type="double");
-        @statistic[accuracy](title="calculo de la exactitud"; source="accuracy"; record=vector,stats; interpolationmode=none);
-       
-       //Señal para indicar el calculo del error humano
-		@signal[humanError](type="double");
-        @statistic[humanError](title="Error humano"; source="humanError"; record=vector,stats; interpolationmode=none);
-        
-        
+		@statistic[distanceToFwd](title="distance to fwd"; source="distanceToFwd"; record=vector,stats; interpolationmode=none);
         
 }

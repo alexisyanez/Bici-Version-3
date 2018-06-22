@@ -31,7 +31,7 @@ Define_Module(CustomAppLayer);
 void CustomAppLayer::initialize(int stage)
 {
     //Registrar señales
-    receivedSignal = registerSignal("received");
+    /*receivedSignal = registerSignal("received");
     positionXSignal = registerSignal("xposition");
     positionXGPSErrorSignal = registerSignal("xpositionGPSerror");
     positionYSignal = registerSignal("yposition");
@@ -52,7 +52,10 @@ void CustomAppLayer::initialize(int stage)
     targetSpeedSignal = registerSignal("targetSpeed");
     precisionSignal = registerSignal("precision");
     accuracySignal = registerSignal("accuracy");
-    humanErrorSignal = registerSignal("humanError");
+    humanErrorSignal = registerSignal("humanError");*/
+
+    accelerationSinSignal = registerSignal("accelerationSin");
+    distanceToFwdSignal = registerSignal("distanceToFwd");
 
 
     // Inicializar variables
@@ -243,7 +246,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                         CustomMobilityAccess().get(findHost())->stop();
                         cout << myApplAddr() << " finish at time " << simTime() << endl;
                         //Emitir señal indicando tiempo de llegada
-                        emit(arrivalTimeSignal, simTime());
+                        //emit(arrivalTimeSignal, simTime());
                         //comEnabled = false;
                         cancelEvent(timeToPlatoonInfo);
                         llegada = true;
@@ -269,12 +272,12 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                     updateDisplay();
 
                 //Se emite una senal cada vez que se envia un paquete con su ID
-                emit(sentSignal, packageID);
+               // emit(sentSignal, packageID);
 
                 //Se emiten dos senales con la posicion x e y del nodo al enviar un paquete
-                emit(positionXSignal, xposition);
-                emit(positionYSignal, yposition);
-                emit(positionXGPSErrorSignal, xpositionGPSerror);
+                //emit(positionXSignal, xposition);
+                //emit(positionYSignal, yposition);
+                //emit(positionXGPSErrorSignal, xpositionGPSerror);
 
                 //Volver a iniciar el timer para enviar el siguiente paquete
                 positionTimer = new cMessage("position-timer", POSITION_TIMER);
@@ -419,13 +422,13 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
 
                         //RTT = 2 * ( ST - nearestNode->getTS());
 
-                        EV << "GetBackRTT=" << nearestNode->getRTTBack() << endl;
+                        //EV << "GetBackRTT=" << nearestNode->getRTTBack() << endl;
                         distanceBetweenActualAndFrontRTT =  (Speed_Ligth * nearestNode->getRTTBack());
                         spacing_error_RTT = -distanceBetweenActualAndFrontRTT + length_vehicle_front + desiredSpacing;
 
 
 
-                        emit(distanceToFwdRTTSignal,distanceBetweenActualAndFrontRTT );
+                        //emit(distanceToFwdRTTSignal,distanceBetweenActualAndFrontRTT );
 
                         nodeFrontAcceleration = nearestNode->getAcceleration();
 
@@ -448,7 +451,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                         //Se usan los datos del mecanismo beaconing
                         if (nearestNode != NULL && beaconingEnabled == true)
                         {
-                            emit(leaderInfoMultihopUsedSignal,packageID);
+                            //emit(leaderInfoMultihopUsedSignal,packageID);
 
                             leaderAcceleration = nearestNode->getLeaderAcceleration();
                             leaderSpeed = nearestNode->getLeaderSpeed();
@@ -473,7 +476,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                     double TargetS = getTS();
 
                     //Print data for calculation
-                    EV << "Node[" << myApplAddr() << "]: Platoon parameters" << endl;
+                   /* EV << "Node[" << myApplAddr() << "]: Platoon parameters" << endl;
                     EV << "distance to Vehicle in Front=" << distanceBetweenActualAndFront << endl;
                     EV << "distance to vehicle in Front RTT =" << distanceBetweenActualAndFrontRTT << endl;
                     EV << "Vehicle in Front Acceleration=" << nodeFrontAcceleration << endl;
@@ -482,10 +485,10 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                     EV << "Leader speed=" << leaderSpeed << endl;
                     EV << "My speed=" << getModuleSpeed() << endl;
                     EV << "Target speed=" << TargetS << endl;
-                    EV << "Spacing Error=" << spacing_error << endl;
+                    EV << "Spacing Error=" << spacing_error << endl;*/
 
                     // Enviar valores de la velocidad
-                    emit(velNodeSignal,getModuleSpeed());
+                    //emit(velNodeSignal,getModuleSpeed());
                     double A_des;
 
                     if (GPSErrorEnabled == true) // se activa solo si el usuario quiere incluir el error del GPS
@@ -510,7 +513,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
 
                     if(spacing_error>desiredSpacing){A_des=0;} // Si un nodo sobrepasa a su antecesor no aplica ninguna aceleración
 
-                    emit(accelerationPlatoonSignal, A_des);
+                    //emit(accelerationPlatoonSignal, A_des);
 
 
                     // Calcular el error en base a una normal con parámetros de resultados en simulación
@@ -729,9 +732,9 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                         Umbral_Ac =0;
 
                     }*/
-                    emit(targetSpeedSignal,TargetS);
+                   // emit(targetSpeedSignal,TargetS);
 
-                    EV << "The Human Error is:  " << human_error << endl ;
+                   // EV << "The Human Error is:  " << human_error << endl ;
 
                     //e. Calcular la aceleración deseada incluyéndole el retardo
                     double A_des_lag_sin = ((alphaLag * A_des) + ((1 - alphaLag) * lastAccelerationPlatoon));
@@ -746,7 +749,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                     int Node_precision = 0;
                     double Node_accuracy = 0;
 
-                    EV << "The Acceleration threshold is:  " << Mean_Ac - Umbral_Ac << " y " <<  Mean_Ac + Umbral_Ac << endl;
+                   // EV << "The Acceleration threshold is:  " << Mean_Ac - Umbral_Ac << " y " <<  Mean_Ac + Umbral_Ac << endl;
 
                    // Aplicar Filtro con el umbral de la aceleración
 
@@ -759,21 +762,21 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
 
                     if(A_des_lag_sin > Mean_Ac + Umbral_Ac || A_des_lag_sin < Mean_Ac - Umbral_Ac) // Si la aceleración es mayor o menor que el Umbral
                     {
-                        emit(accelerationFilteredSignal, A_des_lag_sin);
+                        //emit(accelerationFilteredSignal, A_des_lag_sin);
                         A_des_lag_Err = A_des_lag_sin + human_error;
 
                         if(A_des_lag_sin>0 && A_des_lag_Err>0){Node_precision=1;}
                         else if(A_des_lag_sin<0 && A_des_lag_Err<0){Node_precision=1;}
                         else {Node_precision=0;}
 
-                        emit(precisionSignal,Node_precision);
+                        //emit(precisionSignal,Node_precision);
 
                         Node_accuracy = fabs(A_des_lag_sin-A_des_lag_Err);
-                        emit(accuracySignal,Node_accuracy);
+                        //emit(accuracySignal,Node_accuracy);
                     }
                     else
                     {
-                        emit(accelerationFilteredSignal,0);
+                        //emit(accelerationFilteredSignal,0);
                         A_des_lag_Err = human_error; //Corresponde solo al error humano dado que la aceleración deseada es cero
 
                         //emit(precisionSignal,Node_precision);
@@ -782,21 +785,21 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                     setAcceleration(A_des_lag_Err); // se aplica la aceleración al nodo con error humano
 
                     lastAccelerationPlatoon = A_des_lag_Err;
-                    EV << "The Acceleration asigned is: " << A_des_lag_Err << endl;
-                    emit(accelerationErrorSignal, A_des_lag_Err);
+                   // EV << "The Acceleration asigned is: " << A_des_lag_Err << endl;
+                    //emit(accelerationErrorSignal, A_des_lag_Err);
 
 
-                    EV << "Node[" << myApplAddr() << "]: New desired acceleration: " << getModuleAcceleration() << endl;
+                   // EV << "Node[" << myApplAddr() << "]: New desired acceleration: " << getModuleAcceleration() << endl;
 
                     emit(distanceToFwdSignal, spacing_error); // Spacing Real
                     //emit(accelerationPlatoonSignal, A_des_lag);
-                    emit(humanErrorSignal, human_error);
+                    //emit(humanErrorSignal, human_error);
                     }
 
 
                 else
                 {
-                    EV << "No near nodes " << endl;
+                    //EV << "No near nodes " << endl;
                 }
 
                 //Iniciar el timer para hacer la logica del platoon
@@ -807,7 +810,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
             }
 
             default:
-                EV << " Unkown self message! -> delete, kind: " << msg->getKind() << endl;
+                //EV << " Unkown self message! -> delete, kind: " << msg->getKind() << endl;
                 break;
         }
         delete msg;
@@ -815,7 +818,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
     }
     else
     {
-        EV << "Communication is disabled in " << myApplAddr() << endl;
+        //EV << "Communication is disabled in " << myApplAddr() << endl;
     }
 
 }
@@ -842,12 +845,12 @@ void CustomAppLayer::handleLowerMsg(cMessage* msg)
         int packageID = m->getId();
 
         //Se emite una señal indicando que llegó un paquete nuevo al nodo
-        emit(receivedSignal, packageID);
+        //emit(receivedSignal, packageID);
 
         //Se emiten las señales correspondientes a las posiciones del nodo al llegar un paquete
-        emit(positionXSignal, getModuleXPosition());
-        emit(positionYSignal, getModuleYPosition());
-        emit(positionXGPSErrorSignal, getModuleXPositionGPSError());
+        //emit(positionXSignal, getModuleXPosition());
+        //emit(positionYSignal, getModuleYPosition());
+        //emit(positionXGPSErrorSignal, getModuleXPositionGPSError());
 
 
         //Obtener información del paquete para reenviar al resto de nodos
@@ -893,17 +896,17 @@ void CustomAppLayer::handleLowerMsg(cMessage* msg)
             localLeaderSpeed = speed;
 
             //Emitir senal que indica la recepcion de un paquete del lider
-            emit(leaderInfoSignal, packageID);
+            //emit(leaderInfoSignal, packageID);
             //Emitir senal que indica la recepcion de un paquete directamente del lider
-            emit(leaderInfoDirectSignal, packageID);
+            //emit(leaderInfoDirectSignal, packageID);
 
         }
         else if (m->getBeaconingEnabled() == true)
         {
             //Emitir senal que indica la recepcion de un paquete del lider
-            emit(leaderInfoSignal, packageID);
+            //emit(leaderInfoSignal, packageID);
             //Emitir senal que indica la recepcion de un paquete del lider por multisalto
-            emit(leaderInfoMultihopSignal, packageID);
+            //emit(leaderInfoMultihopSignal, packageID);
         }
 
         //Guardar paquete
@@ -920,7 +923,7 @@ void CustomAppLayer::handleLowerMsg(cMessage* msg)
 
         }
         //Se emite una senal cada vez que se envía un paquete con su ID
-        emit(sentSignal, packageID);
+        //emit(sentSignal, packageID);
         delete msg;
 
         return;

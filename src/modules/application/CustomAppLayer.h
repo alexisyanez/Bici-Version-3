@@ -54,7 +54,7 @@ class MIXIM_API CustomAppLayer : public MyTestAppLayer
 
         std::vector<NodeInfo*> nodeInfoVector;
 
-        //Se�al para emitir la aceleraci�n aplicada
+ /*       //Se�al para emitir la aceleraci�n aplicada
         simsignal_t accelerationPlatoonSignal;
 
         //Se�al para emitir la aceleraci�n aplicada con error humano
@@ -119,6 +119,10 @@ class MIXIM_API CustomAppLayer : public MyTestAppLayer
 
         //Señal para emitir el error humano obtenido
         simsignal_t humanErrorSignal;
+*/
+        simsignal_t accelerationSinSignal;
+        simsignal_t distanceToFwdSignal;
+
 
         //Aceleracion del ultimo platoon
         double lastAccelerationPlatoon;
