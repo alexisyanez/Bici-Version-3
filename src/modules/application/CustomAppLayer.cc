@@ -34,13 +34,13 @@ void CustomAppLayer::initialize(int stage)
     /*receivedSignal = registerSignal("received");
     positionXSignal = registerSignal("xposition");
     positionXGPSErrorSignal = registerSignal("xpositionGPSerror");
-    positionYSignal = registerSignal("yposition");
-    velNodeSignal = registerSignal("vel");
+    positionYSignal = registerSignal("yposition");*/
+    velNodeSignal = registerSignal("vel");/*
     sentSignal = registerSignal("sent");
     receivedBroadcastSignal = registerSignal("received_broadcast");
-    arrivalTimeSignal = registerSignal("arrival_time");
+    arrivalTimeSignal = registerSignal("arrival_time");*/
     accelerationPlatoonSignal = registerSignal("accelerationPlatoon");
-    accelerationErrorSignal = registerSignal("accelerationError");
+    accelerationErrorSignal = registerSignal("accelerationError");/*
     accelerationSinSignal = registerSignal("accelerationSin");
     accelerationFilteredSignal = registerSignal("accelerationFiltered");
     distanceToFwdSignal = registerSignal("distanceToFwd");
@@ -488,7 +488,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                     EV << "Spacing Error=" << spacing_error << endl;*/
 
                     // Enviar valores de la velocidad
-                    //emit(velNodeSignal,getModuleSpeed());
+                    emit(velNodeSignal,getModuleSpeed());
                     double A_des;
 
                     if (GPSErrorEnabled == true) // se activa solo si el usuario quiere incluir el error del GPS
@@ -513,7 +513,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
 
                     if(spacing_error>desiredSpacing){A_des=0;} // Si un nodo sobrepasa a su antecesor no aplica ninguna aceleración
 
-                    //emit(accelerationPlatoonSignal, A_des);
+                    emit(accelerationPlatoonSignal, A_des);
 
 
                     // Calcular el error en base a una normal con parámetros de resultados en simulación
@@ -786,7 +786,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
 
                     lastAccelerationPlatoon = A_des_lag_Err;
                    // EV << "The Acceleration asigned is: " << A_des_lag_Err << endl;
-                    //emit(accelerationErrorSignal, A_des_lag_Err);
+                    emit(accelerationErrorSignal, A_des_lag_Err);
 
 
                    // EV << "Node[" << myApplAddr() << "]: New desired acceleration: " << getModuleAcceleration() << endl;

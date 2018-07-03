@@ -54,11 +54,11 @@ class MIXIM_API CustomAppLayer : public MyTestAppLayer
 
         std::vector<NodeInfo*> nodeInfoVector;
 
- /*       //Se�al para emitir la aceleraci�n aplicada
+ /*       //Se�al para emitir la aceleraci�n aplicada*/
         simsignal_t accelerationPlatoonSignal;
 
         //Se�al para emitir la aceleraci�n aplicada con error humano
-        simsignal_t accelerationErrorSignal;
+        simsignal_t accelerationErrorSignal;/*
 
         //Se�al para emitir la aceleraci�n aplicada sin error humano
         simsignal_t accelerationSinSignal;
@@ -87,8 +87,8 @@ class MIXIM_API CustomAppLayer : public MyTestAppLayer
         //Señal para emitir la posición con error GPS x del módulo cuando se recibe un paquete
         simsignal_t positionXGPSErrorSignal;
 
-        //Señal para emitir la velocidad del nodo
-        simsignal_t velNodeSignal;
+        //Señal para emitir la velocidad del nodo*/
+        simsignal_t velNodeSignal;/*
 
         //Señal para emitir la velocidad objetiva del nodo
         simsignal_t targetSpeedSignal;

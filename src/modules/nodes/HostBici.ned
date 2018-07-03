@@ -56,8 +56,8 @@ module HostBici extends MyWirelessNode
 //        @statistic[xPositionGPSerror](title="position x GPS error"; source="xpositionGPSerror"; record=vector,stats; interpolationmode=none);
 //        
 //		//Señal para indicar la velocidad 
-//        @signal[vel](type="double");
-//        @statistic[velNodo](title="velocidad nodo"; source="vel"; record=vector,stats; interpolationmode=none);
+        @signal[vel](type="double");
+        @statistic[velNodo](title="velocidad nodo"; source="vel"; record=vector,stats; interpolationmode=none);
 //        
 //        //Señal para indicar la velocidad objetivo
 //        @signal[targetSpeed](type="double");
@@ -76,12 +76,12 @@ module HostBici extends MyWirelessNode
 //        @statistic[arrival_time](title="arrival time"; source="arrival_time"; record=last);
 //
 //        //Se�al para indicar la aceleraci�n que se aplica al nodo
-//        @signal[accelerationPlatoon](type="double");
-//        @statistic[accelerationPlatoon](title="acceleration platoon"; source="accelerationPlatoon"; record=vector,stats; interpolationmode=none);
+        @signal[accelerationPlatoon](type="double");
+        @statistic[accelerationPlatoon](title="acceleration platoon"; source="accelerationPlatoon"; record=vector,stats; interpolationmode=none);
 //        
 //        //Señal para indicar la aceleracion con error y lag
-//        @signal[accelerationError](type="double");
-//        @statistic[accelerationError](title="acceleration platoon con error"; source="accelerationError"; record=vector,stats; interpolationmode=none);
+        @signal[accelerationError](type="double");
+        @statistic[accelerationError](title="acceleration platoon con error"; source="accelerationError"; record=vector,stats; interpolationmode=none);
 //		
 //		//Señal para indicar la aceleracion sin error con lag
 //		@signal[accelerationSin](type="double");
