@@ -134,6 +134,10 @@ class MIXIM_API CustomAppLayer : public MyTestAppLayer
         double alpha4;
         double alpha5;
 
+        double C1;
+        double omegan;
+        double epsilon;
+
         //Alpha values of CACC with lag
         double alphaLag;
 

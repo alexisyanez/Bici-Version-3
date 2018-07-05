@@ -2,29 +2,29 @@ import sys
 import numpy as np
 
 #Create the name of the file, SinGPS-error-Umbral-STD033-PlatoonSize-57
-namePrefix = "SinGPS-error-Umbral-Base-PlatoonSize" 
+namePrefix = "Umbral-Base-PlatoonSize-HiS" 
 #Extract the packets received from the .sca file  , $0=0.05, $1=0.05, $2=8"
 out = "MeanACC-"
 # Mean -> ListG1[0] , STD -> ListG[1] -> 0.5 Var
 # Mean -> ListG2[0] , STD -> ListG[1] -> 2 Var
 ListG1 = [[[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]],[[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]]]
-ListG2 = [[[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]],[[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]]]
+#ListG2 = [[[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]],[[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]]]
 
-for k in range(0,560):
-	if k==62 or k==84 or k==153 or k==158 or k==184 or k==256 or k==266 or k==280 or k==286 or k==291 or k==351 or k==415 or k==470 or k==496 or k==502 or k==512 or k==513 or k==518 or k==536 or k==549 or k==552: continue
+for k in range(0,30):
+	if k==21 : continue# or k==236 or k==55 or k==234 or k==126 or k==90 or k==258 or k==266 or k==229 or k==273 or k==144 or k==106 or k==214 or k==210 or k==173 or k==170 or k==104 or k==238
 	name= namePrefix + "-" + str(k) + ".sca" 
 	f = open(name, 'r')
 	temp = f.readlines()    
 	j = 0
-	rV = []
+	#rV = []
 	Ns=int()
 	
 	h=0
 	#print("Hola, Voy a abrir Archivo")
 
 	while j<len(temp):
-		if "attr iterationvars" in temp[j] and "$varia=0.05," in temp[j]: rV=0 
-		if "attr iterationvars" in temp[j] and "$varia=0.2" in temp[j]:rV=1 
+		#if "attr iterationvars" in temp[j] and "$varia=0.05," in temp[j]: rV=0 
+		#if "attr iterationvars" in temp[j] and "$varia=0.2" in temp[j]:rV=1 
 		if "accelerationSin:stats" in temp[j] and "Main_Network.node[1]" in temp[j]: Ns=0
 		if "accelerationSin:stats" in temp[j] and "Main_Network.node[2]" in temp[j]: Ns=1 
 		if "accelerationSin:stats" in temp[j] and "Main_Network.node[3]" in temp[j]: Ns=2
@@ -59,23 +59,16 @@ for k in range(0,560):
 			mean= float(value[2])
 			value2 = temp[j+3].split()
 			std= float(value2[2])
-			if rV == 0 : 
-				if not np.isnan(mean) and not np.isinf(mean): ListG1[0][Ns].append(mean)
-				if not np.isnan(std): ListG1[1][Ns].append(std)
-			if rV == 1 : 
-				if not np.isnan(mean) and not np.isinf(mean): ListG2[0][Ns].append(mean)
-				if not np.isnan(std): ListG2[1][Ns].append(std)				
-				
-			
-		j=j+1
-					
+			if not np.isnan(mean) and not np.isinf(mean): ListG1[0][Ns].append(mean)
+			if not np.isnan(std): ListG1[1][Ns].append(std)			
+		j=j+1					
 	f.close()
 
 #print(ListG1)
 #print(ListG2)
 
 Var1=np.zeros((2,29))
-Var2=np.zeros((2,29))
+#Var2=np.zeros((2,29))
 
 
 #print(str(np.mean(ListG[0][0])))
@@ -83,26 +76,27 @@ for i in range(0,29):
 	Var1[0][i]=np.mean(ListG1[0][i])
 	Var1[1][i]=np.mean(ListG1[1][i])
 	
-for i in range(0,29):
-	Var2[0][i]=np.mean(ListG2[0][i])
-	Var2[1][i]=np.mean(ListG2[1][i])
+#for i in range(0,29):
+#	Var2[0][i]=np.mean(ListG2[0][i])
+#	Var2[1][i]=np.mean(ListG2[1][i])
 		
 	
 	
 #Imprimir datos en un archivo .txt
-mat=np.matrix(Var1)
-mat2=np.matrix(Var2)	
+mat=np.transpose(np.matrix(Var1))
 
-nameOut = out+"Var05.txt" 
+#mat2=np.matrix(Var2)	
+
+nameOut = out+"-HiS.txt" 
 fw = open(nameOut, 'w')
-fw.write('Promedios (fila 1) y STD (fila 2) ACC para Var 0.05\n')
-np.savetxt(fw, mat)
+fw.write('Promedios (fila 1) y STD (fila 2) ACC para Var 0.15\n')
+np.savetxt(fw, mat,fmt='%1.4f')
 fw.close()	
 
 
 
-nameOut = out+"STD.txt" 
-fw = open(nameOut, 'w')
-fw.write('Promedios (fila 1) y STD (fila 2) ACC para Var 0.2n \n')
-np.savetxt(fw, mat2)
-fw.close()
+#nameOut = out+"STD.txt" 
+#fw = open(nameOut, 'w')
+#fw.write('Promedios (fila 1) y STD (fila 2) ACC para Var 0.2n \n')
+#np.savetxt(fw, mat2)
+#fw.close()

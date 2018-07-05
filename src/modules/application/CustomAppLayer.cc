@@ -77,12 +77,23 @@ void CustomAppLayer::initialize(int stage)
     WATCH(packageID);
     WATCH(numReceivedBroadcast);
 
-    alpha1 = par("alpha1");
+    /*alpha1 = par("alpha1");
     alpha2 = par("alpha2");
     alpha3 = par("alpha3");
     alpha4 = par("alpha4");
-    alpha5 = par("alpha5");
+    alpha5 = par("alpha5");*/
+    C1 = par("C1");
+    epsilon = par("epsilon");
+    omegan = par("omega_n");
+
     alphaLag = par("alphaLag");
+
+    alpha1 = 1-C1;
+    alpha2 = C1;
+    alpha3 = (2*epsilon-C1*(epsilon+sqrt(pow(epsilon,2)-1)))*omegan;
+    alpha4 = (epsilon+sqrt(pow(epsilon,2)-1))*omegan*C1;
+    alpha5 = pow(omegan,2);
+
 
     // Error humano asociado a la velocidad
     mean_error = par("mean_error");

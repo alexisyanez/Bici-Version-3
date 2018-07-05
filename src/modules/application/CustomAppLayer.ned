@@ -28,11 +28,14 @@ simple CustomAppLayer like IBaseApplLayer
     	bool burstReply = default(false);  // if true, send unicast replies to received broadcasts
     	
     	//Alpha values of CACC
-    	double alpha1;
-    	double alpha2;
-    	double alpha3;
-    	double alpha4;
-    	double alpha5;
+    	//double alpha1;
+    	//double alpha2;
+    	//double alpha3;
+    	//double alpha4;
+    	//double alpha5;
+    	double C1;
+    	double epsilon;
+    	double omega_n;
     	    	    	
     	//Alpha values of CACC with lag
     	double alphaLag;
@@ -58,15 +61,15 @@ simple CustomAppLayer like IBaseApplLayer
     	
     	//MEAN acceleration for each node
     	double MEANac_n1 = default(0);
-	double MEANac_n2 = default(0);
-	double MEANac_n3 = default(0);
-	double MEANac_n4 = default(0);
-	double MEANac_n5 = default(0);
-	double MEANac_n6 = default(0);
-	double MEANac_n7 = default(0);
-	double MEANac_n8 = default(0);
-	double MEANac_n9 = default(0);
-	double MEANac_n10 = default(0);
+    	double MEANac_n2 = default(0);
+    	double MEANac_n3 = default(0);
+    	double MEANac_n4 = default(0);
+    	double MEANac_n5 = default(0);
+    	double MEANac_n6 = default(0);
+    	double MEANac_n7 = default(0);
+    	double MEANac_n8 = default(0);
+    	double MEANac_n9 = default(0);
+    	double MEANac_n10 = default(0);
         double MEANac_n11 = default(0);
         double MEANac_n12 = default(0);
         double MEANac_n13 = default(0);
@@ -88,7 +91,7 @@ simple CustomAppLayer like IBaseApplLayer
         double MEANac_n29 = default(0);    	
     
 	//STD acceleration for each node
-    	        double STDac_n1 = default(0);
+	    double STDac_n1 = default(0);
 		double STDac_n2 = default(0);
 		double STDac_n3 = default(0);
 		double STDac_n4 = default(0);
