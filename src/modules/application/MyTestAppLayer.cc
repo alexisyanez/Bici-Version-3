@@ -1,4 +1,8 @@
 //
+
+
+
+
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
@@ -49,9 +53,9 @@ void MyTestAppLayer::initialize(int stage)
     {
 
         //scheduleAt(simTime() + dblrand() * 10, positionTimer);
-        scheduleAt(simTime() + uniform(0, 5), positionTimer);
+        scheduleAt(simTime() + uniform(0, 1), positionTimer);
         //scheduleAt(simTime() + dblrand() * 20, platoonTimer);
-        scheduleAt(simTime() + 10, platoonTimer);
+        scheduleAt(simTime() +1, platoonTimer);
     }
 }
 

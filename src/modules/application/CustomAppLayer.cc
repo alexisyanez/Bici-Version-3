@@ -31,10 +31,10 @@ Define_Module(CustomAppLayer);
 void CustomAppLayer::initialize(int stage)
 {
     //Registrar señales
-    /*receivedSignal = registerSignal("received");
+    //receivedSignal = registerSignal("received");
     positionXSignal = registerSignal("xposition");
-    positionXGPSErrorSignal = registerSignal("xpositionGPSerror");
-    positionYSignal = registerSignal("yposition");*/
+    //positionXGPSErrorSignal = registerSignal("xpositionGPSerror");
+    positionYSignal = registerSignal("yposition");
     velNodeSignal = registerSignal("vel");/*
     sentSignal = registerSignal("sent");
     receivedBroadcastSignal = registerSignal("received_broadcast");
@@ -194,23 +194,52 @@ void CustomAppLayer::initialize(int stage)
     // Umbral de Aceleración
     Thr_Ac = par("Thr_Ac");
 
-    /*readCSV("DistVectorLowSpeed.csv",VectorDistLS);
-    readCSV("DistVectorMediumSpeed.csv",VectorDistMS);
-    readCSV("DistVectorHighSpeed.csv",VectorDistHS);
+    // Para aplicar Ajuste de distribución
+    fitDistEnabled = par("fitDist");
+    if(fitDistEnabled){
+        EV <<"Entro al if stage 0 distvector values: "<< endl;
+    //readCSV("DistVectorLowSpeed.csv",VectorDistLS);
+    //readCSV("DistVectorMediumSpeed.csv",VectorDistMS);
+    readCSV("DistVectorLowSpeed.csv",VectorDistHS);
 
-    for (int i = 0; i < VectorDistLS.size(); i++) {
-        EV <<"distvector values: "<< VectorDistLS.at(i) << endl;
-    }*/
-    /*for (int i = 0; i < VectorDistMS.size(); i++) {
-        EV <<"distvector values: "<< VectorDistMS.at(i) <<endl;
-    }
-    for (int i = 0; i < VectorDistHS.size(); i++) {
-        EV <<"distvector values: "<<VectorDistHS.at(i) <<endl;
-    }*/
+//    for (int i = 0; i < VectorDistLS.size(); i++) {
+//        EV <<"distvector values: "<< VectorDistLS.at(i) << endl;
+//    }
+//    for (int i = 0; i < VectorDistMS.size(); i++) {
+//        EV <<"distvector values: "<< VectorDistMS.at(i) <<endl;
+//    }
+//    for (int i = 0; i < VectorDistHS.size(); i++) {
+//        EV <<"distvector values: "<<VectorDistHS.at(i) <<endl;
+//    }
+}
+//    for (int i = 0; i < VectorDistLS.size(); i++) {
+//        EV <<"distvector values: "<< VectorDistLS.at(i) << endl;
+//
+//    for (int i = 0; i < VectorDistMS.size(); i++) {
+//        EV <<"distvector values: "<< VectorDistMS.at(i) <<endl;
+//    }
+//    for (int i = 0; i < VectorDistHS.size(); i++) {
+//        EV <<"distvector values: "<<VectorDistHS.at(i) <<endl;
+//    }
 
     MyTestAppLayer::initialize(stage);
     if (stage == 0)
     {
+//        if(fitDistEnabled){
+//        readCSV("DistVectorLowSpeed.csv",VectorDistLS);
+//        readCSV("DistVectorMediumSpeed.csv",VectorDistMS);
+//        readCSV("DistVectorHighSpeed.csv",VectorDistHS);
+//
+//        for (int i = 0; i < VectorDistLS.size(); i++) {
+//            EV <<"distvector values: "<< VectorDistLS.at(i) << endl;
+//        }
+//        for (int i = 0; i < VectorDistMS.size(); i++) {
+//            EV <<"distvector values: "<< VectorDistMS.at(i) <<endl;
+//        }
+//        for (int i = 0; i < VectorDistHS.size(); i++) {
+//            EV <<"distvector values: "<<VectorDistHS.at(i) <<endl;
+//        }
+//    }
         if (hasPar("burstSize"))
             burstSize = par("burstSize");
         else
@@ -245,37 +274,38 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                 double speed = getModuleSpeed();
                 double acceleration = getModuleAcceleration();
 
-                totalDistance = par("totalDistance");
+//                totalDistance = par("totalDistance");
+//
+//                //Detener a todos los nodos al estar en x_final y en el 70% del y_final
+//                if (xposition >= totalDistance)
+//                {
+//                    if (!llegada)
+//                    {
+//                        finalSpeed = speed;
+//                        finalAcceleration = acceleration;
+//                        CustomMobilityAccess().get(findHost())->stop();
+//                        cout << myApplAddr() << " finish at time " << simTime() << endl;
+//                        //Emitir señal indicando tiempo de llegada
+//                        //emit(arrivalTimeSignal, simTime());
+//                        //comEnabled = false;
+//                        cancelEvent(timeToPlatoonInfo);
+//                        llegada = true;
+//                    }
 
-                //Detener a todos los nodos al estar en x_final y en el 70% del y_final
-                if (xposition >= totalDistance)
-                {
-                    if (!llegada)
-                    {
-                        finalSpeed = speed;
-                        finalAcceleration = acceleration;
-                        CustomMobilityAccess().get(findHost())->stop();
-                        cout << myApplAddr() << " finish at time " << simTime() << endl;
-                        //Emitir señal indicando tiempo de llegada
-                        //emit(arrivalTimeSignal, simTime());
-                        //comEnabled = false;
-                        cancelEvent(timeToPlatoonInfo);
-                        llegada = true;
-                    }
+                    //Enviar paquete con la posicion y velocidad al resto de nodos
+                   // sendNodeInfo(packageID, xposition, yposition, xpositionGPSerror, speed, acceleration, LAddress::L3BROADCAST,
+                    //        localLeaderAcceleration, localLeaderSpeed, beaconingEnabled);
+                    //msg->setTimestamp(simTime()); // enviar Timestamp
+
+
+//                else
+//                {
+
                     //Enviar paquete con la posicion y velocidad al resto de nodos
                     sendNodeInfo(packageID, xposition, yposition, xpositionGPSerror, speed, acceleration, LAddress::L3BROADCAST,
                             localLeaderAcceleration, localLeaderSpeed, beaconingEnabled);
                     //msg->setTimestamp(simTime()); // enviar Timestamp
-
-                }
-                else
-                {
-
-                    //Enviar paquete con la posicion y velocidad al resto de nodos
-                    sendNodeInfo(packageID, xposition, yposition, xpositionGPSerror, speed, acceleration, LAddress::L3BROADCAST,
-                            localLeaderAcceleration, localLeaderSpeed, beaconingEnabled);
-                    //msg->setTimestamp(simTime()); // enviar Timestamp
-                }
+               // }
 
                 //Actualizar GUI con numero de paquetes enviados
                 numSent++;
@@ -283,11 +313,12 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                     updateDisplay();
 
                 //Se emite una senal cada vez que se envia un paquete con su ID
-               // emit(sentSignal, packageID);
+
+                //emit(sentSignal, packageID);
 
                 //Se emiten dos senales con la posicion x e y del nodo al enviar un paquete
-                //emit(positionXSignal, xposition);
-                //emit(positionYSignal, yposition);
+                emit(positionXSignal, xposition);
+                emit(positionYSignal, yposition);
                 //emit(positionXGPSErrorSignal, xpositionGPSerror);
 
                 //Volver a iniciar el timer para enviar el siguiente paquete
@@ -306,7 +337,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                 //Lista sin duplicados
 
                 // setear el tiempo de simulación
-
+             //  if(myApplAddr()!=0){
                 std::vector<NodeInfo*> noDuplicateInfo;
                 double distanceBetweenActualAndFront;
                 double distanceBetweenActualAndFrontGPS;
@@ -358,6 +389,8 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
 
                 EV << "Node[" << myApplAddr() << "]: Running Platoon Update" << endl;
 
+
+
                 if (noDuplicateInfo.size() > 0)
                 {
 
@@ -371,39 +404,38 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                         double posx_node = nodeInfo->getXPosition();
                         double distanceToActual = getDistanceBetweenNodes2(posx, posx_node);
 
-                        //Asignar lider
                         if (addr_node == 0)
-                        {
-                            leaderNode = *it;
-                        }
+                          {
+                              leaderNode = *it;
+                              nearestNode = *it;
+                          }
+                          else if (addr_node == myApplAddr()-1 )
+                          {
+                              nearestNode = *it;
+                          }
 
-                        /*if (addr_node == myApplAddr()-1 )
-                        {
-                            nearestNode = *it;
-                        }*/
-
-                        //Si actualmente no hay un nodo mas cercano y la distancia del nodo al actual es mayor a cero,
-                        //este es el nodo mas cercano por el momento
-                        if (distanceToActual > 0 && nearestNode == NULL)
-                        {
-                            nearestNode = *it;
-                        }
-
-                        //Si actualmente hay un nodo mas cercano, se compara con el nodo del cual se recibio un paquete
-                        if (nearestNode != NULL)
-                        {
-                            //Comparar con el nodo mas cercano hasta el momento
-                            //int addr_node_nearest = nearestNode->getSrcAddress();
-                            double posx_node_nearest = nearestNode->getXPosition();
-                            //double speed_node_nearest = nearestNode->getSpeed();
-                            double distanceToActual_nearest = getDistanceBetweenNodes2(posx, posx_node_nearest); // Se asume que el grupo mantiene un orden fijado con anetrioridad por lo que no se aplica el erro del GPS para detectar el nodo de enfrete
-
-                            //Se cambia el nodo mas cercano si la distancia es menor a la del mas cercano actual
-                            if (distanceToActual > 0 && distanceToActual < distanceToActual_nearest)
-                            {
-                                nearestNode = *it;
-                            }
-                        }
+//                        //Si actualmente no hay un nodo mas cercano y la distancia del nodo al actual es mayor a cero,
+//                        //este es el nodo mas cercano por el momento
+//                        if (distanceToActual > 0 && nearestNode == NULL)
+//                        {
+//                            nearestNode = *it;
+//                        }
+//
+//                        //Si actualmente hay un nodo mas cercano, se compara con el nodo del cual se recibio un paquete
+//                        if (nearestNode != NULL)
+//                        {
+//                            //Comparar con el nodo mas cercano hasta el momento
+//                            //int addr_node_nearest = nearestNode->getSrcAddress();
+//                            double posx_node_nearest = nearestNode->getXPosition();
+//                            //double speed_node_nearest = nearestNode->getSpeed();
+//                            double distanceToActual_nearest = getDistanceBetweenNodes2(posx, posx_node_nearest); // Se asume que el grupo mantiene un orden fijado con anetrioridad por lo que no se aplica el erro del GPS para detectar el nodo de enfrete
+//
+//                            //Se cambia el nodo mas cercano si la distancia es menor a la del mas cercano actual
+//                            if (distanceToActual > 0 && distanceToActual < distanceToActual_nearest)
+//                            {
+//                                nearestNode = *it;
+//                            }
+//                        }
                     }
 
                     //b. Obtener informacion del nodo mas cercano que se encuentre al frente
@@ -424,7 +456,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                         //Obtener spacing error
                         distanceBetweenActualAndFront = getDistanceBetweenNodes2(posx, nearestNode->getXPosition());
                         spacing_error = -distanceBetweenActualAndFront + length_vehicle_front + desiredSpacing;
-
+                        emit(distanceToFwdSignal, spacing_error); // Spacing Real
                         //Obtener spacing error con GPS
                         distanceBetweenActualAndFrontGPS = getDistanceBetweenNodes2(posxGPS, nearestNode->getXPositionGPSerror());
                         spacing_error_GPS = -distanceBetweenActualAndFrontGPS + length_vehicle_front + desiredSpacing;
@@ -542,9 +574,20 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                         // Setear valores en base a la desviacion estandar de cada nodo según su velocidad.
                        if (TargetS == getS1())
                         {
-                            human_error = normal(mean_error_S1,std_error_S1); //getRandValMediumSpeed();
-                              //(getS1() + vel_error)/(getS1());
+                            human_error = normal(mean_error_S1,std_error_S1);
 
+                            if(fitDistEnabled){
+                                if(mean_error_S1==-0.016428571){
+                                    human_error = getRandValLowSpeed();
+                              //(getS1() + vel_error)/(getS1());
+                                }
+                                else if(mean_error_S1==-0.043688525 ){
+                                    human_error = getRandValMediumSpeed();
+                                }
+                                else if(mean_error_S1==0.009107143){
+                                    human_error = getRandValHighSpeed();
+                                }
+                            }
                             if(myApplAddr()==1)
                             {
                                Umbral_Ac = STDac_n1*Thr_Ac/2;
@@ -802,16 +845,11 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
 
                    // EV << "Node[" << myApplAddr() << "]: New desired acceleration: " << getModuleAcceleration() << endl;
 
-                    emit(distanceToFwdSignal, spacing_error); // Spacing Real
+
                     //emit(accelerationPlatoonSignal, A_des_lag);
                     //emit(humanErrorSignal, human_error);
-                    }
+           }
 
-
-                else
-                {
-                    //EV << "No near nodes " << endl;
-                }
 
                 //Iniciar el timer para hacer la logica del platoon
                 timeToPlatoonInfo = new cMessage("platoon-timer", PLATOON_TIMER);
@@ -824,6 +862,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                 //EV << " Unkown self message! -> delete, kind: " << msg->getKind() << endl;
                 break;
         }
+    //}
         delete msg;
 
     }
@@ -859,8 +898,8 @@ void CustomAppLayer::handleLowerMsg(cMessage* msg)
         //emit(receivedSignal, packageID);
 
         //Se emiten las señales correspondientes a las posiciones del nodo al llegar un paquete
-        //emit(positionXSignal, getModuleXPosition());
-        //emit(positionYSignal, getModuleYPosition());
+        emit(positionXSignal, getModuleXPosition());
+        emit(positionYSignal, getModuleYPosition());
         //emit(positionXGPSErrorSignal, getModuleXPositionGPSError());
 
 
@@ -925,14 +964,14 @@ void CustomAppLayer::handleLowerMsg(cMessage* msg)
 
         totalDistance = par("totalDistance");
 
-        //Detener el nodo
-        double distanceToOrigin = getAbsoluteDistance(getModuleXPosition(), getModuleYPosition(),
-                getZonaNodo(getModuleXPosition(), getModuleYPosition()));
-        if (distanceToOrigin >= totalDistance)
-        {
-            CustomMobilityAccess().get(findHost())->stop();
-
-        }
+//        //Detener el nodo
+//        double distanceToOrigin = getAbsoluteDistance(getModuleXPosition(), getModuleYPosition(),
+//                getZonaNodo(getModuleXPosition(), getModuleYPosition()));
+//        if (distanceToOrigin >= totalDistance)
+//        {
+//            CustomMobilityAccess().get(findHost())->stop();
+//
+//        }
         //Se emite una senal cada vez que se envía un paquete con su ID
         //emit(sentSignal, packageID);
         delete msg;
@@ -1132,37 +1171,48 @@ double CustomAppLayer::getAbsoluteDistance(double posx, double posy, int zona)
 
 void CustomAppLayer::readCSV(const std::string &s,std::vector<double> &elems)
 {
-    EV << "entro a la función values: "<< endl;
+    EV << "entro a la función ReadCSV: "<< endl;
     string line;
-    ifstream myfile;//myfile(s.c_str(),ios::app);
+    ifstream myfile(s.c_str());//myfile(s.c_str(),ios::app);
     //myfile.open();
-    myfile.open(s.c_str());
+    //myfile.open(s.c_str());
     if (myfile.is_open())
     {
-        EV << "entro al if: "<< endl;
-        while ( getline (myfile,line) )
+        int a=0;
+        EV << "se abre el archivo "<< endl;
+        while (getline (myfile,line))// getline (myfile,line,','))
         {
-            double a = atof(line.c_str());
-            EV << "values: " << a << endl;
-            elems.push_back(a);
+            a++;
+            //EV << "entro al while: "<< endl;
+            //getline (myfile,line);
+            //EV << "values : " << line << endl;
+            //double a = atof(line);//.c_str());
+            EV << "values : " << a<< endl;
+            //elems.push_back(a);
+
         }
+        EV << "values : " << a<< endl;
         myfile.close();
+    }
+    else{
+        EV << "Error abriendo el archivo"<< endl;
+
     }
 }
 
 double CustomAppLayer::getRandValLowSpeed(){
-    int iLS = intuniform(0,sizeof(VectorDistLS));
+    int iLS = intuniform(0,VectorDistLS.size());
     return VectorDistLS.at(iLS);
 }
 
 double CustomAppLayer::getRandValMediumSpeed(){
-    //int iMS = intuniform(0,sizeof(VectorDistMS));
+    int iMS = intuniform(0,VectorDistMS.size());
 
-    return 1; //VectorDistMS.at(1);
+    return VectorDistMS.at(iMS);
 }
 
 double CustomAppLayer::getRandValHighSpeed(){
-    int iHS = intuniform(0,sizeof(VectorDistHS));
+    int iHS = intuniform(0,VectorDistHS.size());
     return VectorDistHS.at(iHS);
 }
 

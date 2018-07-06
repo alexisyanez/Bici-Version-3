@@ -49,8 +49,8 @@ module HostBici extends MyWirelessNode
 //        @statistic[receivedPackages](title="received package"; source="received"; record=vector,stats; interpolationmode=none);
 //
 //        //Señal para indicar la posición x cuando se recibe un paquete
-//        @signal[xposition](type="double");
-//        @statistic[xPosition](title="position x"; source="xposition"; record=vector,stats; interpolationmode=none);
+	      @signal[xposition](type="double");
+          @statistic[xPosition](title="position x"; source="xposition"; record=vector,stats; interpolationmode=none);
 //		
 //		@signal[xpositionGPSerror](type="double");
 //        @statistic[xPositionGPSerror](title="position x GPS error"; source="xpositionGPSerror"; record=vector,stats; interpolationmode=none);
@@ -64,8 +64,8 @@ module HostBici extends MyWirelessNode
 //        @statistic[targetSpeed](title="velocidad objetiva nodo"; source="targetSpeed"; record=vector,stats; interpolationmode=none);
 //        
 //        //Señal para indicar la posición y cuando se recibe un paquete
-//        @signal[yposition](type="double");
-//        @statistic[yPosition](title="position y"; source="yposition"; record=vector,stats; interpolationmode=none);
+        @signal[yposition](type="double");
+        @statistic[yPosition](title="position y"; source="yposition"; record=vector,stats; interpolationmode=none);
 //
 //        //Señal para indicar la recepción de un paquete broadcast
 //        @signal[received_broadcast](type="int");

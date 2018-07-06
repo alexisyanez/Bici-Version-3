@@ -146,6 +146,8 @@ simple CustomAppLayer like IBaseApplLayer
     	//Threshold Acceleration
     	double Thr_Ac = default(0);
     	
+    	bool fitDist;
+    	
     gates:
     	input lowerLayerIn; // from network layer
         output lowerLayerOut; // to network layer

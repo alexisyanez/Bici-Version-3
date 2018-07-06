@@ -81,11 +81,11 @@ class MIXIM_API CustomAppLayer : public MyTestAppLayer
         //Señal para emitir cuando se recibe un paquete
         simsignal_t receivedSignal;
 
-        //Señal para emitir la posición x del módulo cuando se recibe un paquete
+        //Señal para emitir la posición x del módulo cuando se recibe un paquete*/
         simsignal_t positionXSignal;
 
         //Señal para emitir la posición con error GPS x del módulo cuando se recibe un paquete
-        simsignal_t positionXGPSErrorSignal;
+        //simsignal_t positionXGPSErrorSignal;
 
         //Señal para emitir la velocidad del nodo*/
         simsignal_t velNodeSignal;/*
@@ -93,8 +93,8 @@ class MIXIM_API CustomAppLayer : public MyTestAppLayer
         //Señal para emitir la velocidad objetiva del nodo
         simsignal_t targetSpeedSignal;
 
-        //Señal para emitir la posición y del módulo cuando se recibe un paquete
-        simsignal_t positionYSignal;
+        //Señal para emitir la posición y del módulo cuando se recibe un paquete*/
+        simsignal_t positionYSignal;/*
 
         //Señal para emitir cuando se recibe un paquete broadcast
         simsignal_t receivedBroadcastSignal;
@@ -246,6 +246,8 @@ class MIXIM_API CustomAppLayer : public MyTestAppLayer
 
         //Acceleration threshold
         double Thr_Ac;
+
+        bool fitDistEnabled;
 
         std::vector<double> VectorDistLS;
         std::vector<double> VectorDistMS;
