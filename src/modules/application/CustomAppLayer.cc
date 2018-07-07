@@ -382,6 +382,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                 //Obtener la posicion del nodo actual
                 double posx = getModuleXPosition();
                 double posxGPS = getModuleXPositionGPSError();
+                int NearestNodeIndex;
 
                 //Calcular distancias desde los nodos hacia el actual para determinar el mas cercano
                 NodeInfo*nearestNode = NULL;
@@ -414,6 +415,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                           {
                               nearestNode = *it;
                               EV << "Nodo Mas Cercano: " << addr_node << endl;
+                              NearestNodeIndex=addr_node;
                           }
 
 //                        //Si actualmente no hay un nodo mas cercano y la distancia del nodo al actual es mayor a cero,
@@ -454,9 +456,19 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                     {
                         //Velocidad relativa al vehiculo del frente
                         rel_speed_front = getModuleSpeed() - nearestNode->getSpeed();
+                        ostringstream str1;
+                        str1 << NearestNodeIndex;
+                        //string nearestPath = "Main_Network.node[";//+ str1.str() +"]";
+                        string nearestPath = "Main_Network.node["+ str1.str() +"]";
+                        cModule *module = simulation.getModuleByPath(nearestPath.c_str());
+                        double newpos;
+                        if (module){
+                            newpos = (MobilityAccess().get(module)->getCurrentPosition()).x;
+                        }
 
                         //Obtener spacing error
-                        distanceBetweenActualAndFront = getDistanceBetweenNodes2(posx, nearestNode->getXPosition());
+                        //distanceBetweenActualAndFront = getDistanceBetweenNodes2(posx, nearestNode->getXPosition());
+                        distanceBetweenActualAndFront = getDistanceBetweenNodes2(posx, newpos);
                         spacing_error = -distanceBetweenActualAndFront + length_vehicle_front + desiredSpacing;
                         emit(distanceToFwdSignal, spacing_error); // Spacing Real
                         //Obtener spacing error con GPS
