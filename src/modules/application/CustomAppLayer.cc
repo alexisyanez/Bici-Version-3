@@ -408,10 +408,12 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                           {
                               leaderNode = *it;
                               nearestNode = *it;
+                              EV << "Lider: " << addr_node << endl;
                           }
                           else if (addr_node == myApplAddr()-1 )
                           {
                               nearestNode = *it;
+                              EV << "Nodo Mas Cercano: " << addr_node << endl;
                           }
 
 //                        //Si actualmente no hay un nodo mas cercano y la distancia del nodo al actual es mayor a cero,
@@ -500,6 +502,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                             leaderSpeed = nearestNode->getLeaderSpeed();
                             localLeaderAcceleration = nearestNode->getLeaderAcceleration();
                             localLeaderSpeed = nearestNode->getLeaderSpeed();
+                            EV << "Aceleración del lider atraves de beaconing" << leaderAcceleration << endl;
                         }
                         else
                         {
@@ -514,6 +517,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                     {
                         leaderAcceleration = leaderNode->getAcceleration();
                         leaderSpeed = leaderNode->getSpeed();
+                        EV << "Aceleración del lider atraves de beaconing" << leaderAcceleration << endl;
                     }
 
                     double TargetS = getTS();

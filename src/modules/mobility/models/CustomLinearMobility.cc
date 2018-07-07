@@ -223,6 +223,7 @@ void CustomLinearMobility::move()
     {
         currentSpeed = 0;
         stationary = true;
+        EV << "El Nodo entró a modo estacionario, Velocidad = 0 " << endl;
     }
 }
 
