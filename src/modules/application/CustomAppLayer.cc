@@ -418,6 +418,11 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                               NearestNodeIndex=addr_node;
                           }
 
+                        if (myApplAddr()==1)
+                        {
+                            NearestNodeIndex=0;
+                        }
+
 //                        //Si actualmente no hay un nodo mas cercano y la distancia del nodo al actual es mayor a cero,
 //                        //este es el nodo mas cercano por el momento
 //                        if (distanceToActual > 0 && nearestNode == NULL)
