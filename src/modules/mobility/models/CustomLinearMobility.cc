@@ -79,7 +79,7 @@ void CustomLinearMobility::initialize(int stage)
         speedDuration = par("speedDuration");
 
         angle = fmod((double) par("angle"), 360);
-        acceleration = par("acceleration");
+        //acceleration = par("acceleration");
         stationary = (currentSpeed == 0) && (acceleration == 0.0);
 
         //Obtener tiempo y distancia totales para llegar a la meta
@@ -208,6 +208,16 @@ void CustomLinearMobility::move()
 
     }
 
+
+    // accelerate
+    //speed += acceleration * elapsedTime;
+    if (currentSpeed <= 0)
+    {
+        currentSpeed = 0;
+        //SC: COmentar cambio a estacionario para que se siga moviendo en un siguiente ciclo y no se quede pegado
+        //stationary = true;
+        EV << "El Nodo entró a modo estacionario, Velocidad = 0 " << endl;
+    }
     lastSpeed = direction * currentSpeed;
     lastPosition += lastSpeed * elapsedTime;
 
@@ -217,14 +227,6 @@ void CustomLinearMobility::move()
     Coord dummy;
     handleIfOutside(REFLECT, dummy, dummy, angle);
 
-    // accelerate
-    //speed += acceleration * elapsedTime;
-    if (currentSpeed <= 0)
-    {
-        currentSpeed = 0;
-        stationary = true;
-        EV << "El Nodo entró a modo estacionario, Velocidad = 0 " << endl;
-    }
 }
 
 /**

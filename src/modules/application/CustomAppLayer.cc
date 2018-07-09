@@ -411,19 +411,20 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                               nearestNode = *it;
                               EV << "Lider: " << addr_node << endl;
                           }
-                          else if (addr_node == myApplAddr()-1 )
+                        //SC:Remueve el else para que se asigne el nearest nodo cuando es el nodo 1
+                        if (addr_node == myApplAddr()-1 )
                           {
                               nearestNode = *it;
                               EV << "Nodo Mas Cercano: " << addr_node << endl;
                               NearestNodeIndex=addr_node;
                           }
 
-                        if (myApplAddr()==1)
+                        /*if (myApplAddr()==1)
                         {
                             NearestNodeIndex=0;
                         }
 
-//                        //Si actualmente no hay un nodo mas cercano y la distancia del nodo al actual es mayor a cero,
+*///                        //Si actualmente no hay un nodo mas cercano y la distancia del nodo al actual es mayor a cero,
 //                        //este es el nodo mas cercano por el momento
 //                        if (distanceToActual > 0 && nearestNode == NULL)
 //                        {
@@ -523,6 +524,12 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                         }
                         else
                         {
+                            //SC:Poner en 0 datos del lider y del i-1 pues no recibio de nadie
+                            rel_speed_front = 0;
+                            spacing_error = 0;
+                            spacing_error_GPS = 0;
+                            spacing_error_RTT = 0;
+                            nodeFrontAcceleration = 0;
                             leaderAcceleration = 0;
                             leaderSpeed = 0;
                             localLeaderAcceleration = 0;
@@ -575,7 +582,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                                 - alpha5 * spacing_error;
                     }
 
-                    if(spacing_error>desiredSpacing){A_des=0;} // Si un nodo sobrepasa a su antecesor no aplica ninguna aceleración
+                    //if(spacing_error>desiredSpacing){A_des=0;} // Si un nodo sobrepasa a su antecesor no aplica ninguna aceleración
 
                     emit(accelerationPlatoonSignal, A_des);
 
@@ -812,8 +819,10 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                    // EV << "The Human Error is:  " << human_error << endl ;
 
                     //e. Calcular la aceleración deseada incluyéndole el retardo
-                    double A_des_lag_sin = ((alphaLag * A_des) + ((1 - alphaLag) * lastAccelerationPlatoon));
-
+                    double A_des_lag_sin = 0;
+                    if (A_des!=0){
+                       A_des_lag_sin = ((alphaLag * A_des) + ((1 - alphaLag) * lastAccelerationPlatoon));
+                    }
                     //if(distanceBetweenActualAndFront-length_vehicle_front<0){A_des_lag_sin=-0.5;} // Si un nodo sobrepasa a su antecesor no aplica ninguna aceleración
 
                     emit(accelerationSinSignal, A_des_lag_sin);
@@ -839,6 +848,10 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                     {
                         //emit(accelerationFilteredSignal, A_des_lag_sin);
                         A_des_lag_Err = A_des_lag_sin + human_error;
+                        if  (A_des_lag_Err > 1.2)
+                            A_des_lag_Err = 1.2;
+                        else if (A_des_lag_Err < -2.6)
+                            A_des_lag_Err = -2.6;
 
                         if(A_des_lag_sin>0 && A_des_lag_Err>0){Node_precision=1;}
                         else if(A_des_lag_sin<0 && A_des_lag_Err<0){Node_precision=1;}
@@ -852,8 +865,9 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                     else
                     {
                         //emit(accelerationFilteredSignal,0);
-                        A_des_lag_Err = human_error; //Corresponde solo al error humano dado que la aceleración deseada es cero
-
+                        //A_des_lag_Err = human_error; //Corresponde solo al error humano dado que la aceleración deseada es cero
+                        //SC: Aplica 0 aceleraci[on (por la incercia es mas facil mantener la velocidad que ya trae)
+                        A_des_lag_Err = 0;
                         //emit(precisionSignal,Node_precision);
                     }
 
