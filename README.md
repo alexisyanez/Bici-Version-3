@@ -1,5 +1,5 @@
 # bici_simu
-Simulación de las bicicletas (CACC + Beaconing + Human Error + GPS Error + RTT)
+Simulación de las bicicletas (CACC + Beaconing + Human Error + GPS ErroR)
 
 - Utilizar con las siguientes versiones
 Omnet++ 4.4.1

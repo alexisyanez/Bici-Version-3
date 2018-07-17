@@ -11,26 +11,5 @@
 // 
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program.  If not, see http://www.gnu.org/licenses/.
-// 
-
-package bici_simu.src.networks.scenario1;
-
-import org.mixim.base.modules.BaseNetwork;
-import bici_simu.src.modules.nodes.HostBici;
-
-
-
-network Main_Network extends BaseNetwork
-{
-    parameters:
-        int numNodes; // total number of hosts in the network
-
-
-    submodules:
-        node[numNodes]: HostBici {
-            parameters:
-                @display("i=old/ball;b=1,1,oval,,,0;p=237,80;is=vs");
-
-        }
-
-}
+//
+package bici_simu;

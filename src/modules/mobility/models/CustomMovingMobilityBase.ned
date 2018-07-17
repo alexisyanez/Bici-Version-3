@@ -16,7 +16,7 @@
 //
 
 
-package src.modules.mobility.models;
+package bici_simu.src.modules.mobility.models;
 
 import inet.mobility.IMobility;
 import inet.mobility.models.MobilityBase;

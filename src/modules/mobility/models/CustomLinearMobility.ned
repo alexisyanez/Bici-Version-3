@@ -16,10 +16,10 @@
 // along with this program; if not, see <http://www.gnu.org/licenses/>.
 //
 
-package src.modules.mobility.models;
+package bici_simu.src.modules.mobility.models;
 
 import inet.mobility.models.MovingMobilityBase;
-import src.modules.mobility.models.CustomMovingMobilityBase;
+import bici_simu.src.modules.mobility.models.CustomMovingMobilityBase;
 
 //
 // This is a linear mobility model with speed, angle and acceleration parameters.

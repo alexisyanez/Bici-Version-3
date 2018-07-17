@@ -63,8 +63,8 @@ class MIXIM_API CustomAppLayer : public MyTestAppLayer
         //Se�al para emitir la aceleraci�n aplicada sin error humano
         simsignal_t accelerationSinSignal;
 
-        //Se�al para emitir la aceleraci�n filtrada por el umbral
-        simsignal_t accelerationFilteredSignal;
+        //Se�al para emitir la aceleraci�n filtrada por el umbral*/
+        simsignal_t accelerationFilteredSignal;/*
 
         //Se�al para emitir la distancia del nodo actual al nodo frontal
         simsignal_t distanceToFwdSignal;
@@ -109,7 +109,7 @@ class MIXIM_API CustomAppLayer : public MyTestAppLayer
         simsignal_t leaderInfoMultihopSignal;
 
         //Señal para emitir cuando se USA un paquete del l�der por MULTISALTO
-        simsignal_t leaderInfoMultihopUsedSignal;
+        simsignal_t leaderInfoMultihopUsedSignal;*/
 
         //Señal para emitir el calculo de la precision por nodo
         simsignal_t precisionSignal;
@@ -119,7 +119,7 @@ class MIXIM_API CustomAppLayer : public MyTestAppLayer
 
         //Señal para emitir el error humano obtenido
         simsignal_t humanErrorSignal;
-*/
+
         simsignal_t accelerationSinSignal;
         simsignal_t distanceToFwdSignal;
 

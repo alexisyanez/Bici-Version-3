@@ -1,0 +1,4 @@
+Promedios (fila 1) y STD (fila 2) ACC para Var 0.3
+-0.7885 0.3188
+0.0048 0.6552
+0.0152 0.7337

@@ -1,0 +1,6 @@
+Promedios Filas -> variability Columnas -> Sizes 
+-1.085977787429809466e-01
+-1.372829243986317671e-01
+Desviacion estandar Filas -> variability Columnas -> Sizes 
+2.193149270576690291e-01
+2.791931295902784216e-01

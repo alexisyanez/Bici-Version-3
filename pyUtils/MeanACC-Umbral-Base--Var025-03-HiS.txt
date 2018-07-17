@@ -1,0 +1,4 @@
+Promedios (Columna 1) y STD (Columna 2) ACC para STD error 0.25
+-0.7848 0.3396
+0.0288 0.7669
+0.0487 0.9068

@@ -13,11 +13,11 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package src.modules.nodes;
+package bici_simu.src.modules.nodes;
 
-import src.modules.mobility.models.CustomRectangleMobility;
-import src.modules.mobility.models.CustomLinearMobility;
-import src.modules.nodes.MyWirelessNode;
+import bici_simu.src.modules.mobility.models.CustomRectangleMobility;
+import bici_simu.src.modules.mobility.models.CustomLinearMobility;
+import bici_simu.src.modules.nodes.MyWirelessNode;
 
 
 module HostBici extends MyWirelessNode
@@ -88,8 +88,8 @@ module HostBici extends MyWirelessNode
 //        @statistic[accelerationSin](title="acceleration platoon sin error"; source="accelerationSin"; record=vector,stats; interpolationmode=none);
 //        
 //        //Señal para indicar la aceleracion filtrada por el umbral
-//		@signal[accelerationFiltered](type="double");
-//        @statistic[accelerationFiltered](title="acceleration filtrada"; source="accelerationFiltered"; record=vector,stats; interpolationmode=none);
+		@signal[accelerationFiltered](type="double");
+        @statistic[accelerationFiltered](title="acceleration filtrada"; source="accelerationFiltered"; record=vector,stats; interpolationmode=none);
 //        
 //        //Se�al para indicar la distancia al nodo del frente
 //        @signal[distanceToFwd](type="double");
@@ -120,16 +120,16 @@ module HostBici extends MyWirelessNode
 //        @statistic[leaderInfoMultihopUsed](title="leader info multihop used"; source="leaderInfoMultihopUsed"; record=vector,stats; interpolationmode=none);
 //
 //		//Señal para indicar el calculo de la precision
-//		@signal[precision](type="int");
-//        @statistic[precision](title="calculo de la precision"; source="precision"; record=vector,stats; interpolationmode=none);
+	@signal[precision](type="int");
+        @statistic[precision](title="calculo de la precision"; source="precision"; record=vector,stats; interpolationmode=none);
 //		
 //		//Señal para indicar el calculo de la exactitud
-//		@signal[accuracy](type="double");
-//        @statistic[accuracy](title="calculo de la exactitud"; source="accuracy"; record=vector,stats; interpolationmode=none);
+	@signal[accuracy](type="double");
+        @statistic[accuracy](title="calculo de la exactitud"; source="accuracy"; record=vector,stats; interpolationmode=none);
 //       
 //       //Señal para indicar el calculo del error humano
-//		@signal[humanError](type="double");
-//        @statistic[humanError](title="Error humano"; source="humanError"; record=vector,stats; interpolationmode=none);
+	@signal[humanError](type="double");
+        @statistic[humanError](title="Error humano"; source="humanError"; record=vector,stats; interpolationmode=none);
         
         @signal[accelerationSin](type="double");
         @statistic[accelerationSin](title="acceleration platoon sin error"; source="accelerationSin"; record=vector,stats; interpolationmode=none);

@@ -13,7 +13,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package src.modules.nodes;
+package bici_simu.src.modules.nodes;
 
 import org.mixim.modules.nic.IWirelessNicUpperCtrl;
 import org.mixim.base.modules.IBaseArp;
@@ -22,8 +22,8 @@ import org.mixim.base.modules.IBaseNetwLayer;
 import org.mixim.modules.power.battery.BatteryStats;
 import org.mixim.modules.power.battery.SimpleBattery;
 import inet.mobility.IMobility;
-import src.modules.mobility.models.CustomLinearMobility;
-import src.modules.application.CustomAppLayer;
+import bici_simu.src.modules.mobility.models.CustomLinearMobility;
+import bici_simu.src.modules.application.CustomAppLayer;
 
 
 //

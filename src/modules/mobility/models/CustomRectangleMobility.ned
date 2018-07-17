@@ -16,9 +16,9 @@
 //
 
 
-package src.modules.mobility.models;
+package bici_simu.src.modules.mobility.models;
 
-import src.modules.mobility.models.CustomMovingMobilityBase;
+import bici_simu.src.modules.mobility.models.CustomMovingMobilityBase;
 
 //
 // Moves the node around a rectangle.

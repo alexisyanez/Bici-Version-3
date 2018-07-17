@@ -41,18 +41,18 @@ void CustomAppLayer::initialize(int stage)
     arrivalTimeSignal = registerSignal("arrival_time");*/
     accelerationPlatoonSignal = registerSignal("accelerationPlatoon");
     accelerationErrorSignal = registerSignal("accelerationError");/*
-    accelerationSinSignal = registerSignal("accelerationSin");
-    accelerationFilteredSignal = registerSignal("accelerationFiltered");
+    accelerationSinSignal = registerSignal("accelerationSin");*/
+    accelerationFilteredSignal = registerSignal("accelerationFiltered");/*
     distanceToFwdSignal = registerSignal("distanceToFwd");
     distanceToFwdRTTSignal = registerSignal("distanceToFwdRTT");
     leaderInfoSignal = registerSignal("leaderInfo");
     leaderInfoDirectSignal = registerSignal("leaderInfoDirect");
     leaderInfoMultihopSignal = registerSignal("leaderInfoMultihop");
     leaderInfoMultihopUsedSignal = registerSignal("leaderInfoMultihopUsed");
-    targetSpeedSignal = registerSignal("targetSpeed");
+    targetSpeedSignal = registerSignal("targetSpeed");*/
     precisionSignal = registerSignal("precision");
     accuracySignal = registerSignal("accuracy");
-    humanErrorSignal = registerSignal("humanError");*/
+    humanErrorSignal = registerSignal("humanError");
 
     accelerationSinSignal = registerSignal("accelerationSin");
     distanceToFwdSignal = registerSignal("distanceToFwd");
@@ -846,7 +846,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
 
                     if(A_des_lag_sin > Mean_Ac + Umbral_Ac || A_des_lag_sin < Mean_Ac - Umbral_Ac) // Si la aceleración es mayor o menor que el Umbral
                     {
-                        //emit(accelerationFilteredSignal, A_des_lag_sin);
+                        emit(accelerationFilteredSignal, A_des_lag_sin);
                         A_des_lag_Err = A_des_lag_sin + human_error;
                         if  (A_des_lag_Err > 1.2)
                             A_des_lag_Err = 1.2;
@@ -857,14 +857,14 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
                         else if(A_des_lag_sin<0 && A_des_lag_Err<0){Node_precision=1;}
                         else {Node_precision=0;}
 
-                        //emit(precisionSignal,Node_precision);
+                        emit(precisionSignal,Node_precision);
 
                         Node_accuracy = fabs(A_des_lag_sin-A_des_lag_Err);
-                        //emit(accuracySignal,Node_accuracy);
+                        emit(accuracySignal,Node_accuracy);
                     }
                     else
                     {
-                        //emit(accelerationFilteredSignal,0);
+                        emit(accelerationFilteredSignal,0);
                         //A_des_lag_Err = human_error; //Corresponde solo al error humano dado que la aceleración deseada es cero
                         //SC: Aplica 0 aceleraci[on (por la incercia es mas facil mantener la velocidad que ya trae)
                         A_des_lag_Err = 0;
@@ -880,9 +880,7 @@ void CustomAppLayer::handleSelfMsg(cMessage *msg)
 
                    // EV << "Node[" << myApplAddr() << "]: New desired acceleration: " << getModuleAcceleration() << endl;
 
-
-                    //emit(accelerationPlatoonSignal, A_des_lag);
-                    //emit(humanErrorSignal, human_error);
+                    emit(humanErrorSignal, human_error);
            }
 
 
